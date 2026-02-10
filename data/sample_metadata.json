@@ -1,0 +1,8 @@
+{
+  "patient_id": "SAMPLE_001",
+  "age": 45,
+  "tobacco_years": 15,
+  "lesion_duration": "> 6 weeks",
+  "image_path": "data/test_images/sample_001.jpg",
+  "notes": "Example patient metadata for testing"
+}
