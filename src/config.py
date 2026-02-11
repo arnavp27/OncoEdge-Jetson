@@ -8,7 +8,7 @@ from pathlib import Path
 @dataclass
 class ModelConfig:
     """Model configuration"""
-    yolo_model: str = 'yolo26n-seg.pt'
+    yolo_model: str = 'yolo11n-seg.pt'
     yolo_conf_threshold: float = 0.25
     yolo_imgsz: int = 640
     

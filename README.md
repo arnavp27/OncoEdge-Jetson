@@ -1,6 +1,6 @@
 # OncoEdge: Oral Cancer Detection System
 
-AI-powered screening system for oral cancer detection using YOLO26n-seg and BiomedCLIP.
+AI-powered screening system for oral cancer detection using YOLO11n-seg and BiomedCLIP.
 
 ## Setup (Jetson Orin NX)
 

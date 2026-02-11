@@ -32,7 +32,7 @@ def main():
     )
 
     st.title("🔬 OncoEdge: Oral Cancer Screening System")
-    st.markdown("AI-powered screening using YOLO26n-seg and BiomedCLIP")
+    st.markdown("AI-powered screening using YOLO11n-seg and BiomedCLIP")
 
     # Sidebar: Patient Information
     with st.sidebar:
@@ -46,7 +46,7 @@ def main():
 
         st.markdown("---")
         st.markdown("### ℹ️ About OncoEdge")
-        st.info("This system uses YOLO26n-seg for lesion detection and BiomedCLIP for medical classification.")
+        st.info("This system uses YOLO11n-seg for lesion detection and BiomedCLIP for medical classification.")
 
         # Show device info
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -73,7 +73,7 @@ def main():
 
         with col1:
             st.subheader("📷 Uploaded Image")
-            st.image(image, use_container_width=True)
+            st.image(image, width='stretch')
 
         # Analysis button
         if st.button("🔍 Analyze Image", type="primary", use_container_width=True):
@@ -158,7 +158,7 @@ def display_results(results):
     # Visualization
     if results['detections']:
         st.subheader("🎯 Detected Lesions")
-        st.image(results['visualization'], use_container_width=True,
+        st.image(results['visualization'], width='stretch',
                 caption="Annotated image with detected lesions")
 
         # Detailed detection information

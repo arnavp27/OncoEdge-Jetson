@@ -54,6 +54,9 @@ class BiomedCLIPClassifier:
             'hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224'
         )
 
+        # Context length for text tokenization
+        self.context_length = 256
+
         # Precompute text embeddings for efficiency
         self.text_features = self._encode_text_prompts()
 
@@ -64,9 +67,29 @@ class BiomedCLIPClassifier:
         Returns:
             torch.Tensor: Normalized text features
         """
+        import open_clip.tokenizer as clip_tokenizer
+
         with torch.no_grad():
-            text_tokens = self.tokenizer(self.PROMPTS).to(self.device)
+            # Manual tokenization using the underlying tokenizer
+            # This avoids the batch_encode_plus compatibility issue
+            tokenized = []
+            for text in self.PROMPTS:
+                # Tokenize each text individually
+                tokens = self.tokenizer.tokenizer(
+                    text,
+                    max_length=self.context_length,
+                    padding='max_length',
+                    truncation=True,
+                    return_tensors='pt'
+                )
+                tokenized.append(tokens['input_ids'])
+
+            # Stack all tokenized prompts
+            text_tokens = torch.cat(tokenized, dim=0).to(self.device)
+
+            # Encode text features
             text_features = self.model.encode_text(text_tokens)
+
             # Normalize features
             text_features /= text_features.norm(dim=-1, keepdim=True)
         return text_features

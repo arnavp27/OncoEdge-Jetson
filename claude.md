@@ -15,7 +15,7 @@ You are building **OncoEdge**, a real-time oral cancer screening system for NVID
 - ✅ Optimize for Jetson Orin edge deployment
 - ❌ DO NOT add features beyond the core MVP
 - ❌ DO NOT suggest model training or fine-tuning
-- ❌ DO NOT use models other than YOLO26n-seg and BiomedCLIP
+- ❌ DO NOT use models other than YOLO11n-seg and BiomedCLIP
 
 ---
 
@@ -25,7 +25,7 @@ You are building **OncoEdge**, a real-time oral cancer screening system for NVID
 ```
 Smartphone Photo Input
     ↓
-[YOLO26n-seg] → Lesion Detection & Segmentation
+[YOLO11n-seg] → Lesion Detection & Segmentation
     ↓
 [BiomedCLIP] → Medical Classification (per lesion)
     ↓
@@ -38,8 +38,8 @@ Risk Report + Visualization Output
 
 ### Core Components
 
-**1. YOLO26n-seg (Detection & Segmentation)**
-- **Model**: `yolo26n-seg.pt` (Nano variant for edge devices)
+**1. YOLO11n-seg (Detection & Segmentation)**
+- **Model**: `yolo11n-seg.pt` (Nano variant for edge devices)
 - **Purpose**: Detect and segment oral lesions
 - **Input**: RGB image (any size, resized to 640x640)
 - **Output**: 
@@ -103,7 +103,7 @@ oncoedge/
 │   └── sample_metadata.json        # Example patient metadata
 │
 ├── models/                         # Downloaded models (auto-cached)
-│   ├── yolo26n-seg.pt             # Auto-downloaded by ultralytics
+│   ├── yolo11n-seg.pt             # Auto-downloaded by ultralytics
 │   └── biomedclip/                 # Auto-cached from HuggingFace
 │
 ├── src/
@@ -111,7 +111,7 @@ oncoedge/
 │   │
 │   ├── models/
 │   │   ├── __init__.py
-│   │   ├── yolo_detector.py        # YOLO26n-seg wrapper
+│   │   ├── yolo_detector.py        # YOLO11n-seg wrapper
 │   │   └── biomedclip_classifier.py # BiomedCLIP wrapper
 │   │
 │   ├── pipeline/
@@ -148,7 +148,7 @@ oncoedge/
 # pyproject.toml dependencies - LATEST VERSIONS (Feb 2026)
 torch = ">=2.10.0"              # Latest: 2.10.0 (Jan 2026)
 torchvision = ">=0.25.0"        # Latest: 0.25.0 (Jan 2026)
-ultralytics = ">=8.4.8"         # Latest: 8.4.8 (YOLO26 support)
+ultralytics = ">=8.4.8"         # Latest: 8.4.8 (YOLO11 support)
 open-clip-torch = ">=3.2.0"     # Latest: 3.2.0 (BiomedCLIP)
 ```
 
@@ -173,13 +173,13 @@ uv pip install ultralytics==8.4.8 open-clip-torch==3.2.0 streamlit==1.54.0 openc
 
 ### 2. Model Configuration
 
-**YOLO26n-seg Settings:**
+**YOLO11n-seg Settings:**
 ```python
 # src/models/yolo_detector.py
 from ultralytics import YOLO
 
 class YOLODetector:
-    def __init__(self, model_path='yolo26n-seg.pt', device='0'):
+    def __init__(self, model_path='yolo11n-seg.pt', device='0'):
         self.model = YOLO(model_path)
         self.device = device
     
@@ -543,7 +543,7 @@ from pathlib import Path
 @dataclass
 class ModelConfig:
     """Model configuration"""
-    yolo_model: str = 'yolo26n-seg.pt'
+    yolo_model: str = 'yolo11n-seg.pt'
     yolo_conf_threshold: float = 0.25
     yolo_imgsz: int = 640
     
@@ -589,7 +589,7 @@ CONFIG = {
 ```python
 # tests/test_yolo.py
 def test_yolo_detection():
-    """Test YOLO26n-seg detection"""
+    """Test YOLO11n-seg detection"""
     detector = YOLODetector()
     test_image = np.random.randint(0, 255, (640, 640, 3), dtype=np.uint8)
     results = detector.detect(test_image)
@@ -620,7 +620,7 @@ def test_end_to_end_pipeline():
 ## Performance Targets
 
 **Inference Time (Jetson Orin NX):**
-- YOLO26n-seg: < 60ms per image
+- YOLO11n-seg: < 60ms per image
 - BiomedCLIP: < 150ms per lesion
 - Total pipeline: < 500ms for typical case (1-3 lesions)
 
@@ -638,7 +638,7 @@ def test_end_to_end_pipeline():
 ## Important Constraints & Guidelines
 
 ### DO:
-✅ Use YOLO26n-seg (nano variant) for edge optimization
+✅ Use YOLO11n-seg (nano variant) for edge optimization
 ✅ Use BiomedCLIP with exact prompts specified
 ✅ Follow the file structure exactly
 ✅ Implement decision tree with specified thresholds
@@ -649,7 +649,7 @@ def test_end_to_end_pipeline():
 
 ### DON'T:
 ❌ Don't train or fine-tune models (zero-shot only)
-❌ Don't use other YOLO variants (must be YOLO26n-seg)
+❌ Don't use other YOLO variants (must be YOLO11n-seg)
 ❌ Don't modify BiomedCLIP prompts without justification
 ❌ Don't add complex features beyond MVP
 ❌ Don't use additional ML models
@@ -662,7 +662,7 @@ def test_end_to_end_pipeline():
 
 **Day 1 Evening:**
 - [ ] Environment setup with uv complete
-- [ ] YOLO26n-seg loading and inference working
+- [ ] YOLO11n-seg loading and inference working
 - [ ] BiomedCLIP loading and inference working
 - [ ] Fusion module implemented
 - [ ] Decision tree implemented
@@ -688,7 +688,7 @@ def test_end_to_end_pipeline():
 ```markdown
 # OncoEdge: Oral Cancer Detection System
 
-AI-powered screening system for oral cancer detection using YOLO26n-seg and BiomedCLIP.
+AI-powered screening system for oral cancer detection using YOLO11n-seg and BiomedCLIP.
 
 ## Setup (Jetson Orin NX)
 

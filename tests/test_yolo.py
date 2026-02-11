@@ -4,7 +4,7 @@ import pytest
 
 
 def test_yolo_detection():
-    """Test YOLO26n-seg detection"""
+    """Test YOLO11n-seg detection"""
     # TODO: Implement test
     pass
 

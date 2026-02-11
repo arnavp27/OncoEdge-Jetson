@@ -558,7 +558,7 @@
                         </div>
                         <div style="font-size: 2em; color: #667eea;">↓</div>
                         <div style="background: #ebf4ff; padding: 20px; border-radius: 10px; margin: 7px 0; border-left: 5px solid #4299e1;">
-                            🎯 <strong>YOLO26n-seg</strong> → Lesion Detection & Segmentation
+                            🎯 <strong>YOLO11n-seg</strong> → Lesion Detection & Segmentation
                         </div>
                         <div style="font-size: 2em; color: #667eea;">↓</div>
                         <div style="background: #faf5ff; padding: 20px; border-radius: 10px; margin: 7px 0; border-left: 5px solid #9f7aea;">
@@ -617,16 +617,16 @@
             </div>
         </div>
 
-        <!-- Slide 9: Vision Model 1 - YOLO26n-seg -->
+        <!-- Slide 9: Vision Model 1 - YOLO11n-seg -->
         <div class="slide">
-            <h2 style="font-size: 3.5em; color: #4299e1; margin-bottom: 30px;">Vision Model 1: YOLO26n-seg</h2>
+            <h2 style="font-size: 3.5em; color: #4299e1; margin-bottom: 30px;">Vision Model 1: YOLO11n-seg</h2>
             <div style="max-width: 1400px;">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
                     <div style="background: #ebf4ff; padding: 30px; border-radius: 15px; border-left: 5px solid #4299e1;">
                         <h3 style="color: #2d3748; font-size: 1.8em; margin-bottom: 20px;">📋 Model Specifications</h3>
                         <ul style="font-size: 1.3em; color: #4a5568; line-height: 2; list-style: none;">
                             <li>🔹 <strong>Type:</strong> Object Detection + Segmentation</li>
-                            <li>🔹 <strong>Variant:</strong> YOLO26n-seg (Nano)</li>
+                            <li>🔹 <strong>Variant:</strong> YOLO11n-seg (Nano)</li>
                             <li>🔹 <strong>Parameters:</strong> 2.7M (lightweight)</li>
                             <li>🔹 <strong>Input Size:</strong> 640×640 pixels</li>
                             <li>🔹 <strong>Output:</strong> Bounding boxes + pixel masks</li>
@@ -648,7 +648,7 @@
                     <div style="font-size: 1.4em; color: #4a5568; line-height: 2.2;">
                         <strong>Input:</strong> RGB oral cavity image (any resolution)<br>
                         <strong>Pre-processing:</strong> Resize to 640×640, normalize pixel values<br>
-                        <strong>Inference:</strong> Forward pass through YOLO26n-seg network<br>
+                        <strong>Inference:</strong> Forward pass through YOLO11n-seg network<br>
                         <strong>Post-processing:</strong> NMS (Non-Max Suppression) for detection filtering<br>
                         <strong>Output:</strong> Bounding boxes (xyxy format), segmentation masks, confidence scores
                     </div>

@@ -1,5 +1,5 @@
 """
-YOLO26n-seg Detector Wrapper
+YOLO11n-seg Detector Wrapper
 
 Provides a clean interface for oral lesion detection and segmentation.
 """
@@ -10,18 +10,18 @@ from PIL import Image
 
 class YOLODetector:
     """
-    Wrapper for YOLO26n-seg model for lesion detection and segmentation.
+    Wrapper for YOLO11n-seg model for lesion detection and segmentation.
 
     This class handles loading the YOLO model and running inference on images
     to detect and segment oral lesions.
     """
 
-    def __init__(self, model_path='yolo26n-seg.pt', device='0'):
+    def __init__(self, model_path='yolo11n-seg.pt', device='0'):
         """
         Initialize YOLO detector.
 
         Args:
-            model_path: Path to YOLO model weights file (default: 'yolo26n-seg.pt')
+            model_path: Path to YOLO model weights file (default: 'yolo11n-seg.pt')
             device: Device to run inference on ('0' for GPU, 'cpu' for CPU)
         """
         self.model_path = model_path
