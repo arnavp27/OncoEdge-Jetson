@@ -164,14 +164,13 @@ def build_tensorrt_int8_engine(
     parser = trt.OnnxParser(network, TRT_LOGGER)
 
     # Parse FP32 ONNX model
+    # CRITICAL: Use parseFromFile for external data (.onnx.data) support
     print(f"[2/5] Parsing ONNX model: {onnx_path}")
-    with open(onnx_path, 'rb') as f:
-        onnx_data = f.read()
-        if not parser.parse(onnx_data):
-            print("[ERROR] Failed to parse ONNX model:")
-            for error in range(parser.num_errors):
-                print(f"  - {parser.get_error(error)}")
-            raise RuntimeError("ONNX parsing failed")
+    if not parser.parseFromFile(str(onnx_path)):
+        print("[ERROR] Failed to parse ONNX model:")
+        for error in range(parser.num_errors):
+            print(f"  - {parser.get_error(error)}")
+        raise RuntimeError("ONNX parsing failed")
 
     print(f"[OK] ONNX model parsed successfully")
     print(f"     Network inputs: {[network.get_input(i).name for i in range(network.num_inputs)]}")
