@@ -109,15 +109,22 @@ class BiomedCLIPTensorRT:
 
         CRITICAL FIX: Use trt.volume() for element count, not byte count.
         The pagelocked_empty() takes element count, not bytes.
+
+        TensorRT 10.x API: Use tensor names instead of deprecated binding API.
         """
         inputs = []
         outputs = []
         bindings = []
         stream = cuda.Stream()
 
-        for binding in self.engine:
-            # Get binding shape and compute element count
-            shape = self.engine.get_binding_shape(binding)
+        # Store tensor names for execute_async_v3
+        self.input_names = []
+        self.output_names = []
+
+        # TensorRT 10.x API: Use get_tensor_name and get_tensor_shape
+        for i in range(self.engine.num_io_tensors):
+            tensor_name = self.engine.get_tensor_name(i)
+            shape = self.engine.get_tensor_shape(tensor_name)
             size = trt.volume(shape)  # Element count (NOT bytes)
             dtype = np.float32
 
@@ -128,10 +135,13 @@ class BiomedCLIPTensorRT:
 
             bindings.append(int(device_mem))
 
-            if self.engine.binding_is_input(binding):
-                inputs.append({'host': host_mem, 'device': device_mem})
+            # TensorRT 10.x: Use get_tensor_mode to check input/output
+            if self.engine.get_tensor_mode(tensor_name) == trt.TensorIOMode.INPUT:
+                inputs.append({'host': host_mem, 'device': device_mem, 'name': tensor_name})
+                self.input_names.append(tensor_name)
             else:
-                outputs.append({'host': host_mem, 'device': device_mem})
+                outputs.append({'host': host_mem, 'device': device_mem, 'name': tensor_name})
+                self.output_names.append(tensor_name)
 
         return inputs, outputs, bindings, stream
 
@@ -162,11 +172,14 @@ class BiomedCLIPTensorRT:
             self.stream
         )
 
-        # Run inference
-        self.context.execute_async_v2(
-            bindings=self.bindings,
-            stream_handle=self.stream.handle
-        )
+        # TensorRT 10.x: Set tensor addresses for execute_async_v3
+        for i, inp in enumerate(self.inputs):
+            self.context.set_tensor_address(inp['name'], int(inp['device']))
+        for i, out in enumerate(self.outputs):
+            self.context.set_tensor_address(out['name'], int(out['device']))
+
+        # Run inference (TensorRT 10.x API)
+        self.context.execute_async_v3(stream_handle=self.stream.handle)
 
         # Copy output back to host
         cuda.memcpy_dtoh_async(

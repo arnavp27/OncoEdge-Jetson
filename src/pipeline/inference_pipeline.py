@@ -123,7 +123,7 @@ class OncoEdgePipeline:
         self.decision_tree = ClinicalDecisionTree()
 
         print(f"[OK] OncoEdge pipeline initialized (backend: {self.backend})")
-        print()")
+        print()
 
     def process_image(self, image, patient_metadata):
         """
