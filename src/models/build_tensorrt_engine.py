@@ -222,22 +222,40 @@ def build_tensorrt_int8_engine(
 
     # Build engine
     print("[5/5] Building INT8 engine (please wait)...")
-    engine = builder.build_engine(network, config)
 
-    if engine is None:
-        print("\n[ERROR] Engine build failed!")
-        print("Possible causes:")
-        print("  - Out of memory (try --workspace 256 or 128)")
-        print("  - ONNX opset incompatibility (need opset 13-16 for Jetson)")
-        print("  - TensorRT version mismatch")
-        raise RuntimeError("Engine build failed")
+    # TensorRT 8.5+ uses build_serialized_network instead of build_engine
+    if hasattr(builder, 'build_serialized_network'):
+        # TensorRT 8.5+ (returns serialized engine directly)
+        serialized_engine = builder.build_serialized_network(network, config)
+        if serialized_engine is None:
+            print("\n[ERROR] Engine build failed!")
+            print("Possible causes:")
+            print("  - Out of memory (try --workspace 256 or 128)")
+            print("  - ONNX opset incompatibility")
+            print("  - TensorRT version mismatch")
+            raise RuntimeError("Engine build failed")
 
-    # Serialize and save
-    print("\n[OK] Engine build successful!")
-    print(f"     Serializing engine to: {engine_path}")
+        # Save serialized engine directly
+        print("\n[OK] Engine build successful!")
+        print(f"     Saving engine to: {engine_path}")
+        with open(engine_path, 'wb') as f:
+            f.write(serialized_engine)
+    else:
+        # TensorRT < 8.5 (legacy API)
+        engine = builder.build_engine(network, config)
+        if engine is None:
+            print("\n[ERROR] Engine build failed!")
+            print("Possible causes:")
+            print("  - Out of memory (try --workspace 256 or 128)")
+            print("  - ONNX opset incompatibility (need opset 13-16 for Jetson)")
+            print("  - TensorRT version mismatch")
+            raise RuntimeError("Engine build failed")
 
-    with open(engine_path, 'wb') as f:
-        f.write(engine.serialize())
+        # Serialize and save
+        print("\n[OK] Engine build successful!")
+        print(f"     Serializing engine to: {engine_path}")
+        with open(engine_path, 'wb') as f:
+            f.write(engine.serialize())
 
     engine_size_mb = engine_path.stat().st_size / (1024**2)
 
