@@ -26,6 +26,9 @@ onnx==1.20.1
 onnxscript==0.6.2
 onnxruntime==1.21.1  # For validation testing only
 
+# Configuration
+pyyaml==6.0.2
+
 # Scientific computing
 scipy==1.17.0
 

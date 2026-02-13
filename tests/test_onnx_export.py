@@ -10,13 +10,21 @@ import onnxruntime as ort
 import open_clip
 from pathlib import Path
 
+ONNX_PATH = Path('models/biomedclip/onnx/vision_encoder.onnx')
+_skip_no_onnx = pytest.mark.skipif(
+    not ONNX_PATH.exists(),
+    reason=f"ONNX model not found at {ONNX_PATH} (run export script first)",
+)
 
+
+@_skip_no_onnx
 def test_onnx_export_exists():
     """Test that ONNX model file exists."""
     onnx_path = Path('models/biomedclip/onnx/vision_encoder.onnx')
     assert onnx_path.exists(), f"ONNX model not found at {onnx_path}"
 
 
+@_skip_no_onnx
 def test_onnx_model_outputs():
     """Test that ONNX model produces similar outputs to PyTorch model."""
     # Load PyTorch model
@@ -57,6 +65,7 @@ def test_onnx_model_outputs():
     print(f"  Mean absolute difference: {np.abs(pytorch_output - onnx_output).mean():.6f}")
 
 
+@_skip_no_onnx
 def test_onnx_model_shape():
     """Test ONNX model input/output shapes."""
     onnx_path = 'models/biomedclip/onnx/vision_encoder.onnx'

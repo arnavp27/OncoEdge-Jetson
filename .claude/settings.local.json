@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(export PATH=\"$HOME/.local/bin:$PATH\")",
+      "Bash(source:*)",
+      "Bash(uv pip install:*)",
+      "Bash(pkill:*)",
+      "Bash(streamlit run:*)"
+    ]
+  }
+}

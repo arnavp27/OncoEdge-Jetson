@@ -1,140 +1,103 @@
-"""
-OncoEdge Inference Pipeline
+"""OncoEdge Inference Pipeline -- Model-Agnostic Orchestrator.
 
-Main orchestration logic combining YOLO detection, BiomedCLIP classification,
-score fusion, and clinical risk assessment.
-
-Auto-detects Jetson Nano and uses TensorRT backend when available.
+Does NOT import any concrete model classes. Uses the backend registry
+to create detector and classifier instances from configuration.
+Swapping model formats requires ONLY config changes, not code changes.
 """
+import time
+import uuid
+
 import numpy as np
 from PIL import Image
-from pathlib import Path
+from typing import Optional
 
-from src.models.yolo_detector import YOLODetector
+from src.config import OncoEdgeConfig, load_config
+from src.interfaces.detector import BaseDetector, DetectorOutput
+from src.interfaces.classifier import BaseClassifier
+from src.backends.registry import create_detector, create_classifier
+from src.backends.load_backends import load_all_backends
 from src.pipeline.fusion import FusionModule
 from src.pipeline.decision_tree import ClinicalDecisionTree
 from src.utils.visualization import draw_detections
 
 
-def is_jetson_nano():
-    """
-    Detect if running on Jetson Nano.
-
-    Returns:
-        bool: True if running on Jetson Nano, False otherwise
-    """
-    try:
-        with open('/etc/nv_tegra_release', 'r') as f:
-            content = f.read()
-            return 'Nano' in content or 'tegra' in content.lower()
-    except FileNotFoundError:
-        return False
-
-
-def has_tensorrt_engine(engine_path='models/biomedclip/tensorrt/vision_encoder_int8.engine'):
-    """
-    Check if TensorRT engine exists.
-
-    Args:
-        engine_path: Path to TensorRT engine file
-
-    Returns:
-        bool: True if engine exists, False otherwise
-    """
-    return Path(engine_path).exists()
-
-
 class OncoEdgePipeline:
-    """
-    Complete inference pipeline for oral cancer screening.
+    """Model-agnostic inference pipeline for oral cancer screening.
 
     Orchestrates the full workflow:
-    1. YOLO detection and segmentation
-    2. BiomedCLIP classification per lesion
+    1. Detection via BaseDetector (any format: .pt, .onnx, .engine)
+    2. Classification via BaseClassifier (any format: hf-hub, .onnx, .engine)
     3. Score fusion
     4. Clinical risk assessment
     5. Visualization generation
+
+    All model-specific decisions are driven by configuration.
+    Swapping YOLO versions or BiomedCLIP formats requires
+    ZERO code changes -- only config changes.
     """
 
-    def __init__(self, device='cuda', force_backend=None):
-        """
-        Initialize pipeline with all components.
-
-        Auto-detects Jetson Nano and uses TensorRT backend when available.
-        Falls back to PyTorch if TensorRT not available.
+    def __init__(self, config: Optional[OncoEdgeConfig] = None, device: str = None):
+        """Initialize pipeline from configuration.
 
         Args:
-            device: Device for inference ('cuda' or 'cpu') - only used for PyTorch backend
-            force_backend: Force specific backend:
-                - None: Auto-detect (recommended)
-                - 'tensorrt': Force TensorRT (raises error if not available)
-                - 'pytorch': Force PyTorch (ignores TensorRT even if available)
+            config: OncoEdgeConfig instance. If None, loads from default YAML.
+            device: Deprecated. Use config.device.preferred instead.
+                    Kept for backward compatibility.
         """
-        print(f"Initializing OncoEdge Pipeline...")
+        self.config = config or load_config()
 
-        # Initialize YOLO detector
-        self.yolo = YOLODetector(device=device)
+        # Backward compatibility: if device is passed directly, override config
+        if device is not None:
+            self.config.device.preferred = device
 
-        # Auto-select or force backend
-        use_tensorrt = False
+        resolved_device = self.config.device.resolved
+        print(f"Initializing OncoEdge Pipeline on device: {resolved_device}")
 
-        if force_backend == 'tensorrt':
-            # Force TensorRT - raise error if not available
-            if not has_tensorrt_engine():
-                raise RuntimeError(
-                    "TensorRT engine not found. Build it first:\n"
-                    "  python3 src/models/build_tensorrt_engine.py"
-                )
-            use_tensorrt = True
-            print("[OK] Forcing TensorRT backend (user override)")
+        # Register all available backends
+        load_all_backends()
 
-        elif force_backend == 'pytorch':
-            # Force PyTorch - ignore TensorRT even if available
-            use_tensorrt = False
-            print("[OK] Forcing PyTorch backend (user override)")
+        # Create detector and classifier via registry (format auto-detected)
+        self.detector: BaseDetector = create_detector(
+            model_path=self.config.detector.model_path,
+            device=resolved_device,
+            imgsz=self.config.detector.imgsz,
+        )
+        self.classifier: BaseClassifier = create_classifier(
+            model_path=self.config.classifier.model_path,
+            device=resolved_device,
+            prompts=self.config.classifier.prompts,
+            class_names=self.config.classifier.class_names,
+            text_embeddings_path=self.config.classifier.text_embeddings_path,
+            logit_scale_path=self.config.classifier.logit_scale_path,
+        )
 
-        else:
-            # Auto-detect
-            use_tensorrt = is_jetson_nano() and has_tensorrt_engine()
+        self.fusion = FusionModule(
+            method=self.config.fusion.method,
+            gate_threshold=self.config.fusion.gate_threshold,
+        )
+        self.decision_tree = ClinicalDecisionTree(config=self.config.clinical)
 
-            if use_tensorrt:
-                print(f"[OK] Detected Jetson Nano with TensorRT engine")
-            elif is_jetson_nano():
-                print(f"[WARNING] Jetson Nano detected but no TensorRT engine found")
-                print(f"         Falling back to PyTorch. Build engine for better performance:")
-                print(f"         python3 src/models/build_tensorrt_engine.py")
-            else:
-                print(f"[OK] Running on development machine")
+        # Lazy-load metrics tracker
+        self._metrics = None
+        if self.config.metrics.enabled:
+            try:
+                from src.utils.metrics import MetricsTracker
+                self._metrics = MetricsTracker(config=self.config.metrics)
+            except Exception:
+                pass
 
-        # Load appropriate BiomedCLIP backend
-        if use_tensorrt:
-            print("[OK] Loading TensorRT INT8 backend...")
-            from src.models.biomedclip_tensorrt import BiomedCLIPTensorRT
-            self.biomedclip = BiomedCLIPTensorRT()
-            self.backend = 'tensorrt'
-        else:
-            print(f"[OK] Loading PyTorch FP32 backend (device: {device})...")
-            from src.models.biomedclip_classifier import BiomedCLIPClassifier
-            self.biomedclip = BiomedCLIPClassifier(device=device)
-            self.backend = 'pytorch'
-
-        # Initialize fusion and decision modules
-        self.fusion = FusionModule()
-        self.decision_tree = ClinicalDecisionTree()
-
-        print(f"[OK] OncoEdge pipeline initialized (backend: {self.backend})")
-        print()
+        print("Pipeline initialization complete")
 
     def process_image(self, image, patient_metadata):
-        """
-        Process an image through the complete pipeline.
+        """Process an image through the complete pipeline.
 
         Args:
             image: Input image (numpy array HxWx3 or PIL Image)
             patient_metadata: Dictionary containing:
-                - age: Patient age (int)
-                - tobacco_years: Years of tobacco use (int)
-                - lesion_duration: Duration category (str)
+                - tobacco_years: Years of smokeless tobacco use (int)
+                - smoking_years: Years of smoking (int)
+                - age: Patient age (int, optional)
+                - lesion_duration: Duration category (str, optional)
 
         Returns:
             dict: Results containing:
@@ -143,124 +106,128 @@ class OncoEdgePipeline:
                 - 'detections': List of detection dicts
                 - 'visualization': Annotated image (numpy array)
                 - 'risk_score': Computed risk score (float)
+                - 'inference_id': Unique ID for this inference (str)
+                - 'timing': Dict of timing info (dict)
+                - 'model_info': Dict of model metadata (dict)
         """
-        # Convert PIL Image to numpy array if needed
+        pipeline_start = time.perf_counter()
+
+        # Normalize input
         if isinstance(image, Image.Image):
             image = np.array(image)
-
-        # Ensure RGB format
-        if len(image.shape) == 2:  # Grayscale
+        if len(image.shape) == 2:
             image = np.stack([image] * 3, axis=-1)
-        elif image.shape[2] == 4:  # RGBA
+        elif image.shape[2] == 4:
             image = image[:, :, :3]
 
-        # Step 1: YOLO detection
-        print("Running YOLO detection...")
-        yolo_results = self.yolo.detect(image)
+        # Step 1: Detection (format-agnostic)
+        detector_output: DetectorOutput = self.detector.detect(
+            image, conf_threshold=self.config.detector.conf_threshold
+        )
 
-        # Check if any detections found
-        if yolo_results.boxes is None or len(yolo_results.boxes) == 0:
-            return self._no_detection_output(image, patient_metadata)
+        if not detector_output.detections:
+            return self._no_detection_output(image, patient_metadata, pipeline_start)
 
-        # Step 2: Process each detection
-        print(f"Processing {len(yolo_results.boxes)} detections...")
+        # Step 2: Classification per lesion + gate fusion
         detections = []
+        classification_time_ms = 0.0
 
-        for i in range(len(yolo_results.boxes)):
-            # Extract detection info
-            box = yolo_results.boxes.xyxy[i].cpu().numpy()
-            conf = float(yolo_results.boxes.conf[i].cpu().numpy())
-
-            # Get mask if available
-            mask = None
-            if yolo_results.masks is not None and i < len(yolo_results.masks):
-                mask = yolo_results.masks.data[i].cpu().numpy()
-
-            # Crop lesion patch for classification
-            x1, y1, x2, y2 = map(int, box)
-            # Ensure valid crop coordinates
+        for det in detector_output.detections:
+            x1, y1, x2, y2 = det.bbox
             x1, y1 = max(0, x1), max(0, y1)
             x2 = min(image.shape[1], x2)
             y2 = min(image.shape[0], y2)
 
             if x2 <= x1 or y2 <= y1:
-                continue  # Skip invalid boxes
+                continue
 
             lesion_crop = image[y1:y2, x1:x2]
-
-            # Skip if crop is too small
             if lesion_crop.size == 0 or min(lesion_crop.shape[:2]) < 10:
                 continue
 
-            # Step 3: Classify with BiomedCLIP
-            print(f"  Classifying lesion {i+1}...")
-            classification = self.biomedclip.classify(lesion_crop)
+            # Gate check: skip classification if YOLO conf below gate threshold
+            # (saves compute — don't run CLIP on low-confidence detections)
+            if (self.fusion.method == "gate"
+                    and det.confidence < self.fusion.gate_threshold):
+                continue
 
-            # Step 4: Fuse scores
+            classification = self.classifier.classify(lesion_crop)
+            classification_time_ms += classification.inference_time_ms
+
             fusion_score = self.fusion.combine(
-                yolo_conf=conf,
-                biomedclip_score=classification['max_score']
+                yolo_conf=det.confidence,
+                biomedclip_score=classification.max_score,
             )
 
-            # Store detection
             detections.append({
                 'bbox': [x1, y1, x2, y2],
-                'mask': mask,
-                'yolo_conf': conf,
-                'class': classification['class'],
-                'class_scores': classification['scores'],
-                'fusion_score': fusion_score
+                'mask': det.mask,
+                'yolo_conf': det.confidence,
+                'class': classification.predicted_class,
+                'class_scores': classification.class_scores,
+                'fusion_score': fusion_score,
             })
 
-        # Handle case where all detections were invalid
         if not detections:
-            return self._no_detection_output(image, patient_metadata)
+            return self._no_detection_output(image, patient_metadata, pipeline_start)
 
-        # Step 5: Clinical risk assessment
-        print("Assessing clinical risk...")
+        # Step 3: Clinical risk assessment
+        # With gate fusion, fusion_score IS the CLIP score
         max_fusion_score = max(d['fusion_score'] for d in detections)
         risk_output = self.decision_tree.assess_risk(
             vision_score=max_fusion_score,
-            age=patient_metadata['age'],
-            tobacco_years=patient_metadata['tobacco_years'],
-            lesion_duration=patient_metadata['lesion_duration']
+            tobacco_years=patient_metadata.get('tobacco_years', 0),
+            smoking_years=patient_metadata.get('smoking_years', 0),
         )
 
-        # Step 6: Create visualization
-        print("Creating visualization...")
+        # Step 4: Visualization
         annotated_image = draw_detections(image, detections)
 
-        return {
+        pipeline_ms = (time.perf_counter() - pipeline_start) * 1000
+
+        result = {
             'risk_level': risk_output['level'],
             'recommendation': risk_output['recommendation'],
             'detections': detections,
             'visualization': annotated_image,
-            'risk_score': risk_output['score']
+            'risk_score': risk_output['score'],
+            'breakdown': risk_output.get('breakdown', {}),
+            'inference_id': str(uuid.uuid4())[:8],
+            'timing': {
+                'detection_ms': detector_output.inference_time_ms,
+                'classification_ms': classification_time_ms,
+                'pipeline_total_ms': pipeline_ms,
+            },
+            'model_info': {
+                'detector': self.detector.get_model_info(),
+                'classifier': self.classifier.get_model_info(),
+            },
         }
 
-    def _no_detection_output(self, image, patient_metadata):
-        """
-        Generate output when no lesions are detected.
+        # Log metrics if enabled
+        if self._metrics:
+            self._metrics.log_inference(result, patient_metadata)
 
-        Args:
-            image: Original image
-            patient_metadata: Patient metadata
+        return result
 
-        Returns:
-            dict: Results with no detections
-        """
-        # Still assess risk based on patient factors only
+    def _no_detection_output(self, image, patient_metadata, pipeline_start=None):
+        """Generate output when no lesions are detected."""
         risk_output = self.decision_tree.assess_risk(
             vision_score=0.0,
-            age=patient_metadata['age'],
-            tobacco_years=patient_metadata['tobacco_years'],
-            lesion_duration=patient_metadata['lesion_duration']
+            tobacco_years=patient_metadata.get('tobacco_years', 0),
+            smoking_years=patient_metadata.get('smoking_years', 0),
         )
+
+        pipeline_ms = (time.perf_counter() - pipeline_start) * 1000 if pipeline_start else 0.0
 
         return {
             'risk_level': risk_output['level'],
             'recommendation': 'No lesions detected. ' + risk_output['recommendation'],
             'detections': [],
             'visualization': image,
-            'risk_score': risk_output['score']
+            'risk_score': risk_output['score'],
+            'breakdown': risk_output.get('breakdown', {}),
+            'inference_id': str(uuid.uuid4())[:8],
+            'timing': {'pipeline_total_ms': pipeline_ms},
+            'model_info': {},
         }

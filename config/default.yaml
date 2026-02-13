@@ -1,0 +1,77 @@
+# OncoEdge Configuration
+# All pipeline parameters in one place.
+# Override any value via environment variables:
+#   ONCOEDGE_DEVICE=cpu
+#   ONCOEDGE_DETECTOR_MODEL=yolo11n-seg.onnx
+#   ONCOEDGE_CLASSIFIER_MODEL=models/biomedclip/onnx/vision_encoder.onnx
+#   ONCOEDGE_CONFIG=/path/to/custom.yaml
+
+device:
+  # "auto" detects: cuda -> mps -> cpu
+  # Or specify explicitly: "cuda", "mps", "cpu"
+  preferred: "auto"
+
+detector:
+  # Model path determines backend automatically:
+  #   .pt     -> ultralytics backend
+  #   .onnx   -> ONNX Runtime backend
+  #   .engine -> TensorRT backend
+  model_path: "yolo11n-seg.pt"
+  conf_threshold: 0.25
+  imgsz: 640
+
+classifier:
+  # Model path determines backend automatically:
+  #   hf-hub:... or .bin -> open_clip backend (full model, 747 MB)
+  #   .onnx              -> ONNX Runtime backend (vision encoder only, 330 MB)
+  #   .engine            -> TensorRT INT8 backend (vision encoder only, 169 MB, Jetson only)
+
+  # DEFAULT: TensorRT INT8 for Jetson deployment
+  # For macOS development, override with: ONCOEDGE_CLASSIFIER_MODEL=models/biomedclip/onnx/vision_encoder.onnx
+  model_path: "models/biomedclip/tensorrt/vision_encoder_int8.engine"
+
+  # Precomputed text embeddings (3x512 float32, L2-normalized)
+  # Generated once from the full model's text encoder, reused at every inference.
+  text_embeddings_path: "models/biomedclip/text_embeddings.npy"
+  logit_scale_path: "models/biomedclip/logit_scale.json"
+
+  prompts:
+    - "clinical photograph of oral squamous cell carcinoma"
+    - "clinical photograph of oral leukoplakia white patch"
+    - "clinical photograph of normal oral mucosa"
+  class_names: ["OSCC", "OPMD", "Normal"]
+
+fusion:
+  # "gate": YOLO as binary gate → CLIP score drives risk (recommended)
+  # "multiplicative": yolo × clip (legacy, suppresses subtle lesions)
+  # "weighted": 0.4*yolo + 0.6*clip (legacy)
+  method: "gate"
+  gate_threshold: 0.5  # YOLO conf >= 0.5 to approve detection
+
+clinical:
+  high_risk_threshold: 8.0
+  medium_risk_threshold: 5.0
+
+  # Alpha: smokeless tobacco (gutka, paan, chewing) weight
+  # tobacco_norm = min(tobacco_years / tobacco_significant_years, 1.0)
+  # Contribution to risk: alpha * tobacco_norm (max = 2.0)
+  alpha: 2.0
+  tobacco_significant_years: 15  # Doctor-defined: years at which risk is maximal
+
+  # Beta: smoking (cigarettes, bidis) weight
+  # smoking_norm = min(smoking_years / smoking_significant_years, 1.0)
+  # Contribution to risk: beta * smoking_norm (max = 1.5)
+  beta: 1.5
+  smoking_significant_years: 15  # Doctor-defined: years at which risk is maximal
+
+paths:
+  models_dir: "models"
+  data_dir: "data"
+  feedback_dir: "data/feedback"
+  metrics_dir: "data/metrics"
+
+metrics:
+  enabled: true
+  track_latency: true
+  track_confidence_distribution: true
+  log_file: "data/metrics/inference_log.jsonl"
