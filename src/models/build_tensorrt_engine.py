@@ -78,6 +78,10 @@ class BiomedCLIPCalibrator(trt.IInt8EntropyCalibrator2):
             try:
                 img = Image.open(img_path)
                 img_tensor = self.preprocessor(img)  # (1, 3, 224, 224) float32
+
+                # CRITICAL: Ensure array is contiguous for CUDA memcpy
+                if not img_tensor.flags['C_CONTIGUOUS']:
+                    img_tensor = np.ascontiguousarray(img_tensor)
             except Exception as e:
                 print(f"[WARNING] Failed to load {img_path}: {e}")
                 self.current_index += self.batch_size
