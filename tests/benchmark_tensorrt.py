@@ -18,12 +18,15 @@ import numpy as np
 from pathlib import Path
 from PIL import Image
 import sys
+import json
+from datetime import datetime
 
 
 def benchmark_tensorrt(
     test_images_dir='data/test_images',
     num_warmup=10,
-    num_iterations=100
+    num_iterations=100,
+    output_file=None
 ):
     """
     Benchmark TensorRT engine performance and accuracy.
@@ -32,6 +35,7 @@ def benchmark_tensorrt(
         test_images_dir: Directory with test images
         num_warmup: Number of warmup iterations (excluded from timing)
         num_iterations: Number of timing iterations
+        output_file: Optional path to save results JSON (default: auto-generated)
 
     Returns:
         dict: Benchmark results
@@ -217,6 +221,58 @@ def benchmark_tensorrt(
         return_code = 1
 
     print("=" * 70)
+
+    # Save results to JSON file
+    if output_file is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = f"benchmark_results_{timestamp}.json"
+
+    results = {
+        "timestamp": datetime.now().isoformat(),
+        "test_config": {
+            "test_images_dir": str(test_images_dir),
+            "num_warmup": num_warmup,
+            "num_iterations": num_iterations,
+            "num_test_images": len(test_image_paths)
+        },
+        "latency": {
+            "mean_ms": float(latencies.mean()),
+            "median_ms": float(np.median(latencies)),
+            "std_dev_ms": float(latencies.std()),
+            "min_ms": float(latencies.min()),
+            "max_ms": float(latencies.max()),
+            "p95_ms": float(np.percentile(latencies, 95)),
+            "p99_ms": float(np.percentile(latencies, 99)),
+            "throughput_fps": float(1000 / latencies.mean())
+        },
+        "accuracy": {
+            "max_score_difference": float(max_diff),
+            "class_matches": int(class_matches),
+            "total_comparisons": int(total_comparisons),
+            "class_agreement_percent": float(100 * class_matches / total_comparisons)
+        },
+        "validation": {
+            "latency_target_ms": target_latency,
+            "latency_passes": bool(latencies.mean() <= target_latency),
+            "accuracy_threshold": accuracy_threshold,
+            "accuracy_passes": bool(max_diff < accuracy_threshold),
+            "overall_pass": bool(latencies.mean() <= target_latency and max_diff < accuracy_threshold)
+        },
+        "return_code": return_code
+    }
+
+    # Try to get Jetson info
+    try:
+        with open('/etc/nv_tegra_release', 'r') as f:
+            results["system_info"] = {"jetson_version": f.read().strip()}
+    except:
+        results["system_info"] = {"jetson_version": "Not running on Jetson"}
+
+    with open(output_file, 'w') as f:
+        json.dump(results, f, indent=2)
+
+    print(f"\n[OK] Results saved to: {output_file}")
+
     return return_code
 
 
@@ -245,6 +301,11 @@ def main():
         default=100,
         help='Number of benchmark iterations'
     )
+    parser.add_argument(
+        '--output',
+        default=None,
+        help='Output JSON file path (default: auto-generated with timestamp)'
+    )
 
     args = parser.parse_args()
 
@@ -252,7 +313,8 @@ def main():
         return_code = benchmark_tensorrt(
             test_images_dir=args.test_dir,
             num_warmup=args.warmup,
-            num_iterations=args.iterations
+            num_iterations=args.iterations,
+            output_file=args.output
         )
         sys.exit(return_code)
     except Exception as e:
