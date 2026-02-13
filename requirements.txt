@@ -21,6 +21,11 @@ timm==1.0.24
 huggingface-hub==1.4.1
 safetensors==0.7.0
 
+# ONNX export and quantization (for Jetson Nano deployment)
+onnx==1.20.1
+onnxscript==0.6.2
+onnxruntime==1.21.1  # For validation testing only
+
 # Scientific computing
 scipy==1.17.0
 
