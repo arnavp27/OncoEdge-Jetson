@@ -195,7 +195,12 @@ def build_tensorrt_int8_engine(
     # Configure builder
     print(f"[3/5] Configuring builder (workspace: {workspace_size_mb}MB)...")
     config = builder.create_builder_config()
-    config.max_workspace_size = workspace_size_mb * (1 << 20)
+
+    # TensorRT 8.5+ uses set_memory_pool_limit instead of max_workspace_size
+    if hasattr(config, 'set_memory_pool_limit'):
+        config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, workspace_size_mb * (1 << 20))
+    else:
+        config.max_workspace_size = workspace_size_mb * (1 << 20)
 
     # Enable INT8 precision with FP16 fallback for stability
     # Some layers (LayerNorm, attention) may not quantize cleanly to INT8
