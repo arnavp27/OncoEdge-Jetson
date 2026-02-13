@@ -8,19 +8,20 @@ Your venv has all Python packages (torch, open-clip, etc.) but cannot import `te
 ### Step 1: Enable system site-packages in your venv
 
 ```bash
-# Activate your venv
-source ~/OncoEdge-Jetson/bin/activate
+# Activate your venv (from ~/OncoEdge/ directory)
+cd ~/OncoEdge
+source OncoEdge-Jetson/bin/activate
 
 # Enable access to system site-packages
 # This allows venv to see TensorRT while keeping your other packages isolated
-echo "import sys; sys.path.append('/usr/lib/python3.10/dist-packages')" > ~/OncoEdge-Jetson/lib/python3.10/site-packages/jetson_packages.pth
+echo "import sys; sys.path.append('/usr/lib/python3.10/dist-packages')" > OncoEdge-Jetson/lib/python3.10/site-packages/jetson_packages.pth
 ```
 
 ### Step 2: Install pycuda in venv
 
 ```bash
-# Still in venv
-pip3 install pycuda
+# Still in venv - use uv pip (your package manager)
+uv pip install pycuda
 ```
 
 ### Step 3: Verify both imports work
@@ -59,7 +60,7 @@ If above doesn't work, you can use system Python directly:
 # Deactivate venv
 deactivate
 
-# Install packages in system Python
+# Install packages in system Python (use uv or pip3)
 sudo pip3 install torch torchvision open_clip_torch
 
 # Run build
@@ -82,7 +83,8 @@ python3 src/models/build_tensorrt_engine.py
 Run these commands **in your venv**:
 
 ```bash
-source ~/OncoEdge-Jetson/bin/activate
+cd ~/OncoEdge
+source OncoEdge-Jetson/bin/activate
 
 # Test TensorRT
 python3 -c "import tensorrt as trt; print(trt.__version__)"
