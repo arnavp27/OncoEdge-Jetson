@@ -3,15 +3,45 @@ OncoEdge Inference Pipeline
 
 Main orchestration logic combining YOLO detection, BiomedCLIP classification,
 score fusion, and clinical risk assessment.
+
+Auto-detects Jetson Nano and uses TensorRT backend when available.
 """
 import numpy as np
 from PIL import Image
+from pathlib import Path
 
 from src.models.yolo_detector import YOLODetector
-from src.models.biomedclip_classifier import BiomedCLIPClassifier
 from src.pipeline.fusion import FusionModule
 from src.pipeline.decision_tree import ClinicalDecisionTree
 from src.utils.visualization import draw_detections
+
+
+def is_jetson_nano():
+    """
+    Detect if running on Jetson Nano.
+
+    Returns:
+        bool: True if running on Jetson Nano, False otherwise
+    """
+    try:
+        with open('/etc/nv_tegra_release', 'r') as f:
+            content = f.read()
+            return 'Nano' in content or 'tegra' in content.lower()
+    except FileNotFoundError:
+        return False
+
+
+def has_tensorrt_engine(engine_path='models/biomedclip/tensorrt/vision_encoder_int8.engine'):
+    """
+    Check if TensorRT engine exists.
+
+    Args:
+        engine_path: Path to TensorRT engine file
+
+    Returns:
+        bool: True if engine exists, False otherwise
+    """
+    return Path(engine_path).exists()
 
 
 class OncoEdgePipeline:
@@ -26,22 +56,74 @@ class OncoEdgePipeline:
     5. Visualization generation
     """
 
-    def __init__(self, device='cuda'):
+    def __init__(self, device='cuda', force_backend=None):
         """
         Initialize pipeline with all components.
 
-        Args:
-            device: Device for inference ('cuda' or 'cpu')
-        """
-        print(f"Initializing OncoEdge Pipeline on device: {device}")
+        Auto-detects Jetson Nano and uses TensorRT backend when available.
+        Falls back to PyTorch if TensorRT not available.
 
-        # Initialize all components
+        Args:
+            device: Device for inference ('cuda' or 'cpu') - only used for PyTorch backend
+            force_backend: Force specific backend:
+                - None: Auto-detect (recommended)
+                - 'tensorrt': Force TensorRT (raises error if not available)
+                - 'pytorch': Force PyTorch (ignores TensorRT even if available)
+        """
+        print(f"Initializing OncoEdge Pipeline...")
+
+        # Initialize YOLO detector
         self.yolo = YOLODetector(device=device)
-        self.biomedclip = BiomedCLIPClassifier(device=device)
+
+        # Auto-select or force backend
+        use_tensorrt = False
+
+        if force_backend == 'tensorrt':
+            # Force TensorRT - raise error if not available
+            if not has_tensorrt_engine():
+                raise RuntimeError(
+                    "TensorRT engine not found. Build it first:\n"
+                    "  python3 src/models/build_tensorrt_engine.py"
+                )
+            use_tensorrt = True
+            print("[OK] Forcing TensorRT backend (user override)")
+
+        elif force_backend == 'pytorch':
+            # Force PyTorch - ignore TensorRT even if available
+            use_tensorrt = False
+            print("[OK] Forcing PyTorch backend (user override)")
+
+        else:
+            # Auto-detect
+            use_tensorrt = is_jetson_nano() and has_tensorrt_engine()
+
+            if use_tensorrt:
+                print(f"[OK] Detected Jetson Nano with TensorRT engine")
+            elif is_jetson_nano():
+                print(f"[WARNING] Jetson Nano detected but no TensorRT engine found")
+                print(f"         Falling back to PyTorch. Build engine for better performance:")
+                print(f"         python3 src/models/build_tensorrt_engine.py")
+            else:
+                print(f"[OK] Running on development machine")
+
+        # Load appropriate BiomedCLIP backend
+        if use_tensorrt:
+            print("[OK] Loading TensorRT INT8 backend...")
+            from src.models.biomedclip_tensorrt import BiomedCLIPTensorRT
+            self.biomedclip = BiomedCLIPTensorRT()
+            self.backend = 'tensorrt'
+        else:
+            print(f"[OK] Loading PyTorch FP32 backend (device: {device})...")
+            from src.models.biomedclip_classifier import BiomedCLIPClassifier
+            self.biomedclip = BiomedCLIPClassifier(device=device)
+            self.backend = 'pytorch'
+
+        # Initialize fusion and decision modules
         self.fusion = FusionModule()
         self.decision_tree = ClinicalDecisionTree()
 
-        print("Pipeline initialization complete")
+        print(f"[OK] OncoEdge pipeline initialized (backend: {self.backend})")
+        print()")
 
     def process_image(self, image, patient_metadata):
         """
