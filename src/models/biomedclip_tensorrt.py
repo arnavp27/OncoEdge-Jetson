@@ -111,6 +111,9 @@ class BiomedCLIPTensorRT:
         The pagelocked_empty() takes element count, not bytes.
 
         TensorRT 10.x API: Use tensor names instead of deprecated binding API.
+
+        CRITICAL: Keep references to DeviceAllocation objects to prevent
+        garbage collection (causes "invalid resource handle" errors).
         """
         inputs = []
         outputs = []
@@ -120,6 +123,9 @@ class BiomedCLIPTensorRT:
         # Store tensor names for execute_async_v3
         self.input_names = []
         self.output_names = []
+
+        # CRITICAL: Store device allocations to prevent garbage collection
+        self.device_allocations = []
 
         # TensorRT 10.x API: Use get_tensor_name and get_tensor_shape
         for i in range(self.engine.num_io_tensors):
@@ -132,6 +138,9 @@ class BiomedCLIPTensorRT:
             # CRITICAL: pagelocked_empty takes ELEMENT COUNT, not bytes
             host_mem = cuda.pagelocked_empty(size, dtype)
             device_mem = cuda.mem_alloc(host_mem.nbytes)  # nbytes for GPU allocation
+
+            # CRITICAL: Keep reference to prevent garbage collection
+            self.device_allocations.append(device_mem)
 
             bindings.append(int(device_mem))
 
@@ -164,8 +173,16 @@ class BiomedCLIPTensorRT:
         # Preprocess using shared preprocessing module (same as calibration)
         img_tensor = preprocess_image(image_patch)  # (1, 3, 224, 224) float32
 
+        # Ensure contiguous array for CUDA memcpy
+        if not img_tensor.flags['C_CONTIGUOUS']:
+            img_tensor = np.ascontiguousarray(img_tensor)
+
         # Copy to device
         np.copyto(self.inputs[0]['host'], img_tensor.ravel())
+
+        # Synchronize before transfer to ensure host data is ready
+        cuda.Context.synchronize()
+
         cuda.memcpy_htod_async(
             self.inputs[0]['device'],
             self.inputs[0]['host'],
@@ -187,6 +204,8 @@ class BiomedCLIPTensorRT:
             self.outputs[0]['device'],
             self.stream
         )
+
+        # CRITICAL: Synchronize stream before reading output
         self.stream.synchronize()
 
         # Extract and normalize image features
