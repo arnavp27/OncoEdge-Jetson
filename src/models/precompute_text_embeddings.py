@@ -2,7 +2,7 @@
 Precompute text embeddings for BiomedCLIP.
 
 Eliminates need to quantize text encoder by computing embeddings once on RTX 4050.
-Text encoder outputs for 3 fixed prompts are saved as numpy array (~18KB).
+Text encoder outputs for 4 fixed prompts are saved as numpy array (~25KB).
 """
 import torch
 import numpy as np
@@ -24,9 +24,10 @@ def precompute_biomedclip_text_embeddings(
     PROMPTS = [
         "clinical photograph of oral squamous cell carcinoma",
         "clinical photograph of oral leukoplakia white patch",
+        "clinical photograph of benign oral lesion aphthous ulcer",
         "clinical photograph of normal oral mucosa"
     ]
-    CLASS_NAMES = ["OSCC", "OPMD", "Normal"]
+    CLASS_NAMES = ["OCA", "OPMD", "Benign", "Normal"]
 
     print("Loading BiomedCLIP model...")
     model, _, _ = open_clip.create_model_and_transforms(
@@ -62,7 +63,7 @@ def precompute_biomedclip_text_embeddings(
 
         text_features = model.encode_text(text_tokens)
         text_features /= text_features.norm(dim=-1, keepdim=True)  # L2 normalize
-        text_features_np = text_features.cpu().numpy()  # (3, 768)
+        text_features_np = text_features.cpu().numpy()  # (4, 512) for ViT-B/16
 
     # Save text embeddings
     output_file = Path(output_path)

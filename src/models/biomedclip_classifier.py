@@ -23,14 +23,16 @@ class BiomedCLIPClassifier:
     """
 
     # Clinical prompts for zero-shot classification
+    # Updated to match YOLO dataset: OCA, OPMD, Benign, Normal
     PROMPTS = [
         "clinical photograph of oral squamous cell carcinoma",
         "clinical photograph of oral leukoplakia white patch",
+        "clinical photograph of benign oral lesion aphthous ulcer",
         "clinical photograph of normal oral mucosa"
     ]
 
-    # Class labels corresponding to prompts
-    CLASS_NAMES = ["OSCC", "OPMD", "Normal"]
+    # Class labels corresponding to prompts (matches YOLO dataset + Normal for YOLO false positives)
+    CLASS_NAMES = ["OCA", "OPMD", "Benign", "Normal"]
 
     # Model configuration
     MODEL_ID = "microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"

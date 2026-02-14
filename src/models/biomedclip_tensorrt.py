@@ -35,8 +35,8 @@ class BiomedCLIPTensorRT:
     - Extracted logit scale (learned temperature parameter)
     """
 
-    # Class labels (must match training order)
-    CLASS_NAMES = ["OSCC", "OPMD", "Normal"]
+    # Class labels (must match training order and YOLO dataset)
+    CLASS_NAMES = ["OCA", "OPMD", "Benign", "Normal"]
 
     def __init__(
         self,
@@ -80,13 +80,13 @@ class BiomedCLIPTensorRT:
         if not text_embeddings_path.exists():
             raise FileNotFoundError(f"Text embeddings not found: {text_embeddings_path}")
 
-        self.text_features = np.load(text_embeddings_path)  # (3, 512)
+        self.text_features = np.load(text_embeddings_path)  # (4, 512) - 4 classes now
 
         # Verify shape
-        if self.text_features.shape != (3, 512):
+        if self.text_features.shape != (4, 512):
             raise ValueError(
-                f"Expected text embeddings shape (3, 512), got {self.text_features.shape}\n"
-                f"Did you use the correct precomputed embeddings?"
+                f"Expected text embeddings shape (4, 512), got {self.text_features.shape}\n"
+                f"Did you regenerate embeddings after updating prompts?"
             )
 
         # Load logit scale (learned temperature parameter)
