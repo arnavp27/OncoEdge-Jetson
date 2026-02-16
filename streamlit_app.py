@@ -118,16 +118,25 @@ def main():
                         patient_metadata=patient_metadata
                     )
 
-                # Display results
-                with col2:
-                    display_results(results)
-
-                # Feedback section
-                display_feedback_form(results, patient_metadata)
+                # Store in session state so results persist across reruns
+                st.session_state['last_results'] = results
+                st.session_state['last_metadata'] = patient_metadata
 
             except Exception as e:
                 st.error(f"❌ Error during analysis: {str(e)}")
                 st.exception(e)
+
+        # Display results and feedback form from session state
+        # This persists even when the form submit triggers a rerun
+        if 'last_results' in st.session_state:
+            results = st.session_state['last_results']
+            patient_metadata = st.session_state['last_metadata']
+
+            with col2:
+                display_results(results)
+
+            # Feedback section
+            display_feedback_form(results, patient_metadata)
 
 
 def display_results(results):
@@ -258,25 +267,32 @@ def display_feedback_form(results, patient_metadata):
 
         doctor_notes = st.text_area("Clinical notes (optional)")
 
-        submitted = st.form_submit_button("Submit Feedback")
+        st.write("---")
+        submitted = st.form_submit_button("🚀 Submit Feedback", type="primary", use_container_width=True)
         if submitted:
-            store = get_feedback_store()
+            try:
+                store = get_feedback_store()
 
-            top_detection = results['detections'][0] if results['detections'] else None
-            ai_prediction = top_detection['class'] if top_detection else "No detection"
-            ai_score = top_detection['fusion_score'] if top_detection else 0.0
+                top_detection = results['detections'][0] if results['detections'] else None
+                ai_prediction = top_detection['class'] if top_detection else "No detection"
+                ai_score = top_detection['fusion_score'] if top_detection else 0.0
 
-            store.record_clinical_feedback(
-                inference_id=results.get('inference_id', ''),
-                ai_prediction=ai_prediction,
-                ai_risk_level=results['risk_level'],
-                ai_fusion_score=ai_score,
-                doctor_agrees=(agrees == "Yes"),
-                doctor_classification=doctor_class,
-                doctor_notes=doctor_notes,
-                patient_metadata=patient_metadata,
-            )
-            st.success("✅ Feedback recorded. Thank you!")
+                feedback_id = store.record_clinical_feedback(
+                    inference_id=results.get('inference_id', ''),
+                    ai_prediction=ai_prediction,
+                    ai_risk_level=results['risk_level'],
+                    ai_fusion_score=ai_score,
+                    doctor_agrees=(agrees == "Yes"),
+                    doctor_classification=doctor_class,
+                    doctor_notes=doctor_notes,
+                    patient_metadata=patient_metadata,
+                )
+
+                st.success(f"✅ Feedback recorded! (ID: {feedback_id})")
+
+            except Exception as e:
+                st.error(f"❌ Error recording feedback: {str(e)}")
+                st.exception(e)
 
 
 if __name__ == "__main__":

@@ -5,7 +5,12 @@
       "Bash(source:*)",
       "Bash(uv pip install:*)",
       "Bash(pkill:*)",
-      "Bash(streamlit run:*)"
+      "Bash(streamlit run:*)",
+      "Bash(.venv/bin/python3:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(ONCOEDGE_CLASSIFIER_MODEL=models/biomedclip/onnx/vision_encoder.onnx .venv/bin/streamlit run:*)",
+      "Bash(curl:*)"
     ]
   }
 }

@@ -16,7 +16,8 @@ detector:
   #   .pt     -> ultralytics backend
   #   .onnx   -> ONNX Runtime backend
   #   .engine -> TensorRT backend
-  model_path: "yolo11n-seg.pt"
+  # Using custom-trained YOLO11 model (best.pt from fine-tuning)
+  model_path: "models/best.pt"
   conf_threshold: 0.25
   imgsz: 640
 
