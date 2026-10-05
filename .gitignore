@@ -53,3 +53,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Deployment configuration (hostnames and future credentials stay local)
+.env
+.env.*
+!.env.example
