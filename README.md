@@ -22,6 +22,7 @@ The repository contains working pipeline code as well as experiments and deploym
 | Capability | Status | Current evidence |
 |---|---|---|
 | Streamlit screening interface | **Implemented** | [`streamlit_app.py`](streamlit_app.py) |
+| CPU demo container and persistent model caches | **Implemented** | [`Dockerfile`](Dockerfile), [`compose.yaml`](compose.yaml), [deployment guide](deploy/README.md) |
 | YOLO detection and segmentation wrapper | **Implemented** | [`src/models/yolo_detector.py`](src/models/yolo_detector.py) |
 | BioMedCLIP zero-shot classifier | **Implemented** | [`src/models/biomedclip_classifier.py`](src/models/biomedclip_classifier.py) |
 | Per-lesion classification and score fusion | **Implemented** | [`src/pipeline/inference_pipeline.py`](src/pipeline/inference_pipeline.py) |
@@ -94,10 +95,10 @@ flowchart TD
 The default branch instantiates Ultralytics with:
 
 ```text
-yolo11n-seg.pt, confidence=0.25, image size=640
+models/best.pt (fine-tuned YOLO11s-seg), confidence=0.25, image size=640
 ```
 
-This filename normally resolves to the generic Ultralytics pretrained checkpoint. The default branch does **not** contain or select the project's fine-tuned oral-lesion model. Consequently, a fresh `main` checkout demonstrates the pipeline structure but should not be represented as a validated oral-lesion detector.
+The detector loads the project's fine-tuned oral-lesion checkpoint from `models/best.pt`. This path is configured in `src/config.py` and resolved relative to the project root. Model files are excluded from source control, so copy the checkpoint from `develop_yolo_ft` using the setup command below. A missing checkpoint produces an explicit error instead of downloading a generic detector.
 
 The fine-tuning branch uses **YOLO11s-seg**, image size `512`, batch size `4`, and three annotated lesion classes:
 
@@ -107,7 +108,7 @@ The fine-tuning branch uses **YOLO11s-seg**, image size `512`, batch size `4`, a
 | 1 | OPMD | Oral potentially malignant disorder |
 | 2 | Benign | Benign oral lesions |
 
-Healthy images are included as background-only negative samples. This work and its training outputs are available on [`develop_yolo_ft`](https://github.com/arnavp27/OncoEdge-Jetson/tree/develop_yolo_ft), but the fine-tuned checkpoint is not integrated into `main`.
+Healthy images are included as background-only negative samples. This work and its training outputs are available on [`develop_yolo_ft`](https://github.com/arnavp27/OncoEdge-Jetson/tree/develop_yolo_ft). The runtime uses a local copy of that branch's `best.pt` checkpoint.
 
 ### 2. BioMedCLIP
 
@@ -274,7 +275,7 @@ A fresh `main` checkout contains source code and documentation, but it does not 
 - a TensorRT engine; or
 - a clinical validation dataset.
 
-The generic YOLO and upstream BioMedCLIP checkpoints can be downloaded automatically by their libraries when internet access is available. The remaining deployment artifacts must be generated.
+The trained YOLO checkpoint must be copied into `models/best.pt`. The upstream BioMedCLIP checkpoint can be downloaded automatically when internet access is available. The remaining deployment artifacts must be generated.
 
 ### Development setup
 
@@ -304,16 +305,36 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
+Copy the trained detector checkpoint from the training branch (Bash):
+
+```bash
+mkdir -p models
+git show origin/develop_yolo_ft:zenodo_DOAOC/yolo_finetune/oncoedge_v1/weights/best.pt > models/best.pt
+git hash-object models/best.pt
+```
+
+The checkpoint's Git blob ID is `b8ee1810c7444d9d4fe1c877be28f7458a6e6805`.
+
 Run the interface:
 
 ```bash
 streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
 ```
 
-Then open `http://localhost:8501`, enter the patient factors, upload an image, and select **Analyze Image**.
+Then open `http://localhost:8501`, enter the patient factors, choose a bundled sample or upload an image, and select **Analyze Image**. The **Sample images** picker offers `027.jpeg` (lip photo) and `photo.webp` (annotated tongue photo); the tongue photo's existing markings are identified as part of the source image.
 
 > [!WARNING]
-> Without an integrated fine-tuned checkpoint, the default YOLO path is a software demonstration rather than an oral-lesion detector suitable for evaluation.
+> Loading the fine-tuned checkpoint enables the intended lesion-detection stage. End-to-end clinical accuracy and risk scoring remain unvalidated.
+
+### Host the CPU demo with Docker
+
+The demo can also run on a Linux x86_64 server using Docker Compose, Python 3.12,
+uv, and CPU-only PyTorch. The image includes the sample picker; the trained
+`best.pt` checkpoint is mounted separately, and model caches persist across code
+updates. An optional Caddy service provides HTTPS for a configured hostname.
+
+See [the deployment guide](deploy/README.md) for checkpoint verification, local
+smoke checks, AWS setup, and the commands to update only the OncoEdge container.
 
 ### Generate BioMedCLIP deployment artifacts
 
@@ -443,7 +464,7 @@ OncoEdge-Jetson/
 
 ## Known limitations
 
-- `main` does not select the branch-only fine-tuned oral-lesion checkpoint.
+- The trained YOLO checkpoint must be copied from `develop_yolo_ft` into the local `models/best.pt` path before running inference.
 - Required model, ONNX, calibration, TensorRT, and evaluation artifacts are not versioned.
 - BioMedCLIP remains zero-shot for this task; it was not fine-tuned here on the oral dataset.
 - Four-way softmax scores are prompt-relative similarities, not calibrated disease probabilities.
@@ -461,8 +482,8 @@ Microsoft's BioMedCLIP model card states that deployed use cases are out of scop
 
 ## Roadmap
 
-- [ ] Merge or deliberately port the fine-tuned YOLO work into the current architecture.
-- [ ] Replace the generic detector default with an explicit, checksummed oral-lesion checkpoint.
+- [x] Connect the existing fine-tuned YOLO checkpoint to runtime detection.
+- [ ] Automate checkpoint provisioning and checksum verification.
 - [ ] Rebuild the dataset split at patient level and publish deterministic split manifests.
 - [ ] Evaluate detection and segmentation per class on an untouched test set.
 - [ ] Evaluate the complete YOLO-to-BioMedCLIP pipeline rather than individual components alone.

@@ -3,12 +3,24 @@ OncoEdge Streamlit Application
 
 Main web interface for oral cancer screening.
 """
+from pathlib import Path
+
 import streamlit as st
 import numpy as np
 import torch
 from PIL import Image
 
 from src.pipeline.inference_pipeline import OncoEdgePipeline
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+SAMPLE_IMAGES = {
+    "Lip photo": ("027.jpeg", None),
+    "Annotated tongue photo": (
+        "photo.webp",
+        "The markings in this sample are part of the original photo.",
+    ),
+}
 
 
 @st.cache_resource
@@ -32,7 +44,7 @@ def main():
     )
 
     st.title("🔬 OncoEdge: Oral Cancer Screening System")
-    st.markdown("AI-powered screening using YOLO11n-seg and BiomedCLIP")
+    st.markdown("AI-powered screening using fine-tuned YOLO11s-seg and BiomedCLIP")
 
     # Sidebar: Patient Information
     with st.sidebar:
@@ -46,7 +58,7 @@ def main():
 
         st.markdown("---")
         st.markdown("### ℹ️ About OncoEdge")
-        st.info("This system uses YOLO11n-seg for lesion detection and BiomedCLIP for medical classification.")
+        st.info("This system uses fine-tuned YOLO11s-seg for lesion detection and BiomedCLIP for medical classification.")
 
         # Show device info
         device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -56,24 +68,42 @@ def main():
         else:
             st.warning("Running on CPU")
 
-    # Main area: Image Upload
-    st.header("📤 Upload Oral Cavity Image")
-
-    uploaded_file = st.file_uploader(
-        "Choose an image...",
-        type=['jpg', 'jpeg', 'png'],
-        help="Upload a clear photo of the oral cavity"
+    # Main area: bundled samples or an uploaded image
+    st.header("📷 Choose an Image")
+    image_source = st.radio(
+        "Image source",
+        ["Sample images", "Upload an image"],
+        horizontal=True,
     )
 
-    if uploaded_file is not None:
-        # Display uploaded image
-        image = Image.open(uploaded_file)
+    image = None
+    image_caption = None
+    if image_source == "Sample images":
+        selected_sample = st.selectbox(
+            "Choose a sample image",
+            list(SAMPLE_IMAGES),
+        )
+        filename, image_caption = SAMPLE_IMAGES[selected_sample]
+        with Image.open(PROJECT_ROOT / filename) as sample:
+            image = sample.convert("RGB")
+    else:
+        uploaded_file = st.file_uploader(
+            "Choose an image...",
+            type=['jpg', 'jpeg', 'png'],
+            help="Upload a clear photo of the oral cavity",
+        )
+        if uploaded_file is not None:
+            with Image.open(uploaded_file) as uploaded_image:
+                image = uploaded_image.convert("RGB")
 
+    if image is not None:
         col1, col2 = st.columns(2)
 
         with col1:
-            st.subheader("📷 Uploaded Image")
+            st.subheader("📷 Selected Image")
             st.image(image, width='stretch')
+            if image_caption:
+                st.caption(image_caption)
 
         # Analysis button
         if st.button("🔍 Analyze Image", type="primary", use_container_width=True):

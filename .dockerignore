@@ -1,0 +1,13 @@
+# Allow only deployment inputs; exclude local environments, Git and model files.
+**
+!Dockerfile
+!deploy/
+!deploy/requirements.cpu.lock
+!deploy/warm_models.py
+!src/
+!src/**
+src/**/__pycache__/
+src/**/*.pyc
+!streamlit_app.py
+!027.jpeg
+!photo.webp
