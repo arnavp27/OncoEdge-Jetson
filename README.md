@@ -4,6 +4,10 @@ OncoEdge is a research prototype for local, image-assisted oral lesion screening
 
 The project targets the **NVIDIA Jetson Nano 4 GB** and explores how a large biomedical vision-language model can be reduced to a practical edge-deployment pipeline.
 
+[**Try the live demo**](https://oncoedge.54-253-96-120.sslip.io/) — select a bundled sample or upload an image.
+The hosted demo runs the existing PyTorch pipeline on CPU with the trained
+`best.pt` detector; the Jetson/TensorRT code remains in the project.
+
 > [!CAUTION]
 > OncoEdge is an engineering and research prototype. It is **not a medical device**, does not provide a diagnosis, and has not been clinically validated. Its output must not replace examination, biopsy, or judgement by a qualified healthcare professional.
 
@@ -13,7 +17,7 @@ The repository contains working pipeline code as well as experiments and deploym
 
 | Label | Meaning |
 |---|---|
-| **Implemented** | Connected to the executable code on `main` |
+| **Implemented** | Connected to the executable code in this checkout |
 | **Branch-only** | Present on another repository branch, not on `main` |
 | **Generated artifact required** | Code exists, but a model, dataset, or engine must be supplied or generated |
 | **Expected** | Design target or estimate, not a measured result in this repository |

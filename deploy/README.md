@@ -67,6 +67,34 @@ these observations come from this development machine and are not an AWS load or
 concurrency benchmark. Budget memory for the other two applications before
 choosing between a 4-GB and an 8-GB shared server.
 
+## OncoEdge AWS deployment
+
+The demo uses the `codex/deploy-demo` branch on the `oncoedge-demo` Lightsail
+instance in Sydney (`ap-southeast-2a`): Ubuntu 24.04, 2 vCPUs, 4 GB RAM and
+80 GB SSD. The plan is $24/month. The attached static IP is `54.253.96.120`,
+with the live demo at [https://oncoedge.54-253-96-120.sslip.io/](https://oncoedge.54-253-96-120.sslip.io/).
+
+The server checkout is `/home/ubuntu/OncoEdge-Jetson`. The private `.env`,
+trained detector and named model/certificate volumes stay on the server.
+SSH permits the deployment connection's IPv4 address and Lightsail browser SSH;
+update that source rule if your public IP changes. Public web ports are 80/443,
+while the Streamlit port binds to `127.0.0.1:8503`.
+
+On 5 October 2026, the real model smoke test passed on this instance. Model
+preparation including downloads took 29.2 seconds; the pipeline analyzed the
+bundled samples in 1.11 and 0.71 seconds. Both had zero detections at the unchanged
+threshold. The separate classifier check returned Benign for the lip photograph
+and OPMD for the annotated tongue photograph. Peak container memory was
+2,740.3 MiB. These are technical smoke checks, not a clinical evaluation or
+multi-user benchmark.
+
+The public health endpoint returned HTTP 200 with certificate verification enabled,
+and HTTP redirected to HTTPS. Caddy obtained a Let's Encrypt certificate. The first
+web analysis loaded the cached model files successfully; the web container later
+used about 1.2 GiB and peaked at 2,538,381,312 bytes (about 2.36 GiB).
+Both sample choices and a JPEG upload completed analysis in the browser through
+public HTTPS, including the Streamlit WebSocket connection.
+
 ## AWS server setup
 
 Use one Ubuntu 24.04 x86_64 EC2 or Lightsail instance. Install Git and Docker Engine
@@ -79,11 +107,23 @@ account does not have access to its Docker daemon.
 Clone the repository after the deployment changes have been pushed, provision the
 checkpoint, and run the local verification commands above on the server.
 
+When using a Lightsail launch script, invoke Bash explicitly with a heredoc:
+
+```sh
+/usr/bin/bash <<'BOOTSTRAP'
+# Put the bootstrap commands here.
+BOOTSTRAP
+```
+
+Lightsail prepends its own `sh` wrapper, so a Bash shebang inside the entered
+script does not select Bash. Running the saved script over SSH with `sudo bash`
+also works.
+
 No private SSH key belongs in the image. This is a public repository, so the server
 can clone over HTTPS. Use a read-only deploy key if the repository becomes private.
 
 ```bash
-git clone https://github.com/arnavp27/OncoEdge-Jetson.git
+git clone --single-branch --branch codex/deploy-demo https://github.com/arnavp27/OncoEdge-Jetson.git
 cd OncoEdge-Jetson
 git fetch origin develop_yolo_ft
 python3 deploy/prepare_checkpoint.py
@@ -91,7 +131,9 @@ cp .env.example .env
 ```
 
 Give the instance a stable public IPv4 address and point the demo hostname's DNS A
-record at it. Set `ONCOEDGE_DOMAIN` in `.env` to that hostname. In the AWS firewall,
+record at it. Without a purchased domain, `oncoedge.<static-ip-with-dashes>.sslip.io`
+can provide an IP-based hostname; verify that it resolves before starting Caddy.
+Set `ONCOEDGE_DOMAIN` in `.env` to that hostname. In the AWS firewall,
 allow inbound TCP 80 and 443; restrict SSH 22 to your own IP. Port 8503 stays private.
 Then launch the HTTPS gateway:
 
