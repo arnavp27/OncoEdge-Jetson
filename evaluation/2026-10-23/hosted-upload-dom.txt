@@ -1,0 +1,129 @@
+Browser tab: 4, Title: "OncoEdge · Oral image analysis", URL: "https://oncoedge.54-253-96-120.sslip.io/".
+0 AXWebArea OncoEdge · Oral image analysis, URL: oncoedge.54-253-96-120.sslip.io/
+	1 container
+		2 container root
+			3 container
+				4 container
+					5 text OncoEdge  / EDGE AI · RESEARCH PROTOTYPE Live inference · CPU
+					6 link Description: View project ↗, Value: github.com/arnavp27/OncoEdge-Jetson
+					7 text COMPUTER VISION, AT A HUMAN SCALE
+					8 heading Oral lesion analysis. Built for the edge., Value: 1
+						9 text Oral lesion analysis.
+						10 text Built for the edge.
+					11 text A closer look at how detection and biomedical image classification work together. Start with a sample, or bring your own photograph.
+					12 container Pipeline: YOLO11 locates regions, BioMedCLIP compares image and text, then outputs are reviewed
+						13 text ONE IMAGE. TWO MODELS.
+						14 text 01
+						15 text Locate
+						16 text YOLO11 · region detection
+						17 text ↘ 02
+						18 text Compare
+						19 text BioMedCLIP · image + text
+						20 text ↘ 03
+						21 text Review
+						22 text Labels, evidence & uncertainty
+					23 text RESEARCH USE  This prototype does not diagnose disease. Model scores are uncalibrated, and an inconclusive result does not rule out a lesion.
+				24 container
+					25 text 01
+					26 heading Choose an image, Value: 2
+						27 text Choose an image
+					28 text SAMPLE LIBRARY / UPLOAD
+				29 Image source
+					30 container
+						31 radio button (settable, integer) Description: Samples, Value: 0
+						32 text Samples
+					33 container
+						34 radio button (settable, integer) Description: Upload, Value: 1
+						35 text Upload
+				36 container
+					37 button Help for Add an oral photograph
+					38 container Add an oral photograph
+						39 button Choose File
+						40 text Drag and drop
+						41 text file
+						42 text  here
+						43 text Limit 20MB per file
+						44 text  • JPG, JPEG, PNG, WEBP
+						45 button Browse files
+					79 content list
+						80 container
+							81 text benign-01.png 93.1KB
+							82 button Remove benign-01.png
+				46 container
+					47 text 02
+					48 heading Your photograph, Value: 2
+						49 text Your photograph
+				83 container
+					84 button Fullscreen
+					85 image 0
+				86 text benign-01.png
+				87 text 360 × 272 px · Uploaded photograph
+				88 button (collapsed) keyboard_arrow_right Demo context, Secondary Actions: Expand
+					89 text keyboard_arrow_right
+					90 text Demo context
+				91 button arrow_forward Run analysis
+					92 text arrow_forward
+					93 text Run analysis
+				94 text Runs the actual models. The first analysis takes longer while they load.
+				95 button (collapsed) check Analysis complete, Secondary Actions: Expand
+					96 text check
+					97 text Analysis complete
+				60 container
+					61 text 03
+					62 heading Analysis, Value: 2
+						63 text Analysis
+					64 text LIVE MODEL OUTPUT
+				98 text The evidence needs review
+				99 heading Assessment: INCONCLUSIVE, Value: 3, ID: assessment-inconclusive
+					100 text Assessment: INCONCLUSIVE
+					101 link Description: Link to heading, Value: oncoedge.54-253-96-120.sslip.io/#assessment-inconclusive
+				102 container
+					103 text info The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.
+				104 container
+					105 button (expanded) keyboard_arrow_down Why this result?, Secondary Actions: Collapse
+						106 text keyboard_arrow_down
+						107 text Why this result?
+					108 content list
+						109 container
+							110 AXListMarker •
+							111 text Region 3: models disagree (YOLO OPMD, classifier Benign).
+				112 container
+					113 text Demo concern score
+					114 text Not assessed
+				115 container
+					116 text Regions detected
+					117 text 3
+				118 container
+					119 text Analysis time
+					120 text 1.6s
+				121 text The concern score is a demo heuristic, not a disease probability. Time includes model loading on the first run.
+				122 heading Detected regions, Value: 4, ID: detected-regions
+					123 text Detected regions
+					124 link Description: Link to heading, Value: oncoedge.54-253-96-120.sslip.io/#detected-regions
+				125 container
+					126 button Fullscreen
+					127 image 0
+					128 text Model-generated overlays. A ? marks a region that needs review.
+				129 heading Inspect the evidence, Value: 4, ID: inspect-the-evidence
+					130 text Inspect the evidence
+					131 link Description: Link to heading, Value: oncoedge.54-253-96-120.sslip.io/#inspect-the-evidence
+				132 button (collapsed) keyboard_arrow_right Region 1 · Benign, Secondary Actions: Expand
+					133 text keyboard_arrow_right
+					134 text Region 1 · Benign
+				135 button (collapsed) keyboard_arrow_right Region 2 · Benign, Secondary Actions: Expand
+					136 text keyboard_arrow_right
+					137 text Region 2 · Benign
+				138 button (collapsed) keyboard_arrow_right Region 3 · Benign · Needs review, Secondary Actions: Expand
+					139 text keyboard_arrow_right
+					140 text Region 3 · Benign · Needs review
+				141 text Live inference · PYTORCH · trained YOLO checkpoint + BioMedCLIP
+				142 button download Download analysis JSON
+					143 text download
+					144 text Download analysis JSON
+				74 button (collapsed) keyboard_arrow_right About the project & evaluation, Secondary Actions: Expand
+					75 text keyboard_arrow_right
+					76 text About the project & evaluation
+				77 container
+					78 text OncoEdge / research in progress Built for exploration. Professional assessment remains essential.
+
+The focused UI element is 91 button arrow_forward Run analysis

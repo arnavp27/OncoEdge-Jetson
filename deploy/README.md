@@ -97,6 +97,30 @@ used about 1.2 GiB and peaked at 2,538,381,312 bytes (about 2.36 GiB).
 Both sample choices and a JPEG upload completed analysis in the browser through
 public HTTPS, including the Streamlit WebSocket connection.
 
+### Verification on 23 October 2026
+
+The redesigned gallery UI and assessment integration fixes are deployed from
+application commit `b9fc1bcfcb103fb4dff4d91ea6973974c65345a6`. The existing
+Lightsail instance, static IP, Caddy gateway, checkpoint and named volumes were
+reused. The Docker image carries the application commit in its OCI revision label.
+
+All 25 local regression checks passed. The new image built on AWS with cached
+dependencies, then ran both original photos and all six gallery photos with
+Hugging Face network access disabled. Model initialization took 18.8 seconds;
+peak container memory was 2,220.5 MiB. These checks verify execution, not accuracy.
+
+Through the public HTTPS interface, the red-patch gallery sample completed real
+inference, its JSON report downloaded and matched the visible assessment, and
+switching to upload cleared the prior result. Uploading `benign-01.png` completed
+analysis with three regions. First web analysis took 20.2 seconds including model
+loading; the warmed upload took 1.6 seconds. These are individual observations,
+not a concurrency or latency benchmark. The container was healthy with zero
+restarts and no OOM kill; its UI, detector, pipeline, CSS and theme hashes matched
+the local release. Caddy continued serving HTTPS throughout the app replacement.
+
+The previous image is retained as `oncoedge:rollback-1f195a0-20261023`. See the
+[release record](../evaluation/2026-10-23/AWS_RELEASE.md) for evidence and rollback.
+
 ## AWS server setup
 
 Use one Ubuntu 24.04 x86_64 EC2 or Lightsail instance. Install Git and Docker Engine

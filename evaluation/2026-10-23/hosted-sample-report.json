@@ -1,0 +1,42 @@
+{
+  "project": "OncoEdge",
+  "research_only": true,
+  "image": "Oral cavity \u00b7 red patch",
+  "demo_context": {
+    "age": 45,
+    "tobacco_years": 0,
+    "lesion_duration": "< 2 weeks"
+  },
+  "backend": "pytorch",
+  "elapsed_seconds": 20.161,
+  "risk_level": "INCONCLUSIVE",
+  "risk_score": null,
+  "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+  "assessment_issues": [
+    "Region 1: models disagree (YOLO OPMD, classifier Benign)."
+  ],
+  "detections": [
+    {
+      "bbox": [
+        0,
+        0,
+        309,
+        302
+      ],
+      "yolo_conf": 0.26698213815689087,
+      "yolo_class": "OPMD",
+      "class": "Benign",
+      "class_scores": {
+        "OCA": 0.0039671906270086765,
+        "OPMD": 0.001246828120201826,
+        "Benign": 0.9946209192276001,
+        "Normal": 0.000165055607794784
+      },
+      "fusion_score": 0.2655460196709569,
+      "concern_score": 0.0013920498735203735,
+      "classifier_margin": 0.9906537286005914,
+      "model_disagreement": true,
+      "classification_uncertain": false
+    }
+  ]
+}

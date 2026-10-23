@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-23",
+  "release": "b9fc1bcfcb103fb4dff4d91ea6973974c65345a6",
+  "backend": "cpu/pytorch",
+  "offline_model_cache": true,
+  "memory": {
+    "process_peak_rss_mib": 1972.5,
+    "container_peak_memory_mib": 2220.5
+  },
+  "cases": [
+    {
+      "sample": "027.jpeg",
+      "seconds": 0.94,
+      "detections": 0,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "classifier": {
+        "class": "Benign",
+        "scores": {
+          "OCA": 0.09653507173061371,
+          "OPMD": 0.018591152504086494,
+          "Benign": 0.8314882516860962,
+          "Normal": 0.053385503590106964
+        },
+        "max_score": 0.8314882516860962
+      }
+    },
+    {
+      "sample": "photo.webp",
+      "seconds": 0.7,
+      "detections": 0,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "classifier": {
+        "class": "OPMD",
+        "scores": {
+          "OCA": 0.00010969662253046408,
+          "OPMD": 0.9945125579833984,
+          "Benign": 7.295950490515679e-05,
+          "Normal": 0.005304830148816109
+        },
+        "max_score": 0.9945125579833984
+      }
+    },
+    {
+      "sample": "assets/samples/opmd-06.webp",
+      "seconds": 1.46,
+      "detections": 1,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "classifier": {
+        "class": "OCA",
+        "scores": {
+          "OCA": 0.8008314967155457,
+          "OPMD": 0.04126919433474541,
+          "Benign": 0.1570519208908081,
+          "Normal": 0.0008474084897898138
+        },
+        "max_score": 0.8008314967155457
+      }
+    },
+    {
+      "sample": "assets/samples/opmd-01.png",
+      "seconds": 1.17,
+      "detections": 1,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "classifier": {
+        "class": "OPMD",
+        "scores": {
+          "OCA": 0.0037570111453533173,
+          "OPMD": 0.946760892868042,
+          "Benign": 0.048652760684490204,
+          "Normal": 0.0008294309373013675
+        },
+        "max_score": 0.946760892868042
+      }
+    },
+    {
+      "sample": "assets/samples/oca-01.png",
+      "seconds": 1.07,
+      "detections": 1,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "classifier": {
+        "class": "Benign",
+        "scores": {
+          "OCA": 0.0019118065247312188,
+          "OPMD": 0.0013248104369267821,
+          "Benign": 0.9959891438484192,
+          "Normal": 0.0007742923917248845
+        },
+        "max_score": 0.9959891438484192
+      }
+    },
+    {
+      "sample": "assets/samples/opmd-04.png",
+      "seconds": 1.4,
+      "detections": 2,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "classifier": {
+        "class": "Benign",
+        "scores": {
+          "OCA": 0.06842454522848129,
+          "OPMD": 0.002549162833020091,
+          "Benign": 0.9177796840667725,
+          "Normal": 0.01124659739434719
+        },
+        "max_score": 0.9177796840667725
+      }
+    },
+    {
+      "sample": "assets/samples/benign-01.png",
+      "seconds": 2.18,
+      "detections": 3,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "classifier": {
+        "class": "Benign",
+        "scores": {
+          "OCA": 0.002716868882998824,
+          "OPMD": 0.1162753701210022,
+          "Benign": 0.8732212781906128,
+          "Normal": 0.00778651749715209
+        },
+        "max_score": 0.8732212781906128
+      }
+    },
+    {
+      "sample": "assets/samples/benign-06.png",
+      "seconds": 2.36,
+      "detections": 4,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "classifier": {
+        "class": "Normal",
+        "scores": {
+          "OCA": 0.001207522233016789,
+          "OPMD": 0.12970559298992157,
+          "Benign": 0.00021211509010754526,
+          "Normal": 0.8688747882843018
+        },
+        "max_score": 0.8688747882843018
+      }
+    }
+  ]
+}
