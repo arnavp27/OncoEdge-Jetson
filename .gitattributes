@@ -1,0 +1,2 @@
+# CSV exports use the standard CRLF record terminator; preserve recorded data.
+*.csv whitespace=cr-at-eol

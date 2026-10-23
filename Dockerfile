@@ -33,6 +33,8 @@ RUN useradd --create-home --uid 10001 oncoedge \
     && chown -R oncoedge:oncoedge /app/models /home/oncoedge
 
 COPY --chown=oncoedge:oncoedge src /app/src
+COPY --chown=oncoedge:oncoedge assets /app/assets
+COPY --chown=oncoedge:oncoedge .streamlit /app/.streamlit
 COPY --chown=oncoedge:oncoedge streamlit_app.py 027.jpeg photo.webp /app/
 COPY --chown=oncoedge:oncoedge deploy/warm_models.py /app/deploy/warm_models.py
 

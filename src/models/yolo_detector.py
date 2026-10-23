@@ -52,7 +52,7 @@ class YOLODetector:
         Run detection on an image.
 
         Args:
-            image: Input image (numpy array HxWx3 or PIL Image)
+            image: RGB numpy array HxWx3 or PIL Image
             conf_threshold: Confidence threshold for detections (0-1)
             imgsz: Input image size for YOLO (will be resized)
 
@@ -62,13 +62,23 @@ class YOLODetector:
                 - masks: Segmentation masks (if available)
                 - conf: Confidence scores
         """
-        # Convert PIL Image to numpy array if needed
+        # The application and classifier use RGB. Ultralytics expects NumPy
+        # sources in BGR and reverses their channels during preprocessing.
         if isinstance(image, Image.Image):
-            image = np.array(image)
+            image = np.array(image.convert('RGB'))
+        else:
+            image = np.asarray(image)
+            if image.ndim == 2:
+                image = np.repeat(image[:, :, None], 3, axis=2)
+            elif image.ndim == 3 and image.shape[2] == 4:
+                image = image[:, :, :3]
+        if image.ndim != 3 or image.shape[2] != 3:
+            raise ValueError('Expected an RGB image with shape HxWx3')
+        bgr_image = np.ascontiguousarray(image[:, :, ::-1])
 
         # Run YOLO inference
         results = self.model.predict(
-            source=image,
+            source=bgr_image,
             conf=conf_threshold,
             imgsz=imgsz,
             device=self.device,

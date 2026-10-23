@@ -7,6 +7,9 @@ The project targets the **NVIDIA Jetson Nano 4 GB** and explores how a large bio
 [**Try the live demo**](https://oncoedge.54-253-96-120.sslip.io/) — select a bundled sample or upload an image.
 The hosted demo runs the existing PyTorch pipeline on CPU with the trained
 `best.pt` detector; the Jetson/TensorRT code remains in the project.
+See the [assessment fixes and evaluation](evaluation/2026-10-05/FIXES.md)
+and [interview preparation guide](evaluation/INTERVIEW_GUIDE.md) for the
+implementation evidence and its limits.
 
 > [!CAUTION]
 > OncoEdge is an engineering and research prototype. It is **not a medical device**, does not provide a diagnosis, and has not been clinically validated. Its output must not replace examination, biopsy, or judgement by a qualified healthcare professional.
@@ -45,13 +48,13 @@ The interface accepts an oral-cavity photograph and three patient inputs:
 - years of tobacco use; and
 - lesion duration.
 
-For every region detected by YOLO, the current pipeline crops the bounding box, classifies the crop using BioMedCLIP, fuses the detector and classifier scores, and applies a rule-based risk calculation. The interface returns:
+For every region detected by YOLO, the current pipeline crops the bounding box, classifies the crop using BioMedCLIP, records both models' labels, and checks for disagreement or ambiguous classification before applying a rule-based concern calculation. The interface returns:
 
 - detected regions and optional segmentation overlays;
-- one BioMedCLIP class per region;
+- both the YOLO and BioMedCLIP labels per region;
 - per-class relative scores;
-- a fused confidence score;
-- a `LOW`, `MEDIUM`, or `HIGH` risk level; and
+- a fused match score, separate from cancer concern evidence;
+- an `INCONCLUSIVE`, `LOW`, `MEDIUM`, or `HIGH` research assessment; and
 - a referral-oriented recommendation.
 
 ### End-to-end architecture
@@ -61,7 +64,7 @@ flowchart TD
     A[Oral-cavity image] --> B[Normalize image format]
     B --> C[YOLO11 segmentation]
     C --> D{Any detections?}
-    D -- No --> J[Patient-factor-only risk assessment]
+    D -- No --> J[INCONCLUSIVE: no numeric score]
     D -- Yes --> E[Crop each YOLO bounding box]
     E --> F[BioMedCLIP vision encoder]
     P[Four fixed clinical prompts] --> Q[Precomputed 4 x 512 text embeddings]
@@ -70,27 +73,31 @@ flowchart TD
     Q --> H
     H --> I[Logit scaling and softmax]
     C --> K[YOLO confidence]
-    I --> L[BioMedCLIP maximum class score]
-    K --> M[Multiplicative score fusion]
-    L --> M
-    M --> N[Rule-based clinical risk calculation]
+    I --> L[Class labels and relative scores]
+    C --> S[YOLO class labels]
+    S --> T{Labels compatible and classifier unambiguous?}
+    L --> T
+    T -- No --> J
+    T -- Yes --> M[Detector-weighted OCA and OPMD evidence]
+    K --> M
+    M --> N[Rule-based demo concern calculation]
     R[Age, tobacco use, lesion duration] --> N
-    J --> O[LOW / MEDIUM / HIGH]
-    N --> O
+    J --> W[Streamlit results and recommendation]
+    N --> O[LOW / MEDIUM / HIGH research flags]
     C --> V[Bounding boxes and mask overlays]
-    O --> W[Streamlit results and recommendation]
+    O --> W
     V --> W
 ```
 
 ### Runtime data flow
 
 1. **Image preparation** — PIL or NumPy input is converted to RGB.
-2. **Detection** — YOLO processes the full image at a default input size of `640` with confidence threshold `0.25`.
+2. **Detection** — the wrapper converts RGB to BGR at the Ultralytics NumPy boundary. YOLO processes the full image at input size `640` with confidence threshold `0.25`. Missing or unusable regions return `INCONCLUSIVE`, with no numeric score.
 3. **Cropping** — each valid bounding box becomes a lesion candidate. The mask is retained for visualization but is not used to mask the classifier crop.
 4. **Classification** — BioMedCLIP compares the crop with four fixed text prompts.
-5. **Fusion** — `fusion_score = yolo_confidence × biomedclip_max_score`.
-6. **Risk assessment** — the maximum fused lesion score is combined with patient factors.
-7. **Presentation** — Streamlit displays the risk level, recommendation, detected regions, and score breakdown.
+5. **Review gates** — any model disagreement or ambiguous classifier output makes the image assessment `INCONCLUSIVE`. YOLO `Benign` and BioMedCLIP `Normal` are treated as compatible non-concerning labels.
+6. **Scores** — semantic match remains `yolo_confidence × biomedclip_max_score`; concern evidence is separately `yolo_confidence × (OCA_score + OPMD_score)`.
+7. **Assessment and presentation** — only resolved assessments receive a bounded demo concern score and class-aware flag. Streamlit displays both labels, any assessment issues, detected regions, and relative scores.
 
 ## Models
 
@@ -206,32 +213,42 @@ Calibration and runtime use the same preprocessing module to reduce calibration/
 
 ### Score fusion
 
-The current `main` implementation uses multiplicative fusion:
+The semantic match uses multiplicative fusion:
 
 ```text
 fusion_score = yolo_confidence × biomedclip_max_score
 ```
 
-This treats YOLO as spatial evidence and BioMedCLIP as semantic evidence. It is simple and interpretable, but it can suppress the final score when either component is uncertain. The unmerged advanced branch explores a gate-style alternative.
-
-### Rule-based risk score
-
-The current clinical decision tree calculates:
+This records a detector-weighted match to whichever classifier prompt won. A strong `Normal` or `Benign` match must not increase cancer concern, so the assessment uses a separate quantity:
 
 ```text
-risk_score = fusion_score × 10
+concern_score = yolo_confidence × (OCA_relative_score + OPMD_relative_score)
+```
+
+Neither quantity is a calibrated disease probability. The unmerged advanced branch explores a gate-style alternative.
+
+### Abstention and rule-based concern score
+
+No detections, unusable crops, model disagreement, or ambiguous classification produce `INCONCLUSIVE` with `risk_score = None`. A classifier output is considered ambiguous when its maximum relative score is below `0.60` or its top-two margin is below `0.15`. These are configurable engineering gates, not clinically calibrated cut-offs. An unresolved region prevents a completed image assessment.
+
+For resolved assessments, the decision tree calculates:
+
+```text
+risk_score = max_region_concern_score × 10
            + 1.5 if age > 40
            + 2.0 if tobacco use > 10 years
            + 1.5 if lesion duration > 6 weeks
+           bounded to [0, 10]
 ```
 
-| Risk level | Current rule | Interface recommendation |
+| Research flag | Current rule | Interface interpretation |
 |---|---|---|
-| `HIGH` | score `> 8.0` | Urgent specialist referral within 2 weeks |
-| `MEDIUM` | score `> 5.0` | Non-urgent referral within 4 weeks |
-| `LOW` | score `≤ 5.0` | Routine monitoring |
+| `INCONCLUSIVE` | Missing usable regions or unresolved model output | Unable to assess; disease has not been ruled out |
+| `HIGH` | Agreed `OCA`, or agreed `OPMD` with score `> 8.0` | Models flagged concerning features; professional assessment needed |
+| `MEDIUM` | Other agreed `OPMD` | Models flagged a potentially malignant appearance; professional assessment needed |
+| `LOW` | All usable regions have resolved non-concerning labels | Not a negative screening result; persistent or concerning lesions still need professional assessment |
 
-These thresholds are software rules, not clinically validated cut-offs. The theoretical score can reach `15`, although the current UI formats it as `/10`; this known mismatch should be corrected before presenting the score to users.
+These flags, weights and class floors are software heuristics, not clinically validated risk categories. The UI calls the numeric value a **demo concern score**, displays **Not assessed** for inconclusive cases, and labels the classifier's scores as relative matches rather than disease probabilities.
 
 ## Dataset and fine-tuning evidence
 
@@ -294,19 +311,17 @@ Requirements:
 git clone https://github.com/arnavp27/OncoEdge-Jetson.git
 cd OncoEdge-Jetson
 
-python3.10 -m venv .venv
+uv venv --python 3.10 .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 PowerShell activation on Windows:
 
 ```powershell
-py -3.10 -m venv .venv
+uv venv --python 3.10 .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 Copy the trained detector checkpoint from the training branch (Bash):
@@ -322,10 +337,15 @@ The checkpoint's Git blob ID is `b8ee1810c7444d9d4fe1c877be28f7458a6e6805`.
 Run the interface:
 
 ```bash
-streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 \
+  .venv/bin/python -m streamlit run streamlit_app.py --server.port 8504 --server.address 127.0.0.1
 ```
 
-Then open `http://localhost:8501`, enter the patient factors, choose a bundled sample or upload an image, and select **Analyze Image**. The **Sample images** picker offers `027.jpeg` (lip photo) and `photo.webp` (annotated tongue photo); the tongue photo's existing markings are identified as part of the source image.
+Then open `http://localhost:8504`, choose one of six published sample photographs or upload a JPEG, PNG or WebP, and select **Run analysis**. Optional synthetic patient factors are under **Demo context**. Port 8504 is used for local development because another project currently occupies 8503; the Docker configuration remains configurable with `ONCOEDGE_PORT`.
+
+The gallery includes tongue, cheek, palate and floor-of-mouth examples. Every choice runs the actual pipeline; results are not prefilled. Sample inputs are unchanged copies of the visually reviewed evaluation photos, with [publication attribution and CC BY 4.0 licensing](assets/samples/ATTRIBUTION.md). Source reference labels are available under **About this sample** and do not control model output.
+
+The workspace retains completed results across reruns, clears them when the photo or context changes, validates uploads and context, and offers a JSON analysis download. See the [local UI notes](evaluation/2026-10-23/UI_REDESIGN.md) for verification and service controls.
 
 > [!WARNING]
 > Loading the fine-tuned checkpoint enables the intended lesion-detection stage. End-to-end clinical accuracy and risk scoring remain unvalidated.
@@ -417,7 +437,8 @@ The older Jetson documents in this repository were written across different impl
 
 ```text
 OncoEdge-Jetson/
-├── streamlit_app.py                    # User interface
+├── streamlit_app.py                    # Streamlit entry point
+├── assets/                             # Styles and six attributed sample photos
 ├── src/
 │   ├── config.py                       # Model, path, and clinical defaults
 │   ├── models/
@@ -433,10 +454,12 @@ OncoEdge-Jetson/
 │   │   ├── inference_pipeline.py       # End-to-end orchestration
 │   │   ├── fusion.py                   # Confidence fusion
 │   │   └── decision_tree.py            # Risk rules
-│   └── utils/
+│   ├── utils/
 │       ├── prepare_calibration_data.py
 │       └── visualization.py
-├── tests/                              # Placeholder, ONNX, and benchmark scripts
+│   └── ui/app.py                        # Sample workspace and result presentation
+├── tests/                              # Assessment/deployment regressions and model scripts
+├── evaluation/                         # Published-photo inputs, attribution and retained results
 ├── data/                               # Metadata and ignored local image data
 ├── models/                             # Ignored generated/downloaded artifacts
 ├── QUANTIZATION_README.md              # Historical quantization progress notes
@@ -457,6 +480,7 @@ OncoEdge-Jetson/
 | Test surface | Current status |
 |---|---|
 | Python syntax | Source files compile syntactically |
+| Assessment, UI and demo deployment regressions | 25 passing checks; use the command below |
 | YOLO unit tests | Placeholder tests on `main` |
 | BioMedCLIP unit tests | Placeholder tests on `main` |
 | Pipeline integration tests | Placeholder tests on `main` |
@@ -466,18 +490,31 @@ OncoEdge-Jetson/
 
 `test_components.py` is a smoke-test script, not a reliable automated pass/fail suite: it catches component exceptions and prints a final completion message regardless of individual failures.
 
+With the existing uv-created development environment:
+
+```bash
+.venv/bin/python -m pytest tests/test_assessment.py tests/test_deployment.py tests/test_demo_ui.py -q
+HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 OMP_NUM_THREADS=2 \
+  .venv/bin/python evaluation/evaluate_fixes.py
+```
+
+The saved 17-photo replay detects regions in 11 photos after the color fix. All 17 assessments are inconclusive under the review gates. This exposes unresolved model limitations; it is not evidence of clinical accuracy. The [fixes report](evaluation/2026-10-05/FIXES.md) retains the before/after results and links the historical baseline.
+
+For recruiter conversations, the [evaluation interview guide](evaluation/INTERVIEW_GUIDE.md) contains verified metrics, likely follow-up questions, short answers, evaluation limits and a plan for stronger validation.
+
 ## Known limitations
 
 - The trained YOLO checkpoint must be copied from `develop_yolo_ft` into the local `models/best.pt` path before running inference.
-- Required model, ONNX, calibration, TensorRT, and evaluation artifacts are not versioned.
+- Required model, ONNX, calibration and TensorRT artifacts are not versioned.
 - BioMedCLIP remains zero-shot for this task; it was not fine-tuned here on the oral dataset.
 - Four-way softmax scores are prompt-relative similarities, not calibrated disease probabilities.
 - The segmentation mask is visualized but not used to isolate pixels sent to BioMedCLIP.
 - Multiplicative fusion and risk weights have not been clinically calibrated.
-- The risk score can exceed the `/10` range displayed by the UI.
+- The abstention gates are conservative engineering choices and have not been calibrated against a clinical test set.
 - The YOLO training split is image-level rather than demonstrably patient-level.
 - The OCA class is substantially underrepresented relative to OPMD.
-- No external validation, demographic subgroup analysis, uncertainty threshold, or abstention policy is available.
+- Models still miss regions and produce incorrect or conflicting labels on the exploratory published-photo set.
+- No independent clinical validation or demographic subgroup analysis is available.
 - No retained result demonstrates TensorRT size, speed, memory usage, thermal stability, or clinical accuracy on the Nano.
 - The TensorRT wrapper and historical JetPack instructions must be reconciled for one confirmed TensorRT API version.
 - The application does not implement authentication, encrypted storage, audit controls, or medical-data governance.

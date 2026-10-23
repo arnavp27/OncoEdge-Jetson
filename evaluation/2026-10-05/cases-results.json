@@ -1,0 +1,1440 @@
+[
+  {
+    "id": "oca-01",
+    "expected_class": "OCA",
+    "source_label": "SCC, posterior right oral cavity",
+    "source_id": "zahid2022",
+    "figure": 6,
+    "pdf_page": 4,
+    "pdf_image_number": 10,
+    "file": "images/oca-01.png",
+    "width": 413,
+    "height": 302,
+    "sha256": "1114c8175729bf511ceea9f1b6c1375dc0d1c35088b18f4b86619df89958b505",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single posterior oral photo; visible red ulcerated region on image left. No diagnostic text. PDF locator arrow is a separate vector and is absent from the extracted photograph.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.14924794399848906,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "Benign",
+      "scores": {
+        "OCA": 0.0019118355121463537,
+        "OPMD": 0.0013248102040961385,
+        "Benign": 0.9959890246391296,
+        "Normal": 0.0007743070600554347
+      },
+      "max_score": 0.9959890246391296
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            0.11747097969055176,
+            0.0,
+            309.54412841796875,
+            302.0
+          ],
+          "confidence": 0.26698195934295654,
+          "yolo_class": "OPMD"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            0,
+            0,
+            309,
+            302
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.26698195934295654,
+          "class": "Benign",
+          "class_scores": {
+            "OCA": 0.003967266529798508,
+            "OPMD": 0.0012468138011172414,
+            "Benign": 0.9946209192276001,
+            "Normal": 0.0001650600170250982
+          },
+          "fusion_score": 0.2655458418188772
+        }
+      ],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 4.155458418188772
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "oca-02",
+    "expected_class": "OCA",
+    "source_label": "SCC, underside of tongue",
+    "source_id": "zahid2022",
+    "figure": 7,
+    "pdf_page": 4,
+    "pdf_image_number": 8,
+    "file": "images/oca-02.png",
+    "width": 394,
+    "height": 217,
+    "sha256": "7a80a37a4265d8acf4ced3bc3605d1af61c1722b7b7263e4ea79df851f65f21f",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single tongue photo; irregular white/red area at image right. No diagnostic text. PDF locator arrow is absent from extracted image.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.06170499799918616,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "OPMD",
+      "scores": {
+        "OCA": 0.00042358224163763225,
+        "OPMD": 0.9961192607879639,
+        "Benign": 0.0031168381683528423,
+        "Normal": 0.00034033969859592617
+      },
+      "max_score": 0.9961192607879639
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 1.5
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "oca-03",
+    "expected_class": "OCA",
+    "source_label": "OSCC, vestibular region",
+    "source_id": "markopoulos2012",
+    "figure": 1,
+    "pdf_page": 1,
+    "pdf_image_number": 0,
+    "file": "images/oca-03.png",
+    "width": 335,
+    "height": 214,
+    "sha256": "29ae03a0f685afb820b52a87ece3b513b1aa0843515c18c9448c84b6c5a974e7",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single intraoral photo with retractors/metal instrument, teeth and pink-white vestibular area. Compressed/soft detail. No labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.0686092819996702,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "OCA",
+      "scores": {
+        "OCA": 0.9672405123710632,
+        "OPMD": 0.0007756848935969174,
+        "Benign": 0.031905561685562134,
+        "Normal": 7.827739318599924e-05
+      },
+      "max_score": 0.9672405123710632
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 1.5
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "oca-04",
+    "expected_class": "OCA",
+    "source_label": "OSCC, cheek mucosa",
+    "source_id": "markopoulos2012",
+    "figure": 2,
+    "pdf_page": 1,
+    "pdf_image_number": 1,
+    "file": "images/oca-04.png",
+    "width": 335,
+    "height": 214,
+    "sha256": "a863484dea5c9412514142da41b3176a6e76dfac7415f7948f877d44ad2685a7",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single cheek-mucosa photo showing focal ulcerated region; compressed/soft detail. No labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.059795798999402905,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "Benign",
+      "scores": {
+        "OCA": 0.08659853786230087,
+        "OPMD": 0.0018278424395248294,
+        "Benign": 0.9020677804946899,
+        "Normal": 0.009505907073616982
+      },
+      "max_score": 0.9020677804946899
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            0.45367884635925293,
+            0.0,
+            255.8726806640625,
+            214.0
+          ],
+          "confidence": 0.7906551957130432,
+          "yolo_class": "OPMD"
+        },
+        {
+          "bbox": [
+            70.6041259765625,
+            0.0,
+            334.54833984375,
+            214.0
+          ],
+          "confidence": 0.376992404460907,
+          "yolo_class": "OPMD"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            0,
+            0,
+            255,
+            214
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.7906551957130432,
+          "class": "OCA",
+          "class_scores": {
+            "OCA": 0.6961801648139954,
+            "OPMD": 0.0028002290055155754,
+            "Benign": 0.1699385643005371,
+            "Normal": 0.13108110427856445
+          },
+          "fusion_score": 0.5504384644625482
+        },
+        {
+          "bbox": [
+            70,
+            0,
+            334,
+            214
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.376992404460907,
+          "class": "Benign",
+          "class_scores": {
+            "OCA": 0.04905592277646065,
+            "OPMD": 0.000629822607152164,
+            "Benign": 0.9476761817932129,
+            "Normal": 0.0026379614137113094
+          },
+          "fusion_score": 0.35726672242455493
+        }
+      ],
+      "risk": {
+        "level": "MEDIUM",
+        "recommendation": "Non-urgent referral within 4 weeks",
+        "score": 7.004384644625482
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "opmd-01",
+    "expected_class": "OPMD",
+    "source_label": "Reticular oral lichen planus",
+    "source_id": "zahid2022",
+    "figure": 13,
+    "pdf_page": 7,
+    "pdf_image_number": 28,
+    "file": "images/opmd-01.png",
+    "width": 398,
+    "height": 332,
+    "sha256": "94a549aa047820a8c3fd8047d2872d6cbc9a010fd2365be4609969b0218de697",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single cheek photo with teeth/retractor and fine pale mucosal markings. Caption mapping checked on PDF page 7; first of paired figures 13/14. Vector arrows absent.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.08816862199819298,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "OPMD",
+      "scores": {
+        "OCA": 0.0037569431588053703,
+        "OPMD": 0.9467617273330688,
+        "Benign": 0.04865187779068947,
+        "Normal": 0.0008294507279060781
+      },
+      "max_score": 0.9467617273330688
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            0.0,
+            1.4884159564971924,
+            316.9125671386719,
+            332.0
+          ],
+          "confidence": 0.26627117395401,
+          "yolo_class": "OPMD"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            0,
+            1,
+            316,
+            332
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.26627117395401,
+          "class": "OPMD",
+          "class_scores": {
+            "OCA": 0.0062795779667794704,
+            "OPMD": 0.497918963432312,
+            "Benign": 0.4724157452583313,
+            "Normal": 0.02338581532239914
+          },
+          "fusion_score": 0.1325814669270855
+        }
+      ],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 2.825814669270855
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "opmd-02",
+    "expected_class": "OPMD",
+    "source_label": "Erosive oral lichen planus",
+    "source_id": "zahid2022",
+    "figure": 15,
+    "pdf_page": 7,
+    "pdf_image_number": 30,
+    "file": "images/opmd-02.png",
+    "width": 378,
+    "height": 290,
+    "sha256": "f7c5b723eb0ef3b7af12d8fa46879c39bc9613f1e5b082694a77893da8e757ac",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single oral photo with red/white areas on cheek and tongue; metal instrument and glare. No labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.08490987600089284,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "OPMD",
+      "scores": {
+        "OCA": 0.3448871076107025,
+        "OPMD": 0.5761094689369202,
+        "Benign": 0.07869584113359451,
+        "Normal": 0.000307574518956244
+      },
+      "max_score": 0.5761094689369202
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            0.564363420009613,
+            0.0,
+            278.9717712402344,
+            290.0
+          ],
+          "confidence": 0.3521272540092468,
+          "yolo_class": "Benign"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            0,
+            0,
+            278,
+            290
+          ],
+          "yolo_class": "Benign",
+          "yolo_conf": 0.3521272540092468,
+          "class": "OPMD",
+          "class_scores": {
+            "OCA": 0.13502824306488037,
+            "OPMD": 0.7644299268722534,
+            "Benign": 0.09890453517436981,
+            "Normal": 0.0016374028054997325
+          },
+          "fusion_score": 0.26917661103201596
+        }
+      ],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 4.1917661103201596
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "opmd-03",
+    "expected_class": "OPMD",
+    "source_label": "White lesion: OLP plus candidosis",
+    "source_id": "zahid2022",
+    "figure": 20,
+    "pdf_page": 9,
+    "pdf_image_number": 40,
+    "file": "images/opmd-03.png",
+    "width": 375,
+    "height": 317,
+    "sha256": "f5da5ecf1dc4ef76b0ae1f068c21f244b32ee837a5ab053e23159f2607b63bce",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single dorsal-tongue photo with white patches. Mixed source diagnosis OLP plus secondary candidosis; OPMD mapping follows OLP, not an assumption that all white lesions are leukoplakia.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.08147304600061034,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "OPMD",
+      "scores": {
+        "OCA": 1.6903792129596695e-05,
+        "OPMD": 0.8852260112762451,
+        "Benign": 3.558773096301593e-05,
+        "Normal": 0.11472155898809433
+      },
+      "max_score": 0.8852260112762451
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 1.5
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "opmd-04",
+    "expected_class": "OPMD",
+    "source_label": "Erythroplakia",
+    "source_id": "zahid2022",
+    "figure": 21,
+    "pdf_page": 9,
+    "pdf_image_number": 42,
+    "file": "images/opmd-04.png",
+    "width": 372,
+    "height": 230,
+    "sha256": "613e4dcd094bdf144eb8cb449a55398d6d6a4c48b4aae24c26d5689c81fb3add",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single posterior palate/uvula photo; small red area and glare. Caption mapping checked on PDF page 9. Vector arrow absent; no labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.060362787000485696,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "Benign",
+      "scores": {
+        "OCA": 0.0684240534901619,
+        "OPMD": 0.0025491199921816587,
+        "Benign": 0.9177800416946411,
+        "Normal": 0.011246751993894577
+      },
+      "max_score": 0.9177800416946411
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            206.6114501953125,
+            89.22991180419922,
+            320.8195495605469,
+            183.23155212402344
+          ],
+          "confidence": 0.5655475854873657,
+          "yolo_class": "OCA"
+        },
+        {
+          "bbox": [
+            84.36498260498047,
+            0.0,
+            371.1570739746094,
+            230.0
+          ],
+          "confidence": 0.5478081703186035,
+          "yolo_class": "OCA"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            206,
+            89,
+            320,
+            183
+          ],
+          "yolo_class": "OCA",
+          "yolo_conf": 0.5655475854873657,
+          "class": "Benign",
+          "class_scores": {
+            "OCA": 0.0002787605917546898,
+            "OPMD": 0.0003996047598775476,
+            "Benign": 0.9833709001541138,
+            "Normal": 0.01595071330666542
+          },
+          "fusion_score": 0.5561430382206964
+        },
+        {
+          "bbox": [
+            84,
+            0,
+            371,
+            230
+          ],
+          "yolo_class": "OCA",
+          "yolo_conf": 0.5478081703186035,
+          "class": "OCA",
+          "class_scores": {
+            "OCA": 0.6146865487098694,
+            "OPMD": 0.0003218522178940475,
+            "Benign": 0.3847094178199768,
+            "Normal": 0.00028218573424965143
+          },
+          "fusion_score": 0.3367303135682107
+        }
+      ],
+      "risk": {
+        "level": "MEDIUM",
+        "recommendation": "Non-urgent referral within 4 weeks",
+        "score": 7.061430382206964
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "opmd-05",
+    "expected_class": "OPMD",
+    "source_label": "Oral submucous fibrosis",
+    "source_id": "zahid2022",
+    "figure": 22,
+    "pdf_page": 9,
+    "pdf_image_number": 38,
+    "file": "images/opmd-05.png",
+    "width": 500,
+    "height": 287,
+    "sha256": "19c8f83a3ca2679b8b9a7de7831cbe1e553153dd4a0ec1066db8484bf3e98634",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single palatal photo with teeth; diffuse pallor and small bleeding point. No labels; vector source arrow absent.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.0724470180030039,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "Normal",
+      "scores": {
+        "OCA": 0.00013858477177564055,
+        "OPMD": 0.0005126764299347997,
+        "Benign": 2.8319796911091544e-05,
+        "Normal": 0.999320387840271
+      },
+      "max_score": 0.999320387840271
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            120.38874816894531,
+            1.1357545852661133,
+            499.5713806152344,
+            286.9445495605469
+          ],
+          "confidence": 0.6351357698440552,
+          "yolo_class": "OPMD"
+        },
+        {
+          "bbox": [
+            0.0,
+            1.543116569519043,
+            399.8319396972656,
+            284.9722900390625
+          ],
+          "confidence": 0.3253743350505829,
+          "yolo_class": "OPMD"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            120,
+            1,
+            499,
+            286
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.6351357698440552,
+          "class": "OPMD",
+          "class_scores": {
+            "OCA": 0.1425720900297165,
+            "OPMD": 0.5708286762237549,
+            "Benign": 0.0019130123546347022,
+            "Normal": 0.28468620777130127
+          },
+          "fusion_score": 0.36255371072243747
+        },
+        {
+          "bbox": [
+            0,
+            1,
+            399,
+            284
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.3253743350505829,
+          "class": "Normal",
+          "class_scores": {
+            "OCA": 0.005839732941240072,
+            "OPMD": 0.010330773890018463,
+            "Benign": 0.0008454691851511598,
+            "Normal": 0.9829840660095215
+          },
+          "fusion_score": 0.3198377868431663
+        }
+      ],
+      "risk": {
+        "level": "MEDIUM",
+        "recommendation": "Non-urgent referral within 4 weeks",
+        "score": 5.125537107224375
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "opmd-06",
+    "expected_class": "OPMD",
+    "source_label": "Extensive tongue leukoplakia",
+    "source_id": "rich2023",
+    "figure": 1,
+    "pdf_page": null,
+    "pdf_image_number": null,
+    "file": "images/opmd-06.webp",
+    "width": 1425,
+    "height": 896,
+    "sha256": "51cca1f14fe0880d5631d783554b874568a54f88e5c28b2e7b62fa1de0be98ff",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Sharp larger ventral-tongue photo; broad white areas and glare. No labels, diagrams or clinical overlays.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.11131652100084466,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "OCA",
+      "scores": {
+        "OCA": 0.8008328676223755,
+        "OPMD": 0.04126816615462303,
+        "Benign": 0.15705159306526184,
+        "Normal": 0.0008474066853523254
+      },
+      "max_score": 0.8008328676223755
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            4.244588375091553,
+            0.0,
+            1061.29541015625,
+            895.9487915039062
+          ],
+          "confidence": 0.40563857555389404,
+          "yolo_class": "Benign"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            4,
+            0,
+            1061,
+            895
+          ],
+          "yolo_class": "Benign",
+          "yolo_conf": 0.40563857555389404,
+          "class": "Benign",
+          "class_scores": {
+            "OCA": 0.3672173321247101,
+            "OPMD": 0.2040320187807083,
+            "Benign": 0.42815282940864563,
+            "Normal": 0.0005979030975140631
+          },
+          "fusion_score": 0.1736753038406924
+        }
+      ],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 3.236753038406924
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "benign-01",
+    "expected_class": "Benign",
+    "source_label": "Minor aphthous ulcer",
+    "source_id": "zahid2022",
+    "figure": 1,
+    "pdf_page": 2,
+    "pdf_image_number": 2,
+    "file": "images/benign-01.png",
+    "width": 360,
+    "height": 272,
+    "sha256": "16c0a663b184315d5d7c452db4c8edbc6b22afd1da72ce6a7045fff7e9557eae",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single floor-of-mouth photo; small pale/red ulcer at image left; visible thin clinical instrument. No labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.07484084899988375,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "Benign",
+      "scores": {
+        "OCA": 0.00271693617105484,
+        "OPMD": 0.11627647280693054,
+        "Benign": 0.8732196092605591,
+        "Normal": 0.007786889094859362
+      },
+      "max_score": 0.8732196092605591
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            86.04057312011719,
+            160.0308074951172,
+            142.62112426757812,
+            212.76181030273438
+          ],
+          "confidence": 0.36235496401786804,
+          "yolo_class": "Benign"
+        },
+        {
+          "bbox": [
+            0.5761127471923828,
+            0.0,
+            262.5963439941406,
+            272.0
+          ],
+          "confidence": 0.3428521752357483,
+          "yolo_class": "Benign"
+        },
+        {
+          "bbox": [
+            83.53437042236328,
+            0.0,
+            359.269775390625,
+            271.6801452636719
+          ],
+          "confidence": 0.3418610990047455,
+          "yolo_class": "OPMD"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            86,
+            160,
+            142,
+            212
+          ],
+          "yolo_class": "Benign",
+          "yolo_conf": 0.36235496401786804,
+          "class": "Benign",
+          "class_scores": {
+            "OCA": 0.004964152816683054,
+            "OPMD": 0.00029408084810711443,
+            "Benign": 0.7397321462631226,
+            "Normal": 0.25500956177711487
+          },
+          "fusion_score": 0.2680456152420341
+        },
+        {
+          "bbox": [
+            0,
+            0,
+            262,
+            272
+          ],
+          "yolo_class": "Benign",
+          "yolo_conf": 0.3428521752357483,
+          "class": "Benign",
+          "class_scores": {
+            "OCA": 0.023036232218146324,
+            "OPMD": 0.0009720124653540552,
+            "Benign": 0.9750667214393616,
+            "Normal": 0.0009250521543435752
+          },
+          "fusion_score": 0.33430374644547456
+        },
+        {
+          "bbox": [
+            83,
+            0,
+            359,
+            271
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.3418610990047455,
+          "class": "Benign",
+          "class_scores": {
+            "OCA": 0.00021397968521341681,
+            "OPMD": 0.1607099324464798,
+            "Benign": 0.8293654918670654,
+            "Normal": 0.009710617363452911
+          },
+          "fusion_score": 0.2835277985262863
+        }
+      ],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 4.843037464454746
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "benign-02",
+    "expected_class": "Benign",
+    "source_label": "Major aphthous ulcer",
+    "source_id": "zahid2022",
+    "figure": 2,
+    "pdf_page": 2,
+    "pdf_image_number": 0,
+    "file": "images/benign-02.png",
+    "width": 305,
+    "height": 276,
+    "sha256": "932ccd900728dbc9c42ec02aed69c101a485718c1cc58550f6ff3d0ea0fb35fb",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single palatal photo with small red/pale focal area near uvula; relatively soft focus. No labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.10542883900052402,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "Benign",
+      "scores": {
+        "OCA": 0.348357617855072,
+        "OPMD": 0.004104221239686012,
+        "Benign": 0.5347480177879333,
+        "Normal": 0.11279013007879257
+      },
+      "max_score": 0.5347480177879333
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            72.7026596069336,
+            0.0,
+            304.3907165527344,
+            223.5385284423828
+          ],
+          "confidence": 0.33642274141311646,
+          "yolo_class": "OPMD"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            72,
+            0,
+            304,
+            223
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.33642274141311646,
+          "class": "Benign",
+          "class_scores": {
+            "OCA": 0.4401898980140686,
+            "OPMD": 0.04728999361395836,
+            "Benign": 0.470216304063797,
+            "Normal": 0.042303893715143204
+          },
+          "fusion_score": 0.15819145807028612
+        }
+      ],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 3.081914580702861
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "benign-03",
+    "expected_class": "Benign",
+    "source_label": "Palatal pseudomembranous candidosis",
+    "source_id": "zahid2022",
+    "figure": 9,
+    "pdf_page": 5,
+    "pdf_image_number": 14,
+    "file": "images/benign-03.png",
+    "width": 426,
+    "height": 282,
+    "sha256": "032b0b706684a1f244ae2b5bb3780b6de8803815b59408430c0958d154f8ba17",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single palatal photo with patchy white areas, teeth and glare. No labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.08765478699933738,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "Normal",
+      "scores": {
+        "OCA": 0.00022652422194369137,
+        "OPMD": 0.021039465442299843,
+        "Benign": 9.795529331313446e-05,
+        "Normal": 0.9786360859870911
+      },
+      "max_score": 0.9786360859870911
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            103.73406219482422,
+            1.2595441341400146,
+            424.80621337890625,
+            281.4502868652344
+          ],
+          "confidence": 0.34802308678627014,
+          "yolo_class": "OPMD"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            103,
+            1,
+            424,
+            281
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.34802308678627014,
+          "class": "Normal",
+          "class_scores": {
+            "OCA": 0.001585408695973456,
+            "OPMD": 0.0731954276561737,
+            "Benign": 0.0005487810703925788,
+            "Normal": 0.924670398235321
+          },
+          "fusion_score": 0.3218066462537461
+        }
+      ],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 4.718066462537461
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "benign-04",
+    "expected_class": "Benign",
+    "source_label": "Geographic tongue",
+    "source_id": "zahid2022",
+    "figure": 18,
+    "pdf_page": 8,
+    "pdf_image_number": 32,
+    "file": "images/benign-04.png",
+    "width": 296,
+    "height": 272,
+    "sha256": "cd08af00dbe59136e0791f4d8e66bad0f98de9a115fe6db3fe8403fa7a047a71",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single dorsal-tongue photo with patchy surface markings and saliva. No labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.10034220299712615,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "OPMD",
+      "scores": {
+        "OCA": 0.0001847971579991281,
+        "OPMD": 0.5579021573066711,
+        "Benign": 0.0051483819261193275,
+        "Normal": 0.4367646276950836
+      },
+      "max_score": 0.5579021573066711
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 1.5
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "benign-05",
+    "expected_class": "Benign",
+    "source_label": "Lower-lip mucocele",
+    "source_id": "zahid2022",
+    "figure": 24,
+    "pdf_page": 10,
+    "pdf_image_number": 47,
+    "file": "images/benign-05.png",
+    "width": 373,
+    "height": 230,
+    "sha256": "9816a47b420ad23b516198b2ad8d344f31bb0197789a6b4cdf96ae937099e092",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single lower-lip/mouth photo with rounded raised area; glare/soft detail. Caption mapping checked; no labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.06575694999992265,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "Benign",
+      "scores": {
+        "OCA": 0.033637914806604385,
+        "OPMD": 0.00015560429892502725,
+        "Benign": 0.9661747217178345,
+        "Normal": 3.1735024094814435e-05
+      },
+      "max_score": 0.9661747217178345
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 1.5
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "benign-06",
+    "expected_class": "Benign",
+    "source_label": "Squamous papilloma",
+    "source_id": "zahid2022",
+    "figure": 25,
+    "pdf_page": 10,
+    "pdf_image_number": 45,
+    "file": "images/benign-06.png",
+    "width": 359,
+    "height": 341,
+    "sha256": "caab459e00ced641643cc8fc2d40d8c1bbd8535f95a469325a278f6123da706e",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single ventral-tongue photo with small rounded pink projection near lower center; no labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.15822107799976948,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "Normal",
+      "scores": {
+        "OCA": 0.0012075318954885006,
+        "OPMD": 0.12970517575740814,
+        "Benign": 0.0002121131692547351,
+        "Normal": 0.8688752055168152
+      },
+      "max_score": 0.8688752055168152
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [
+        {
+          "bbox": [
+            99.20964813232422,
+            67.21251678466797,
+            356.6839904785156,
+            339.95550537109375
+          ],
+          "confidence": 0.5831348299980164,
+          "yolo_class": "OPMD"
+        },
+        {
+          "bbox": [
+            72.91452026367188,
+            0.5327947735786438,
+            358.3035888671875,
+            272.3965148925781
+          ],
+          "confidence": 0.5161923170089722,
+          "yolo_class": "OPMD"
+        },
+        {
+          "bbox": [
+            0.27678826451301575,
+            0.3379182815551758,
+            272.3461608886719,
+            272.68182373046875
+          ],
+          "confidence": 0.37111639976501465,
+          "yolo_class": "OPMD"
+        },
+        {
+          "bbox": [
+            0.6606695652008057,
+            63.749359130859375,
+            216.64183044433594,
+            339.32342529296875
+          ],
+          "confidence": 0.35807082056999207,
+          "yolo_class": "OPMD"
+        }
+      ],
+      "detections": [
+        {
+          "bbox": [
+            99,
+            67,
+            356,
+            339
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.5831348299980164,
+          "class": "Normal",
+          "class_scores": {
+            "OCA": 0.4703064262866974,
+            "OPMD": 0.048072416335344315,
+            "Benign": 0.003505665808916092,
+            "Normal": 0.4781155586242676
+          },
+          "fusion_score": 0.2788058349977689
+        },
+        {
+          "bbox": [
+            72,
+            0,
+            358,
+            272
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.5161923170089722,
+          "class": "Normal",
+          "class_scores": {
+            "OCA": 0.0005659282323904335,
+            "OPMD": 0.11046499758958817,
+            "Benign": 0.00010029699478764087,
+            "Normal": 0.8888687491416931
+          },
+          "fusion_score": 0.4588272191363174
+        },
+        {
+          "bbox": [
+            0,
+            0,
+            272,
+            272
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.37111639976501465,
+          "class": "OPMD",
+          "class_scores": {
+            "OCA": 0.02276911586523056,
+            "OPMD": 0.505438506603241,
+            "Benign": 0.007207410875707865,
+            "Normal": 0.46458497643470764
+          },
+          "fusion_score": 0.18757651887320037
+        },
+        {
+          "bbox": [
+            0,
+            63,
+            216,
+            339
+          ],
+          "yolo_class": "OPMD",
+          "yolo_conf": 0.35807082056999207,
+          "class": "OPMD",
+          "class_scores": {
+            "OCA": 0.007617420982569456,
+            "OPMD": 0.9537972807884216,
+            "Benign": 0.003360115922987461,
+            "Normal": 0.03522514924407005
+          },
+          "fusion_score": 0.34152697498933726
+        }
+      ],
+      "risk": {
+        "level": "MEDIUM",
+        "recommendation": "Non-urgent referral within 4 weeks",
+        "score": 6.088272191363174
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  },
+  {
+    "id": "benign-07",
+    "expected_class": "Benign",
+    "source_label": "Hairy tongue",
+    "source_id": "zahid2022",
+    "figure": 29,
+    "pdf_page": 11,
+    "pdf_image_number": 48,
+    "file": "images/benign-07.png",
+    "width": 266,
+    "height": 322,
+    "sha256": "153cd400ca73bb3c8a414348b3943527e188abbfaf65e95cf212321f290ac40d",
+    "visual_review_status": "reviewed",
+    "visual_notes": "Single dorsal-tongue photo with diffuse coating; no labels.",
+    "baseline": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk_level": "LOW",
+      "risk_score": 1.5,
+      "recommendation": "No lesions detected. Routine monitoring recommended",
+      "pipeline_seconds": 0.08878442599962,
+      "classifier_ran": false,
+      "contains_reference_class": false
+    },
+    "whole_image_classifier_diagnostic": {
+      "class": "Normal",
+      "scores": {
+        "OCA": 3.722172914422117e-05,
+        "OPMD": 0.028813723474740982,
+        "Benign": 0.0008335452293977141,
+        "Normal": 0.9703154563903809
+      },
+      "max_score": 0.9703154563903809
+    },
+    "bgr_input_diagnostic": {
+      "raw_yolo_boxes": [],
+      "detections": [],
+      "risk": {
+        "level": "LOW",
+        "recommendation": "Routine monitoring recommended",
+        "score": 1.5
+      }
+    },
+    "rgb_threshold_010_diagnostic": {
+      "raw_yolo_boxes": []
+    },
+    "synthetic_high_factors_risk_only": {
+      "level": "LOW",
+      "recommendation": "Routine monitoring recommended",
+      "score": 5.0
+    }
+  }
+]

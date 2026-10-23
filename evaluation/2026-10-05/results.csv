@@ -1,0 +1,18 @@
+case_id,source_label,reference_class,source_id,figure,baseline_boxes,baseline_crop_classes,baseline_risk,baseline_risk_score,whole_image_class_diagnostic,whole_image_relative_score,bgr_boxes_diagnostic,bgr_crop_classes_diagnostic,bgr_risk_diagnostic,bgr_risk_score_diagnostic,rgb_conf_010_boxes_diagnostic,baseline_seconds
+oca-01,"SCC, posterior right oral cavity",OCA,zahid2022,6,0,,LOW,1.5,Benign,0.9959890246391296,1,Benign,LOW,4.155458418188772,0,0.14924794399848906
+oca-02,"SCC, underside of tongue",OCA,zahid2022,7,0,,LOW,1.5,OPMD,0.9961192607879639,0,,LOW,1.5,0,0.06170499799918616
+oca-03,"OSCC, vestibular region",OCA,markopoulos2012,1,0,,LOW,1.5,OCA,0.9672405123710632,0,,LOW,1.5,0,0.0686092819996702
+oca-04,"OSCC, cheek mucosa",OCA,markopoulos2012,2,0,,LOW,1.5,Benign,0.9020677804946899,2,OCA;Benign,MEDIUM,7.004384644625482,0,0.059795798999402905
+opmd-01,Reticular oral lichen planus,OPMD,zahid2022,13,0,,LOW,1.5,OPMD,0.9467617273330688,1,OPMD,LOW,2.825814669270855,0,0.08816862199819298
+opmd-02,Erosive oral lichen planus,OPMD,zahid2022,15,0,,LOW,1.5,OPMD,0.5761094689369202,1,OPMD,LOW,4.1917661103201596,0,0.08490987600089284
+opmd-03,White lesion: OLP plus candidosis,OPMD,zahid2022,20,0,,LOW,1.5,OPMD,0.8852260112762451,0,,LOW,1.5,0,0.08147304600061034
+opmd-04,Erythroplakia,OPMD,zahid2022,21,0,,LOW,1.5,Benign,0.9177800416946411,2,Benign;OCA,MEDIUM,7.061430382206964,0,0.060362787000485696
+opmd-05,Oral submucous fibrosis,OPMD,zahid2022,22,0,,LOW,1.5,Normal,0.999320387840271,2,OPMD;Normal,MEDIUM,5.125537107224375,0,0.0724470180030039
+opmd-06,Extensive tongue leukoplakia,OPMD,rich2023,1,0,,LOW,1.5,OCA,0.8008328676223755,1,Benign,LOW,3.236753038406924,0,0.11131652100084466
+benign-01,Minor aphthous ulcer,Benign,zahid2022,1,0,,LOW,1.5,Benign,0.8732196092605591,3,Benign;Benign;Benign,LOW,4.843037464454746,0,0.07484084899988375
+benign-02,Major aphthous ulcer,Benign,zahid2022,2,0,,LOW,1.5,Benign,0.5347480177879333,1,Benign,LOW,3.081914580702861,0,0.10542883900052402
+benign-03,Palatal pseudomembranous candidosis,Benign,zahid2022,9,0,,LOW,1.5,Normal,0.9786360859870911,1,Normal,LOW,4.718066462537461,0,0.08765478699933738
+benign-04,Geographic tongue,Benign,zahid2022,18,0,,LOW,1.5,OPMD,0.5579021573066711,0,,LOW,1.5,0,0.10034220299712615
+benign-05,Lower-lip mucocele,Benign,zahid2022,24,0,,LOW,1.5,Benign,0.9661747217178345,0,,LOW,1.5,0,0.06575694999992265
+benign-06,Squamous papilloma,Benign,zahid2022,25,0,,LOW,1.5,Normal,0.8688752055168152,4,Normal;Normal;OPMD;OPMD,MEDIUM,6.088272191363174,0,0.15822107799976948
+benign-07,Hairy tongue,Benign,zahid2022,29,0,,LOW,1.5,Normal,0.9703154563903809,0,,LOW,1.5,0,0.08878442599962

@@ -1,0 +1,74 @@
+- heading "📋 Patient Information" [level=2]
+- paragraph: Age
+- spinbutton "Age": "65"
+- button:
+- button:
+- paragraph: Years of Tobacco Use
+- spinbutton "Years of Tobacco Use": "20"
+- button:
+- button:
+- paragraph: Lesion Duration
+- generic: "> 6 weeks"
+- combobox "Selected > 6 weeks. Lesion Duration"
+- img "open"
+- separator
+- heading "ℹ️ About OncoEdge" [level=3]
+- alert:
+  - paragraph: This system uses fine-tuned YOLO11s-seg for lesion detection and BiomedCLIP for medical classification.
+- paragraph:
+  - strong: "Device:"
+  - text: CPU
+- alert:
+  - paragraph: Running on CPU
+- banner:
+  - button:
+- 'heading "🔬 OncoEdge: Oral Cancer Screening System" [level=1]':
+  - text: "🔬 OncoEdge: Oral Cancer Screening System"
+  - link "Link to heading":
+    - /url: "#onco-edge-oral-cancer-screening-system"
+- paragraph: AI-powered screening using fine-tuned YOLO11s-seg and BiomedCLIP
+- heading "📷 Choose an Image" [level=2]:
+  - text: 📷 Choose an Image
+  - link "Link to heading":
+    - /url: "#choose-an-image"
+- paragraph: Image source
+- radiogroup "Image source":
+  - radio "Sample images"
+  - paragraph: Sample images
+  - radio "Upload an image" [checked]
+  - paragraph: Upload an image
+- paragraph: Choose an image...
+- button "Help for Choose an image...":
+- region "Choose an image...":
+  - button "Choose File"
+  - generic: Drag and drop file here
+  - generic: Limit 20MB per file • JPG, JPEG, PNG
+  - button "Browse files"
+- list:
+  - generic "oca-04.png"
+  - generic: 67.7KB
+  - button "Remove oca-04.png":
+- heading "📷 Selected Image" [level=3]:
+  - text: 📷 Selected Image
+  - link "Link to heading":
+    - /url: "#selected-image"
+- button "Fullscreen":
+- img "0"
+- 'heading "🟢 Risk Assessment: LOW" [level=3]':
+  - text: "🟢 Risk Assessment: LOW"
+  - link "Link to heading":
+    - /url: "#risk-assessment-low"
+- alert:
+  - paragraph:
+    - strong: "Recommendation:"
+    - text: No lesions detected. Routine monitoring recommended
+- paragraph: Risk Score
+- paragraph: 5.0/10
+- paragraph: Lesions Detected
+- paragraph: "0"
+- paragraph: Max Confidence
+- paragraph: N/A
+- alert:
+  - paragraph: ℹ️ No lesions detected in the image.
+- button "🔍 Analyze Image" [active]:
+  - paragraph: 🔍 Analyze Image

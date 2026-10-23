@@ -1,0 +1,94 @@
+- heading "📋 Patient Information" [level=2]
+- paragraph: Age
+- spinbutton "Age": "45"
+- paragraph: Years of Tobacco Use
+- spinbutton "Years of Tobacco Use": "0"
+- paragraph: Lesion Duration
+- generic: < 2 weeks
+- combobox "Selected < 2 weeks. Lesion Duration"
+- img "open"
+- separator
+- heading "ℹ️ About OncoEdge" [level=3]
+- alert:
+  - paragraph: This demo uses fine-tuned YOLO11s-seg for region detection and BiomedCLIP for prompt-based classification.
+- paragraph:
+  - strong: "Device:"
+  - text: CPU
+- alert:
+  - paragraph: Running on CPU
+- banner:
+  - button "keyboard_double_arrow_right":
+    - generic: keyboard_double_arrow_right
+  - button "Deploy":
+    - generic: Deploy
+  - button:
+- 'heading "🔬 OncoEdge: Oral Lesion Analysis" [level=1]':
+  - text: "🔬 OncoEdge: Oral Lesion Analysis"
+  - link "Link to heading":
+    - /url: "#onco-edge-oral-lesion-analysis"
+- paragraph: Research demo using fine-tuned YOLO11s-seg and BiomedCLIP
+- paragraph: Model scores are uncalibrated. This prototype does not provide a clinical diagnosis.
+- heading "📷 Choose an Image" [level=2]:
+  - text: 📷 Choose an Image
+  - link "Link to heading":
+    - /url: "#choose-an-image"
+- paragraph: Image source
+- radiogroup "Image source":
+  - radio "Sample images"
+  - paragraph: Sample images
+  - radio "Upload an image" [checked]
+  - paragraph: Upload an image
+- paragraph: Choose an image...
+- button "Help for Choose an image...":
+- region "Choose an image...":
+  - button "Choose File"
+  - generic: Drag and drop file here
+  - generic: Limit 20MB per file • JPG, JPEG, PNG, WEBP
+  - button "Browse files"
+- list:
+  - generic "oca-04.png"
+  - generic: 67.7KB
+  - button "Remove oca-04.png":
+- heading "📷 Selected Image" [level=3]:
+  - text: 📷 Selected Image
+  - link "Link to heading":
+    - /url: "#selected-image"
+- button "Fullscreen":
+- img "0"
+- 'heading "🟠 Research assessment: INCONCLUSIVE" [level=3]':
+  - text: "🟠 Research assessment: INCONCLUSIVE"
+  - link "Link to heading":
+    - /url: "#research-assessment-inconclusive"
+- alert:
+  - paragraph:
+    - strong: "Recommendation:"
+    - text: The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.
+- list:
+  - listitem: "Region 1: models disagree (YOLO OPMD, classifier OCA)."
+- list:
+  - listitem: "Region 2: models disagree (YOLO OPMD, classifier Benign)."
+- paragraph: Demo concern score
+- paragraph: Not assessed
+- paragraph: Regions detected
+- paragraph: "2"
+- paragraph: Top fused match
+- paragraph: 55.0%
+- heading "🎯 Detected Regions" [level=3]:
+  - text: 🎯 Detected Regions
+  - link "Link to heading":
+    - /url: "#detected-regions"
+- button "Fullscreen":
+- img "0"
+- paragraph: Model-detected regions; labels and match scores are research outputs.
+- heading "📊 Detection Details" [level=3]:
+  - text: 📊 Detection Details
+  - link "Link to heading":
+    - /url: "#detection-details"
+- 'generic "keyboard_arrow_right Region 1: OCA (fused match: 55.0%)"':
+  - generic: keyboard_arrow_right
+  - paragraph: "Region 1: OCA (fused match: 55.0%)"
+- 'generic "keyboard_arrow_right Region 2: Benign (fused match: 35.7%)"':
+  - generic: keyboard_arrow_right
+  - paragraph: "Region 2: Benign (fused match: 35.7%)"
+- button "🔍 Analyze Image" [active]:
+  - paragraph: 🔍 Analyze Image

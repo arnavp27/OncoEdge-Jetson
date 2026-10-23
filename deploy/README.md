@@ -3,7 +3,9 @@
 This Docker deployment runs the existing PyTorch pipeline and sample picker on a
 Linux x86_64 server. The Jetson/TensorRT implementation is still available in the
 repository. Docker uses Python 3.12, uv, and a CPU dependency lock derived from the
-working local environment. The detector, prompts, fusion and risk rules are unchanged.
+working local environment. The trained weights and prompts are unchanged; the
+RGB/BGR boundary and assessment handling are documented in
+[the integration fixes](../evaluation/2026-10-05/FIXES.md).
 
 ## Local verification
 
@@ -22,7 +24,7 @@ oncoedge` for a temporary test. On this development machine, the previous launch
 can be stopped with `systemctl --user stop oncoedge-local`.
 
 The warm-up command checks the trained detector's classes, initializes BioMedCLIP,
-and optionally runs both samples and the classifier. It exercises the classifier
+and optionally runs both original samples, all six gallery photos and the classifier. It exercises the classifier
 even if YOLO finds no regions. These checks verify execution, not clinical accuracy.
 The web health check verifies the Streamlit server; it does not initialize the models.
 Visitors' first analysis still loads the models into the web process's memory, using

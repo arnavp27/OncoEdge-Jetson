@@ -11,6 +11,7 @@ from PIL import Image
 from pathlib import Path
 
 from src.models.yolo_detector import YOLODetector
+from src.config import CONFIG
 from src.pipeline.fusion import FusionModule
 from src.pipeline.decision_tree import ClinicalDecisionTree
 from src.utils.visualization import draw_detections
@@ -142,11 +143,12 @@ class OncoEdgePipeline:
                 - 'recommendation': Clinical recommendation (str)
                 - 'detections': List of detection dicts
                 - 'visualization': Annotated image (numpy array)
-                - 'risk_score': Computed risk score (float)
+                - 'risk_score': Demo score, or None if inconclusive
+                - 'assessment_issues': Reasons the assessment is inconclusive
         """
         # Convert PIL Image to numpy array if needed
         if isinstance(image, Image.Image):
-            image = np.array(image)
+            image = np.array(image.convert('RGB'))
 
         # Ensure RGB format
         if len(image.shape) == 2:  # Grayscale
@@ -165,11 +167,14 @@ class OncoEdgePipeline:
         # Step 2: Process each detection
         print(f"Processing {len(yolo_results.boxes)} detections...")
         detections = []
+        assessment_issues = []
 
         for i in range(len(yolo_results.boxes)):
             # Extract detection info
             box = yolo_results.boxes.xyxy[i].cpu().numpy()
             conf = float(yolo_results.boxes.conf[i].cpu().numpy())
+            class_id = int(yolo_results.boxes.cls[i].item())
+            yolo_class = yolo_results.names[class_id]
 
             # Get mask if available
             mask = None
@@ -184,12 +189,14 @@ class OncoEdgePipeline:
             y2 = min(image.shape[0], y2)
 
             if x2 <= x1 or y2 <= y1:
+                assessment_issues.append(f'Region {i+1}: detector crop is invalid.')
                 continue  # Skip invalid boxes
 
             lesion_crop = image[y1:y2, x1:x2]
 
             # Skip if crop is too small
             if lesion_crop.size == 0 or min(lesion_crop.shape[:2]) < 10:
+                assessment_issues.append(f'Region {i+1}: detector crop is too small.')
                 continue
 
             # Step 3: Classify with BiomedCLIP
@@ -202,28 +209,66 @@ class OncoEdgePipeline:
                 biomedclip_score=classification['max_score']
             )
 
+            # Preserve both labels: high relative confidence cannot resolve a
+            # disagreement between the localizer and zero-shot classifier.
+            model_disagreement = yolo_class != classification['class'] and not (
+                yolo_class == 'Benign' and classification['class'] == 'Normal'
+            )
+            ranked_scores = sorted(classification['scores'].values(), reverse=True)
+            margin = ranked_scores[0] - ranked_scores[1]
+            classification_uncertain = (
+                classification['max_score'] < CONFIG['model'].min_classifier_score
+                or margin < CONFIG['model'].min_classifier_margin
+            )
+            if model_disagreement:
+                assessment_issues.append(
+                    f"Region {i+1}: models disagree (YOLO {yolo_class}, "
+                    f"classifier {classification['class']})."
+                )
+            if classification_uncertain:
+                assessment_issues.append(
+                    f'Region {i+1}: classifier scores are ambiguous.'
+                )
+            concern_score = self.fusion.combine_concern(conf, classification['scores'])
+
             # Store detection
             detections.append({
                 'bbox': [x1, y1, x2, y2],
                 'mask': mask,
                 'yolo_conf': conf,
+                'yolo_class': yolo_class,
                 'class': classification['class'],
                 'class_scores': classification['scores'],
-                'fusion_score': fusion_score
+                'fusion_score': fusion_score,
+                'concern_score': concern_score,
+                'classifier_margin': margin,
+                'model_disagreement': model_disagreement,
+                'classification_uncertain': classification_uncertain,
             })
 
         # Handle case where all detections were invalid
         if not detections:
-            return self._no_detection_output(image, patient_metadata)
+            return self._no_detection_output(
+                image, patient_metadata,
+                reason='The detector returned no usable regions to classify.'
+            )
 
         # Step 5: Clinical risk assessment
         print("Assessing clinical risk...")
-        max_fusion_score = max(d['fusion_score'] for d in detections)
+        max_concern_score = max(d['concern_score'] for d in detections)
+        agreed_classes = {
+            d['class'] for d in detections
+            if not d['model_disagreement'] and not d['classification_uncertain']
+        }
+        concerning_class = ('OCA' if 'OCA' in agreed_classes else
+                            'OPMD' if 'OPMD' in agreed_classes else None)
         risk_output = self.decision_tree.assess_risk(
-            vision_score=max_fusion_score,
+            vision_score=max_concern_score,
             age=patient_metadata['age'],
             tobacco_years=patient_metadata['tobacco_years'],
-            lesion_duration=patient_metadata['lesion_duration']
+            lesion_duration=patient_metadata['lesion_duration'],
+            concerning_class=concerning_class,
+            assessment_issues=assessment_issues,
         )
 
         # Step 6: Create visualization
@@ -235,10 +280,12 @@ class OncoEdgePipeline:
             'recommendation': risk_output['recommendation'],
             'detections': detections,
             'visualization': annotated_image,
-            'risk_score': risk_output['score']
+            'risk_score': risk_output['score'],
+            'assessment_issues': assessment_issues,
         }
 
-    def _no_detection_output(self, image, patient_metadata):
+    def _no_detection_output(self, image, patient_metadata,
+                             reason='No lesion regions were detected; the image was not assessed.'):
         """
         Generate output when no lesions are detected.
 
@@ -249,18 +296,19 @@ class OncoEdgePipeline:
         Returns:
             dict: Results with no detections
         """
-        # Still assess risk based on patient factors only
         risk_output = self.decision_tree.assess_risk(
             vision_score=0.0,
             age=patient_metadata['age'],
             tobacco_years=patient_metadata['tobacco_years'],
-            lesion_duration=patient_metadata['lesion_duration']
+            lesion_duration=patient_metadata['lesion_duration'],
+            detection_available=False,
         )
 
         return {
             'risk_level': risk_output['level'],
-            'recommendation': 'No lesions detected. ' + risk_output['recommendation'],
+            'recommendation': risk_output['recommendation'],
             'detections': [],
             'visualization': image,
-            'risk_score': risk_output['score']
+            'risk_score': risk_output['score'],
+            'assessment_issues': [reason],
         }

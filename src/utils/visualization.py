@@ -7,11 +7,13 @@ import cv2
 import numpy as np
 
 
-# Color mapping for different classes
+# OpenCV draws in BGR; returned images are converted back to RGB.
 CLASS_COLORS = {
-    'OSCC': (255, 0, 0),      # Red for cancer
-    'OPMD': (255, 255, 0),    # Yellow for pre-malignant
-    'Normal': (0, 255, 0)     # Green for normal
+    'OCA': (0, 0, 255),
+    'OSCC': (0, 0, 255),
+    'OPMD': (0, 255, 255),
+    'Benign': (255, 200, 0),
+    'Normal': (0, 200, 0),
 }
 
 
@@ -25,7 +27,7 @@ def draw_detections(image, detections):
             - 'bbox': [x1, y1, x2, y2]
             - 'mask': Segmentation mask (optional)
             - 'class': Class name
-            - 'fusion_score': Confidence score
+            - 'fusion_score': Uncalibrated semantic match score
 
     Returns:
         numpy array: Annotated image
@@ -39,7 +41,6 @@ def draw_detections(image, detections):
     for idx, detection in enumerate(detections):
         bbox = detection['bbox']
         class_name = detection['class']
-        score = detection['fusion_score']
 
         # Get color for this class
         color = CLASS_COLORS.get(class_name, (255, 255, 255))
@@ -72,22 +73,52 @@ def draw_detections(image, detections):
                 vis_image
             )
 
-        # Draw label with background
-        label = f"{class_name}: {score:.2%}"
+    # Draw labels after all masks so a later region cannot tint or hide them.
+    label_rects = []
+    for idx, detection in enumerate(detections):
+        x1, y1, x2, y2 = map(int, detection['bbox'])
+        class_name = detection['class']
+        score = detection['fusion_score']
+        color = CLASS_COLORS.get(class_name, (255, 255, 255))
+        needs_review = detection.get('model_disagreement') or detection.get('classification_uncertain')
+        label = f"#{idx+1} {'? ' if needs_review else ''}{class_name} | match {score:.2f}"
         font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 0.6
-        thickness = 2
+        font_scale = 0.5
+        thickness = 1
 
         # Get text size for background
         (text_width, text_height), baseline = cv2.getTextSize(
             label, font, font_scale, thickness
         )
+        if text_width + 10 > vis_image.shape[1]:
+            font_scale *= (vis_image.shape[1] - 10) / (text_width + 10)
+            (text_width, text_height), baseline = cv2.getTextSize(
+                label, font, font_scale, thickness
+            )
+        label_x = min(max(0, x1), max(0, vis_image.shape[1] - text_width - 10))
+        label_y = min(max(text_height + 10, y1), vis_image.shape[0] - baseline - 1)
+
+        # Overlapping boxes often share their top edge; move subsequent labels
+        # down a row instead of covering the earlier model output.
+        while True:
+            rect = (label_x, label_y - text_height - 10,
+                    label_x + text_width + 10, label_y + baseline)
+            overlaps = any(
+                rect[0] < other[2] and rect[2] > other[0]
+                and rect[1] < other[3] and rect[3] > other[1]
+                for other in label_rects
+            )
+            next_y = label_y + text_height + baseline + 12
+            if not overlaps or next_y > vis_image.shape[0] - baseline - 1:
+                break
+            label_y = next_y
+        label_rects.append(rect)
 
         # Draw background rectangle
         cv2.rectangle(
             vis_image,
-            (x1, y1 - text_height - 10),
-            (x1 + text_width + 10, y1),
+            (label_x, label_y - text_height - 10),
+            (label_x + text_width + 10, label_y + baseline),
             color,
             -1
         )
@@ -96,10 +127,10 @@ def draw_detections(image, detections):
         cv2.putText(
             vis_image,
             label,
-            (x1 + 5, y1 - 5),
+            (label_x + 5, label_y - 5),
             font,
             font_scale,
-            (255, 255, 255),
+            (10, 10, 10),
             thickness
         )
 

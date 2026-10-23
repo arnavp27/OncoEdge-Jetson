@@ -19,7 +19,7 @@ from src.pipeline.inference_pipeline import OncoEdgePipeline
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--smoke-test", action="store_true", help="Also run both sample images and the classifier.")
+    parser.add_argument("--smoke-test", action="store_true", help="Run the bundled photos, gallery samples and classifier.")
     args = parser.parse_args()
     if torch.version.cuda is not None:
         raise SystemExit("The hosted demo must use the CPU-only PyTorch build.")
@@ -35,7 +35,10 @@ def main():
 
     if args.smoke_test:
         metadata = {"age": 45, "tobacco_years": 0, "lesion_duration": "< 2 weeks"}
-        for filename in ("027.jpeg", "photo.webp"):
+        filenames = ["027.jpeg", "photo.webp"]
+        catalog = json.loads((PROJECT_ROOT / "assets/samples/catalog.json").read_text())
+        filenames.extend("assets/samples/" + sample["file"] for sample in catalog)
+        for filename in filenames:
             with Image.open(PROJECT_ROOT / filename) as sample:
                 image = sample.convert("RGB")
             started = time.monotonic()
