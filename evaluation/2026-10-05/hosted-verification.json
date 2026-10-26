@@ -1,0 +1,32 @@
+{
+  "url": "https://oncoedge.54-253-96-120.sslip.io/",
+  "case_id": "oca-04",
+  "input": "images/oca-04.png",
+  "default_metadata": {
+    "age": 45,
+    "tobacco_years": 0,
+    "lesion_duration": "< 2 weeks"
+  },
+  "default_observed": {
+    "lesions": 0,
+    "risk": "LOW",
+    "risk_score": 1.5
+  },
+  "evidence": [
+    "hosted-baseline-dom.txt",
+    "hosted-cancer-baseline.png",
+    "hosted-high-factors-dom.txt",
+    "hosted-cancer-high-factors.png"
+  ],
+  "method": "Actual browser upload and Analyze Image action; read visible UI result.",
+  "high_factor_metadata": {
+    "age": 65,
+    "tobacco_years": 20,
+    "lesion_duration": "> 6 weeks"
+  },
+  "high_factor_observed": {
+    "lesions": 0,
+    "risk": "LOW",
+    "risk_score": 5.0
+  }
+}

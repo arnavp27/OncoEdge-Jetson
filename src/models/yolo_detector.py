@@ -1,36 +1,48 @@
 """
-YOLO11n-seg Detector Wrapper
+Fine-tuned YOLO Segmentation Detector Wrapper
 
 Provides a clean interface for oral lesion detection and segmentation.
 """
 from ultralytics import YOLO
 import numpy as np
 from PIL import Image
+from pathlib import Path
+
+from src.config import CONFIG
 
 
 class YOLODetector:
     """
-    Wrapper for YOLO11n-seg model for lesion detection and segmentation.
+    Wrapper for the fine-tuned YOLO model for lesion detection and segmentation.
 
     This class handles loading the YOLO model and running inference on images
     to detect and segment oral lesions.
     """
 
-    def __init__(self, model_path='yolo11n-seg.pt', device='0'):
+    def __init__(self, model_path=None, device='0'):
         """
         Initialize YOLO detector.
 
         Args:
-            model_path: Path to YOLO model weights file (default: 'yolo11n-seg.pt')
+            model_path: Optional weights path. Defaults to the project's trained
+                        checkpoint configured in src/config.py.
             device: Device to run inference on ('0' for GPU, 'cpu' for CPU)
         """
-        self.model_path = model_path
+        if model_path is None:
+            model_path = CONFIG['paths'].project_root / CONFIG['model'].yolo_model
+            if not model_path.is_file():
+                raise FileNotFoundError(
+                    f"Trained YOLO checkpoint not found: {model_path}. "
+                    "Copy best.pt from the develop_yolo_ft branch to this path."
+                )
+
+        self.model_path = str(model_path)
         self.device = device
 
         # Load YOLO model
         try:
-            self.model = YOLO(model_path)
-            print(f"YOLO model loaded successfully from {model_path}")
+            self.model = YOLO(self.model_path)
+            print(f"YOLO model loaded successfully from {self.model_path}")
         except Exception as e:
             print(f"Error loading YOLO model: {e}")
             raise
@@ -40,7 +52,7 @@ class YOLODetector:
         Run detection on an image.
 
         Args:
-            image: Input image (numpy array HxWx3 or PIL Image)
+            image: RGB numpy array HxWx3 or PIL Image
             conf_threshold: Confidence threshold for detections (0-1)
             imgsz: Input image size for YOLO (will be resized)
 
@@ -50,13 +62,23 @@ class YOLODetector:
                 - masks: Segmentation masks (if available)
                 - conf: Confidence scores
         """
-        # Convert PIL Image to numpy array if needed
+        # The application and classifier use RGB. Ultralytics expects NumPy
+        # sources in BGR and reverses their channels during preprocessing.
         if isinstance(image, Image.Image):
-            image = np.array(image)
+            image = np.array(image.convert('RGB'))
+        else:
+            image = np.asarray(image)
+            if image.ndim == 2:
+                image = np.repeat(image[:, :, None], 3, axis=2)
+            elif image.ndim == 3 and image.shape[2] == 4:
+                image = image[:, :, :3]
+        if image.ndim != 3 or image.shape[2] != 3:
+            raise ValueError('Expected an RGB image with shape HxWx3')
+        bgr_image = np.ascontiguousarray(image[:, :, ::-1])
 
         # Run YOLO inference
         results = self.model.predict(
-            source=image,
+            source=bgr_image,
             conf=conf_threshold,
             imgsz=imgsz,
             device=self.device,

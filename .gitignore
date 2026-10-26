@@ -45,7 +45,8 @@ data/test_images/*.jpeg
 !data/test_images/.gitkeep
 
 # Streamlit
-.streamlit/
+.streamlit/*
+!.streamlit/config.toml
 
 # OS
 .DS_Store
@@ -53,3 +54,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Deployment configuration (hostnames and future credentials stay local)
+.env
+.env.*
+!.env.example

@@ -1,0 +1,64 @@
+{
+  "state": {
+    "Status": "running",
+    "Running": true,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 1281380,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-26T11:51:57.345834555Z",
+    "FinishedAt": "0001-01-01T00:00:00Z",
+    "Health": {
+      "Status": "healthy",
+      "FailingStreak": 0,
+      "Log": [
+        {
+          "Start": "2026-10-26T11:57:37.535847682Z",
+          "End": "2026-10-26T11:57:37.940053663Z",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-10-26T11:58:07.942025198Z",
+          "End": "2026-10-26T11:58:08.360185811Z",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-10-26T11:58:38.361262209Z",
+          "End": "2026-10-26T11:58:38.768801808Z",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-10-26T11:59:08.770219176Z",
+          "End": "2026-10-26T11:59:09.183613589Z",
+          "ExitCode": 0,
+          "Output": ""
+        },
+        {
+          "Start": "2026-10-26T11:59:39.184849077Z",
+          "End": "2026-10-26T11:59:39.605264445Z",
+          "ExitCode": 0,
+          "Output": ""
+        }
+      ]
+    }
+  },
+  "restarts": 0,
+  "docker_stats": {
+    "BlockIO": "943MB / 12.3kB",
+    "CPUPerc": "0.43%",
+    "Container": "oncoedge-oncoedge-1",
+    "ID": "12d107cf1cba",
+    "MemPerc": "43.52%",
+    "MemUsage": "1.306GiB / 3GiB",
+    "Name": "oncoedge-oncoedge-1",
+    "NetIO": "263kB / 2.96MB",
+    "PIDs": "22"
+  },
+  "web_container_peak_memory_mib": 2292.1
+}

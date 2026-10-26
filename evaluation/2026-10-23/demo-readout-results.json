@@ -1,0 +1,2303 @@
+{
+  "created_utc": "2026-10-23T07:03:58.856646+00:00",
+  "purpose": "Coverage and behavior replay on an already inspected convenience set; not accuracy validation.",
+  "backend": "pytorch/cpu",
+  "source_hashes": {
+    "evaluation/2026-10-05/manifest.json": "cd6a8981f204abc5b8362d16fbb930a0c19f6c49b8e9124a9504fa2b51e2dbf2",
+    "evaluation/2026-10-05/fixed-results.json": "212c761273bfad436f9be5fd091a0b57470bde927346b6d82cd36463fe061fb4",
+    "models/best.pt": "823cdd1190d18871b75b9f82a869c594184090a9c07c224719e666da6581f110",
+    "models/biomedclip/open_clip_pytorch_model.bin": "52cc993c5c5ff962bd0c60931874bc001e7e9b41666a385530f4a036294576be",
+    "src/__init__.py": "1346b3f8324f3ef75112e55c9f8368d265867c8015bb41872742e2c622184e47",
+    "src/config.py": "2e5a904528ef234a7e0437cf3bab183ae3e9d0e5af94fb8f8879291a768862de",
+    "src/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/models/biomedclip_classifier.py": "309aecd5d2e9c6fa08cfdf2ea007f8a8aebfc96d6eb0d64a6d4104f343c322f4",
+    "src/models/biomedclip_preprocess.py": "60343f20a2d2325dda1f50f3f0b4575483f203e00473d6ddec801e4ad2abca96",
+    "src/models/biomedclip_tensorrt.py": "d6e70e7ddc2dffc2246d1645516dd446abe6b6353646cf1411d4290fc2695424",
+    "src/models/build_tensorrt_engine.py": "989131043c6649e19c8cdd356cf73612f72a1e79e92ad9cae820b5096e5853b8",
+    "src/models/export_vision_encoder_onnx.py": "b4b36a3203367dad39e961e9f75c09bd55f59b52f14b859e640cfd648a774db0",
+    "src/models/extract_clip_logit_scale.py": "535eab1091e5e3a120894df4da11393ef80b7de7138ab68caa4db60468d0ec48",
+    "src/models/precompute_text_embeddings.py": "cf0526d4a958eab08efc55f1af644bc1d9775767000e6a6edd1441be5ca17dda",
+    "src/models/yolo_detector.py": "a2d95c3ab84e9d322f53d806b754d6a2cc7def2250ece660be6a72f151b66797",
+    "src/pipeline/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/pipeline/decision_tree.py": "674852be94a151edb803cb3125d53c5b580453eccc4afa01fab65ec137377c01",
+    "src/pipeline/demo_readout.py": "7f5f3de5805b8e8a617a1153dad86c355fa015d60ee0ebe5770fbf841cfc0cbc",
+    "src/pipeline/fusion.py": "510187b33e08579ca845445b671c38b3c9e900acc698bb46317f9af65005e824",
+    "src/pipeline/inference_pipeline.py": "7de807412886537d9661f6e9d8e17d18c7006e14be235fa05f0a530cba7f3787",
+    "src/ui/__init__.py": "81897a77836f018471b28a6bd3415a9f1cabf779df1b82bc5b2fc84aacbf28c9",
+    "src/ui/app.py": "6111969940166c8c9bd753b771abbd69eea7b766f1d4398432be7c412b10d510",
+    "src/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/utils/image_processing.py": "0f43974e4172ded0bfe407166e76e9802603d75dba00acaaf7bc4ab86ae9d1ab",
+    "src/utils/metrics.py": "89a6c654eec252255ad1c0baf33547b524acb5533d3b1cb1b2562b2afe9ad82f",
+    "src/utils/prepare_calibration_data.py": "4ea4755571f7ca6d26215cd61d6cc2bb6fd3c1e1a3c831f5af140c106db8c381",
+    "src/utils/visualization.py": "d238e5e6698cbdcee1fb2764176b66a835205467e73e26403ce186f9754b5dd4"
+  },
+  "summary": {
+    "photos": 17,
+    "conservative_risk_levels": {
+      "INCONCLUSIVE": 17
+    },
+    "conservative_matches_historical_baseline": true,
+    "exploratory_photos_with_regions": 15,
+    "exploratory_photos_with_provisional_reading": 15,
+    "provisional_class_counts": {
+      "Benign": 7,
+      "OPMD": 4,
+      "OCA": 2,
+      "Normal": 2
+    },
+    "no_reading_ids": [
+      "benign-04",
+      "benign-07"
+    ],
+    "provisional_primary_label_differs_from_photo_reference": [
+      {
+        "id": "oca-01",
+        "reference": "OCA",
+        "provisional_class": "Benign"
+      },
+      {
+        "id": "oca-02",
+        "reference": "OCA",
+        "provisional_class": "OPMD"
+      },
+      {
+        "id": "oca-03",
+        "reference": "OCA",
+        "provisional_class": "Benign"
+      },
+      {
+        "id": "opmd-03",
+        "reference": "OPMD",
+        "provisional_class": "OCA"
+      },
+      {
+        "id": "opmd-04",
+        "reference": "OPMD",
+        "provisional_class": "Benign"
+      },
+      {
+        "id": "opmd-06",
+        "reference": "OPMD",
+        "provisional_class": "Benign"
+      },
+      {
+        "id": "benign-03",
+        "reference": "Benign",
+        "provisional_class": "Normal"
+      },
+      {
+        "id": "benign-06",
+        "reference": "Benign",
+        "provisional_class": "Normal"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "oca-01",
+      "reference": "OCA",
+      "conservative": {
+        "elapsed_seconds": 0.324,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OPMD, classifier Benign)."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              0,
+              0,
+              309,
+              302
+            ],
+            "yolo_conf": 0.26698195934295654,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.003967266529798508,
+              "OPMD": 0.0012468138011172414,
+              "Benign": 0.9946209192276001,
+              "Normal": 0.0001650600170250982
+            },
+            "fusion_score": 0.2655458418188772,
+            "concern_score": 0.001392065382919458,
+            "classifier_margin": 0.9906536526978016,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.586,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OPMD, classifier Benign).",
+          "Region 2: detector confidence is below the conservative limit.",
+          "Region 2: models disagree (YOLO OPMD, classifier Benign).",
+          "Region 3: detector confidence is below the conservative limit.",
+          "Region 3: models disagree (YOLO OPMD, classifier Normal).",
+          "Region 3: classifier scores are ambiguous."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "Benign",
+          "yolo_class": "OPMD",
+          "classifier_score": 0.9946208000183105,
+          "fusion_score": 0.2655458099921475,
+          "concern_index": 0.6688588137227036,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2,
+            3
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              0,
+              0,
+              309,
+              302
+            ],
+            "yolo_conf": 0.26698195934295654,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.003967280965298414,
+              "OPMD": 0.0012468231143429875,
+              "Benign": 0.9946208000183105,
+              "Normal": 0.00016506000247318298
+            },
+            "fusion_score": 0.2655458099921475,
+            "concern_score": 0.0013920717234007646,
+            "classifier_margin": 0.9906535190530121,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              93,
+              0,
+              412,
+              302
+            ],
+            "yolo_conf": 0.24302449822425842,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.0010675594676285982,
+              "OPMD": 0.004059783183038235,
+              "Benign": 0.9912763833999634,
+              "Normal": 0.003596274647861719
+            },
+            "fusion_score": 0.2409044456773337,
+            "concern_score": 0.0012460698749021462,
+            "classifier_margin": 0.9872166002169251,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          },
+          {
+            "bbox": [
+              263,
+              162,
+              413,
+              302
+            ],
+            "yolo_conf": 0.19679847359657288,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 0.0006281167734414339,
+              "OPMD": 0.33924180269241333,
+              "Benign": 0.25321000814437866,
+              "Normal": 0.4069201350212097
+            },
+            "fusion_score": 0.08008126144788541,
+            "concern_score": 0.06688588137227036,
+            "classifier_margin": 0.06767833232879639,
+            "model_disagreement": true,
+            "classification_uncertain": true,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "oca-02",
+      "reference": "OCA",
+      "conservative": {
+        "elapsed_seconds": 0.102,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "No lesion regions were detected; the image was not assessed."
+        ],
+        "detections": []
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.605,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: detector confidence is below the conservative limit.",
+          "Region 2: detector confidence is below the conservative limit.",
+          "Region 2: models disagree (YOLO Benign, classifier OPMD).",
+          "Region 3: detector confidence is below the conservative limit.",
+          "Region 3: models disagree (YOLO OPMD, classifier Benign)."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "OPMD",
+          "yolo_class": "OPMD",
+          "classifier_score": 0.9652970433235168,
+          "fusion_score": 0.17873153440192446,
+          "concern_index": 1.790167683500954,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2,
+            3
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              85,
+              0,
+              393,
+              216
+            ],
+            "yolo_conf": 0.18515703082084656,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.0015404975274577737,
+              "OPMD": 0.9652970433235168,
+              "Benign": 0.03241872414946556,
+              "Normal": 0.0007436865707859397
+            },
+            "fusion_score": 0.17873153440192446,
+            "concern_score": 0.1790167683500954,
+            "classifier_margin": 0.9328783191740513,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          },
+          {
+            "bbox": [
+              9,
+              0,
+              327,
+              217
+            ],
+            "yolo_conf": 0.15412120521068573,
+            "yolo_class": "Benign",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 2.4429911718470976e-05,
+              "OPMD": 0.9960054755210876,
+              "Benign": 0.001993578625842929,
+              "Normal": 0.0019765710458159447
+            },
+            "fusion_score": 0.15350556428375217,
+            "concern_score": 0.15350932945118942,
+            "classifier_margin": 0.9940118968952447,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          },
+          {
+            "bbox": [
+              184,
+              30,
+              367,
+              171
+            ],
+            "yolo_conf": 0.14485126733779907,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.15518993139266968,
+              "OPMD": 0.12658406794071198,
+              "Benign": 0.7128055691719055,
+              "Normal": 0.0054204585030674934
+            },
+            "fusion_score": 0.10325079005999171,
+            "concern_score": 0.04081532090628048,
+            "classifier_margin": 0.5576156377792358,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "oca-03",
+      "reference": "OCA",
+      "conservative": {
+        "elapsed_seconds": 0.12,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "No lesion regions were detected; the image was not assessed."
+        ],
+        "detections": []
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.411,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: detector confidence is below the conservative limit.",
+          "Region 1: models disagree (YOLO OPMD, classifier Benign).",
+          "Region 2: detector confidence is below the conservative limit.",
+          "Region 2: models disagree (YOLO OPMD, classifier Normal)."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "Benign",
+          "yolo_class": "OPMD",
+          "classifier_score": 0.8534706234931946,
+          "fusion_score": 0.19969712948685991,
+          "concern_index": 0.34280528186528103,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              76,
+              0,
+              334,
+              214
+            ],
+            "yolo_conf": 0.23398242890834808,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.14602051675319672,
+              "OPMD": 0.0004884683294221759,
+              "Benign": 0.8534706234931946,
+              "Normal": 2.0495250282692723e-05
+            },
+            "fusion_score": 0.19969712948685991,
+            "concern_score": 0.0342805281865281,
+            "classifier_margin": 0.7074501067399979,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          },
+          {
+            "bbox": [
+              230,
+              4,
+              335,
+              105
+            ],
+            "yolo_conf": 0.1478007584810257,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 8.01486021373421e-06,
+              "OPMD": 0.19696909189224243,
+              "Benign": 0.025390500202775,
+              "Normal": 0.7776323556900024
+            },
+            "fusion_score": 0.11493465199036912,
+            "concern_score": 0.02911336578141099,
+            "classifier_margin": 0.58066326379776,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "oca-04",
+      "reference": "OCA",
+      "conservative": {
+        "elapsed_seconds": 0.241,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OPMD, classifier OCA).",
+          "Region 2: models disagree (YOLO OPMD, classifier Benign)."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              0,
+              0,
+              255,
+              214
+            ],
+            "yolo_conf": 0.7906551957130432,
+            "yolo_class": "OPMD",
+            "class": "OCA",
+            "class_scores": {
+              "OCA": 0.6961805820465088,
+              "OPMD": 0.0028002201579511166,
+              "Benign": 0.16993801295757294,
+              "Normal": 0.13108117878437042
+            },
+            "fusion_score": 0.5504387943496027,
+            "concern_score": 0.5526528029666272,
+            "classifier_margin": 0.5262425690889359,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              70,
+              0,
+              334,
+              214
+            ],
+            "yolo_conf": 0.376992404460907,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.04905557259917259,
+              "OPMD": 0.0006298228981904685,
+              "Benign": 0.9476766586303711,
+              "Normal": 0.0026379525661468506
+            },
+            "fusion_score": 0.35726690218854174,
+            "concern_score": 0.01873101671514202,
+            "classifier_margin": 0.8986210860311985,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.209,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OPMD, classifier OCA).",
+          "Region 2: models disagree (YOLO OPMD, classifier Benign)."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "OCA",
+          "yolo_class": "OPMD",
+          "classifier_score": 0.6961805820465088,
+          "fusion_score": 0.5504387943496027,
+          "concern_index": 5.526528029666272,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              0,
+              0,
+              255,
+              214
+            ],
+            "yolo_conf": 0.7906551957130432,
+            "yolo_class": "OPMD",
+            "class": "OCA",
+            "class_scores": {
+              "OCA": 0.6961805820465088,
+              "OPMD": 0.0028002201579511166,
+              "Benign": 0.16993801295757294,
+              "Normal": 0.13108117878437042
+            },
+            "fusion_score": 0.5504387943496027,
+            "concern_score": 0.5526528029666272,
+            "classifier_margin": 0.5262425690889359,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              70,
+              0,
+              334,
+              214
+            ],
+            "yolo_conf": 0.376992404460907,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.04905557259917259,
+              "OPMD": 0.0006298228981904685,
+              "Benign": 0.9476766586303711,
+              "Normal": 0.0026379525661468506
+            },
+            "fusion_score": 0.35726690218854174,
+            "concern_score": 0.01873101671514202,
+            "classifier_margin": 0.8986210860311985,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "opmd-01",
+      "reference": "OPMD",
+      "conservative": {
+        "elapsed_seconds": 0.193,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: classifier scores are ambiguous."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              0,
+              1,
+              316,
+              332
+            ],
+            "yolo_conf": 0.26627117395401,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.006279587745666504,
+              "OPMD": 0.4979216754436493,
+              "Benign": 0.4724128842353821,
+              "Normal": 0.023385854437947273
+            },
+            "fusion_score": 0.13258218905752805,
+            "concern_score": 0.1342542622585139,
+            "classifier_margin": 0.025508791208267212,
+            "model_disagreement": false,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.337,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: classifier scores are ambiguous.",
+          "Region 2: detector confidence is below the conservative limit."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 2,
+          "class": "OPMD",
+          "yolo_class": "OPMD",
+          "classifier_score": 0.9421544671058655,
+          "fusion_score": 0.14211657274158807,
+          "concern_index": 1.4260968140817547,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2
+          ],
+          "excluded_regions": [],
+          "model_disagreement": false,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              0,
+              1,
+              316,
+              332
+            ],
+            "yolo_conf": 0.26627117395401,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.006279587745666504,
+              "OPMD": 0.4979216754436493,
+              "Benign": 0.4724128842353821,
+              "Normal": 0.023385854437947273
+            },
+            "fusion_score": 0.13258218905752805,
+            "concern_score": 0.1342542622585139,
+            "classifier_margin": 0.025508791208267212,
+            "model_disagreement": false,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              92,
+              1,
+              396,
+              326
+            ],
+            "yolo_conf": 0.1508421152830124,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.0032690383959561586,
+              "OPMD": 0.9421544671058655,
+              "Benign": 0.05452248826622963,
+              "Normal": 5.403850082075223e-05
+            },
+            "fusion_score": 0.14211657274158807,
+            "concern_score": 0.14260968140817548,
+            "classifier_margin": 0.8876319788396358,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "opmd-02",
+      "reference": "OPMD",
+      "conservative": {
+        "elapsed_seconds": 0.263,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO Benign, classifier OPMD)."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              0,
+              0,
+              278,
+              290
+            ],
+            "yolo_conf": 0.3521272540092468,
+            "yolo_class": "Benign",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.1350283920764923,
+              "OPMD": 0.7644307613372803,
+              "Benign": 0.09890351444482803,
+              "Normal": 0.0016373859252780676
+            },
+            "fusion_score": 0.26917690486989443,
+            "concern_score": 0.3167240817850736,
+            "classifier_margin": 0.629402369260788,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.541,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO Benign, classifier OPMD).",
+          "Region 2: detector confidence is below the conservative limit.",
+          "Region 2: models disagree (YOLO OPMD, classifier OCA).",
+          "Region 2: classifier scores are ambiguous.",
+          "Region 3: detector confidence is below the conservative limit."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "OPMD",
+          "yolo_class": "Benign",
+          "classifier_score": 0.7644307613372803,
+          "fusion_score": 0.26917690486989443,
+          "concern_index": 3.167240817850736,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2,
+            3
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              0,
+              0,
+              278,
+              290
+            ],
+            "yolo_conf": 0.3521272540092468,
+            "yolo_class": "Benign",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.1350283920764923,
+              "OPMD": 0.7644307613372803,
+              "Benign": 0.09890351444482803,
+              "Normal": 0.0016373859252780676
+            },
+            "fusion_score": 0.26917690486989443,
+            "concern_score": 0.3167240817850736,
+            "classifier_margin": 0.629402369260788,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              89,
+              0,
+              375,
+              289
+            ],
+            "yolo_conf": 0.20997914671897888,
+            "yolo_class": "OPMD",
+            "class": "OCA",
+            "class_scores": {
+              "OCA": 0.5325738191604614,
+              "OPMD": 0.4117296040058136,
+              "Benign": 0.05528685450553894,
+              "Normal": 0.0004097750352229923
+            },
+            "fusion_score": 0.11182939611218146,
+            "concern_score": 0.19828402704026526,
+            "classifier_margin": 0.12084421515464783,
+            "model_disagreement": true,
+            "classification_uncertain": true,
+            "detection_uncertain": true
+          },
+          {
+            "bbox": [
+              0,
+              0,
+              289,
+              288
+            ],
+            "yolo_conf": 0.15578141808509827,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.02777930349111557,
+              "OPMD": 0.8923118114471436,
+              "Benign": 0.07892002165317535,
+              "Normal": 0.0009888587519526482
+            },
+            "fusion_score": 0.13900559936131884,
+            "concern_score": 0.14333309865258115,
+            "classifier_margin": 0.8133917897939682,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "opmd-03",
+      "reference": "OPMD",
+      "conservative": {
+        "elapsed_seconds": 0.074,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "No lesion regions were detected; the image was not assessed."
+        ],
+        "detections": []
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.262,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: detector confidence is below the conservative limit.",
+          "Region 1: models disagree (YOLO OPMD, classifier OCA)."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "OCA",
+          "yolo_class": "OPMD",
+          "classifier_score": 0.8716714978218079,
+          "fusion_score": 0.10029832320262644,
+          "concern_index": 1.0545240049733084,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              178,
+              39,
+              336,
+              197
+            ],
+            "yolo_conf": 0.1150643602013588,
+            "yolo_class": "OPMD",
+            "class": "OCA",
+            "class_scores": {
+              "OCA": 0.8716714978218079,
+              "OPMD": 0.04479299485683441,
+              "Benign": 0.035011470317840576,
+              "Normal": 0.048524126410484314
+            },
+            "fusion_score": 0.10029832320262644,
+            "concern_score": 0.10545240049733084,
+            "classifier_margin": 0.8231473714113235,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "opmd-04",
+      "reference": "OPMD",
+      "conservative": {
+        "elapsed_seconds": 0.23,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OCA, classifier Benign)."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              206,
+              89,
+              320,
+              183
+            ],
+            "yolo_conf": 0.5655475854873657,
+            "yolo_class": "OCA",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.0002787595731206238,
+              "OPMD": 0.0003996033046860248,
+              "Benign": 0.9833710193634033,
+              "Normal": 0.015950653702020645
+            },
+            "fusion_score": 0.5561431056392223,
+            "concern_score": 0.00038364648762781103,
+            "classifier_margin": 0.9674203656613827,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              84,
+              0,
+              371,
+              230
+            ],
+            "yolo_conf": 0.5478081703186035,
+            "yolo_class": "OCA",
+            "class": "OCA",
+            "class_scores": {
+              "OCA": 0.614687442779541,
+              "OPMD": 0.0003218514611944556,
+              "Benign": 0.3847085237503052,
+              "Normal": 0.0002821861417032778
+            },
+            "fusion_score": 0.33673080334688166,
+            "concern_score": 0.33690711620695296,
+            "classifier_margin": 0.22997891902923584,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.212,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OCA, classifier Benign)."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "Benign",
+          "yolo_class": "OCA",
+          "classifier_score": 0.9833710193634033,
+          "fusion_score": 0.5561431056392223,
+          "concern_index": 3.3690711620695297,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              206,
+              89,
+              320,
+              183
+            ],
+            "yolo_conf": 0.5655475854873657,
+            "yolo_class": "OCA",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.0002787595731206238,
+              "OPMD": 0.0003996033046860248,
+              "Benign": 0.9833710193634033,
+              "Normal": 0.015950653702020645
+            },
+            "fusion_score": 0.5561431056392223,
+            "concern_score": 0.00038364648762781103,
+            "classifier_margin": 0.9674203656613827,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              84,
+              0,
+              371,
+              230
+            ],
+            "yolo_conf": 0.5478081703186035,
+            "yolo_class": "OCA",
+            "class": "OCA",
+            "class_scores": {
+              "OCA": 0.614687442779541,
+              "OPMD": 0.0003218514611944556,
+              "Benign": 0.3847085237503052,
+              "Normal": 0.0002821861417032778
+            },
+            "fusion_score": 0.33673080334688166,
+            "concern_score": 0.33690711620695296,
+            "classifier_margin": 0.22997891902923584,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "opmd-05",
+      "reference": "OPMD",
+      "conservative": {
+        "elapsed_seconds": 0.215,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: classifier scores are ambiguous.",
+          "Region 2: models disagree (YOLO OPMD, classifier Normal)."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              120,
+              1,
+              499,
+              286
+            ],
+            "yolo_conf": 0.6351357698440552,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.14257147908210754,
+              "OPMD": 0.570828378200531,
+              "Benign": 0.0019130113068968058,
+              "Normal": 0.2846871316432953
+            },
+            "fusion_score": 0.36255352143722774,
+            "concern_score": 0.4531057675618477,
+            "classifier_margin": 0.2861412465572357,
+            "model_disagreement": false,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              0,
+              1,
+              399,
+              284
+            ],
+            "yolo_conf": 0.3253743350505829,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 0.005839732941240072,
+              "OPMD": 0.010330773890018463,
+              "Benign": 0.0008454724447801709,
+              "Normal": 0.9829840660095215
+            },
+            "fusion_score": 0.3198377868431663,
+            "concern_score": 0.005261467907651654,
+            "classifier_margin": 0.972653292119503,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.445,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: classifier scores are ambiguous.",
+          "Region 2: models disagree (YOLO OPMD, classifier Normal).",
+          "Region 3: detector confidence is below the conservative limit.",
+          "Region 3: models disagree (YOLO OPMD, classifier Benign)."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "OPMD",
+          "yolo_class": "OPMD",
+          "classifier_score": 0.570828378200531,
+          "fusion_score": 0.36255352143722774,
+          "concern_index": 4.531057675618477,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2,
+            3
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              120,
+              1,
+              499,
+              286
+            ],
+            "yolo_conf": 0.6351357698440552,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.14257147908210754,
+              "OPMD": 0.570828378200531,
+              "Benign": 0.0019130113068968058,
+              "Normal": 0.2846871316432953
+            },
+            "fusion_score": 0.36255352143722774,
+            "concern_score": 0.4531057675618477,
+            "classifier_margin": 0.2861412465572357,
+            "model_disagreement": false,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              0,
+              1,
+              399,
+              284
+            ],
+            "yolo_conf": 0.3253743350505829,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 0.005839732941240072,
+              "OPMD": 0.010330773890018463,
+              "Benign": 0.0008454724447801709,
+              "Normal": 0.9829840660095215
+            },
+            "fusion_score": 0.3198377868431663,
+            "concern_score": 0.005261467907651654,
+            "classifier_margin": 0.972653292119503,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              354,
+              5,
+              499,
+              287
+            ],
+            "yolo_conf": 0.11987331509590149,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.0012487699277698994,
+              "OPMD": 0.03219539299607277,
+              "Benign": 0.9659926891326904,
+              "Normal": 0.0005630988744087517
+            },
+            "fusion_score": 0.11579674600474021,
+            "concern_score": 0.004009062680288458,
+            "classifier_margin": 0.9337972961366177,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "opmd-06",
+      "reference": "OPMD",
+      "conservative": {
+        "elapsed_seconds": 0.195,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: classifier scores are ambiguous."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              4,
+              0,
+              1061,
+              895
+            ],
+            "yolo_conf": 0.40563857555389404,
+            "yolo_class": "Benign",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.36721789836883545,
+              "OPMD": 0.20403076708316803,
+              "Benign": 0.42815348505973816,
+              "Normal": 0.0005979005945846438
+            },
+            "fusion_score": 0.17367556979806764,
+            "concern_score": 0.23172049494101365,
+            "classifier_margin": 0.06093558669090271,
+            "model_disagreement": false,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.351,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: classifier scores are ambiguous.",
+          "Region 2: detector confidence is below the conservative limit.",
+          "Region 2: models disagree (YOLO Benign, classifier OPMD).",
+          "Region 2: classifier scores are ambiguous.",
+          "Region 3: detector confidence is below the conservative limit.",
+          "Region 3: models disagree (YOLO Benign, classifier OPMD).",
+          "Region 3: classifier scores are ambiguous."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "Benign",
+          "yolo_class": "Benign",
+          "classifier_score": 0.42815348505973816,
+          "fusion_score": 0.17367556979806764,
+          "concern_index": 2.3172049494101365,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2,
+            3
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              4,
+              0,
+              1061,
+              895
+            ],
+            "yolo_conf": 0.40563857555389404,
+            "yolo_class": "Benign",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.36721789836883545,
+              "OPMD": 0.20403076708316803,
+              "Benign": 0.42815348505973816,
+              "Normal": 0.0005979005945846438
+            },
+            "fusion_score": 0.17367556979806764,
+            "concern_score": 0.23172049494101365,
+            "classifier_margin": 0.06093558669090271,
+            "model_disagreement": false,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              297,
+              3,
+              1422,
+              890
+            ],
+            "yolo_conf": 0.225777268409729,
+            "yolo_class": "Benign",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.036110151559114456,
+              "OPMD": 0.5996364951133728,
+              "Benign": 0.06687231361865997,
+              "Normal": 0.29738107323646545
+            },
+            "fusion_score": 0.13538428990548113,
+            "concern_score": 0.1435371412863593,
+            "classifier_margin": 0.30225542187690735,
+            "model_disagreement": true,
+            "classification_uncertain": true,
+            "detection_uncertain": true
+          },
+          {
+            "bbox": [
+              1035,
+              302,
+              1425,
+              892
+            ],
+            "yolo_conf": 0.10650134086608887,
+            "yolo_class": "Benign",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 1.1691038707795087e-05,
+              "OPMD": 0.5578621625900269,
+              "Benign": 0.0011085723526775837,
+              "Normal": 0.4410175383090973
+            },
+            "fusion_score": 0.05941306833429394,
+            "concern_score": 0.059414313445592434,
+            "classifier_margin": 0.11684462428092957,
+            "model_disagreement": true,
+            "classification_uncertain": true,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "benign-01",
+      "reference": "Benign",
+      "conservative": {
+        "elapsed_seconds": 0.38,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 3: models disagree (YOLO OPMD, classifier Benign)."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              86,
+              160,
+              142,
+              212
+            ],
+            "yolo_conf": 0.36235496401786804,
+            "yolo_class": "Benign",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.004964152816683054,
+              "OPMD": 0.00029408084810711443,
+              "Benign": 0.7397321462631226,
+              "Normal": 0.25500956177711487
+            },
+            "fusion_score": 0.2680456152420341,
+            "concern_score": 0.0019053470704025839,
+            "classifier_margin": 0.4847225844860077,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              0,
+              0,
+              262,
+              272
+            ],
+            "yolo_conf": 0.3428521752357483,
+            "yolo_class": "Benign",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.023036232218146324,
+              "OPMD": 0.0009720124653540552,
+              "Benign": 0.9750667214393616,
+              "Normal": 0.0009250521543435752
+            },
+            "fusion_score": 0.33430374644547456,
+            "concern_score": 0.008231278913330194,
+            "classifier_margin": 0.9520304892212152,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              83,
+              0,
+              359,
+              271
+            ],
+            "yolo_conf": 0.3418610990047455,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.00021397968521341681,
+              "OPMD": 0.1607099324464798,
+              "Benign": 0.8293654918670654,
+              "Normal": 0.009710617363452911
+            },
+            "fusion_score": 0.2835277985262863,
+            "concern_score": 0.055013625457483735,
+            "classifier_margin": 0.6686555594205856,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.675,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 3: models disagree (YOLO OPMD, classifier Benign).",
+          "Region 4: detector confidence is below the conservative limit."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 2,
+          "class": "Benign",
+          "yolo_class": "Benign",
+          "classifier_score": 0.9750670194625854,
+          "fusion_score": 0.33430384862338514,
+          "concern_index": 0.5501344720779936,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              86,
+              160,
+              142,
+              212
+            ],
+            "yolo_conf": 0.36235496401786804,
+            "yolo_class": "Benign",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.004964144434779882,
+              "OPMD": 0.00029408090631477535,
+              "Benign": 0.7397336959838867,
+              "Normal": 0.25500816106796265
+            },
+            "fusion_score": 0.2680461767910458,
+            "concern_score": 0.0019053440542701966,
+            "classifier_margin": 0.4847255349159241,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              0,
+              0,
+              262,
+              272
+            ],
+            "yolo_conf": 0.3428521752357483,
+            "yolo_class": "Benign",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.02303597517311573,
+              "OPMD": 0.0009720091475173831,
+              "Benign": 0.9750670194625854,
+              "Normal": 0.0009250453440472484
+            },
+            "fusion_score": 0.33430384862338514,
+            "concern_score": 0.008231189647354802,
+            "classifier_margin": 0.9520310442894697,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              83,
+              0,
+              359,
+              271
+            ],
+            "yolo_conf": 0.3418610990047455,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.00021397981618065387,
+              "OPMD": 0.160709410905838,
+              "Benign": 0.8293659687042236,
+              "Normal": 0.009710622951388359
+            },
+            "fusion_score": 0.28352796153836124,
+            "concern_score": 0.05501344720779936,
+            "classifier_margin": 0.6686565577983856,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              263,
+              175,
+              360,
+              269
+            ],
+            "yolo_conf": 0.20454362034797668,
+            "yolo_class": "Benign",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 8.846239506965503e-05,
+              "OPMD": 0.0017269667005166411,
+              "Benign": 0.9342529773712158,
+              "Normal": 0.06393153965473175
+            },
+            "fusion_score": 0.19109548631238482,
+            "concern_score": 0.00037133443969627404,
+            "classifier_margin": 0.8703214377164841,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "benign-02",
+      "reference": "Benign",
+      "conservative": {
+        "elapsed_seconds": 0.232,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OPMD, classifier Benign).",
+          "Region 1: classifier scores are ambiguous."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              72,
+              0,
+              304,
+              223
+            ],
+            "yolo_conf": 0.33642274141311646,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.4401914179325104,
+              "OPMD": 0.04729015752673149,
+              "Benign": 0.4702143371105194,
+              "Normal": 0.042304039001464844
+            },
+            "fusion_score": 0.15819079634247224,
+            "concern_score": 0.16399988800438314,
+            "classifier_margin": 0.030022919178009033,
+            "model_disagreement": true,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.415,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OPMD, classifier Benign).",
+          "Region 1: classifier scores are ambiguous.",
+          "Region 2: detector confidence is below the conservative limit."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 2,
+          "class": "Benign",
+          "yolo_class": "Benign",
+          "classifier_score": 0.9733417630195618,
+          "fusion_score": 0.1936453503384783,
+          "concern_index": 1.6399988800438314,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              72,
+              0,
+              304,
+              223
+            ],
+            "yolo_conf": 0.33642274141311646,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.4401914179325104,
+              "OPMD": 0.04729015752673149,
+              "Benign": 0.4702143371105194,
+              "Normal": 0.042304039001464844
+            },
+            "fusion_score": 0.15819079634247224,
+            "concern_score": 0.16399988800438314,
+            "classifier_margin": 0.030022919178009033,
+            "model_disagreement": true,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              209,
+              99,
+              252,
+              145
+            ],
+            "yolo_conf": 0.19894897937774658,
+            "yolo_class": "Benign",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.00017685115744825453,
+              "OPMD": 1.637446621316485e-05,
+              "Benign": 0.9733417630195618,
+              "Normal": 0.02646506018936634
+            },
+            "fusion_score": 0.1936453503384783,
+            "concern_score": 3.8442040617067946e-05,
+            "classifier_margin": 0.9468767028301954,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "benign-03",
+      "reference": "Benign",
+      "conservative": {
+        "elapsed_seconds": 0.19,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OPMD, classifier Normal)."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              103,
+              1,
+              424,
+              281
+            ],
+            "yolo_conf": 0.34802308678627014,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 0.001585408695973456,
+              "OPMD": 0.0731954276561737,
+              "Benign": 0.0005487810703925788,
+              "Normal": 0.924670398235321
+            },
+            "fusion_score": 0.3218066462537461,
+            "concern_score": 0.026025457499733177,
+            "classifier_margin": 0.8514749705791473,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.251,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OPMD, classifier Normal).",
+          "Region 2: detector confidence is below the conservative limit.",
+          "Region 2: models disagree (YOLO OPMD, classifier Normal)."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "Normal",
+          "yolo_class": "OPMD",
+          "classifier_score": 0.924670398235321,
+          "fusion_score": 0.3218066462537461,
+          "concern_index": 0.4209750976938327,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              103,
+              1,
+              424,
+              281
+            ],
+            "yolo_conf": 0.34802308678627014,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 0.001585408695973456,
+              "OPMD": 0.0731954276561737,
+              "Benign": 0.0005487810703925788,
+              "Normal": 0.924670398235321
+            },
+            "fusion_score": 0.3218066462537461,
+            "concern_score": 0.026025457499733177,
+            "classifier_margin": 0.8514749705791473,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              0,
+              2,
+              335,
+              282
+            ],
+            "yolo_conf": 0.176876038312912,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 0.003939313348382711,
+              "OPMD": 0.2340664118528366,
+              "Benign": 0.0033687662798911333,
+              "Normal": 0.7586255073547363
+            },
+            "fusion_score": 0.13418267430402864,
+            "concern_score": 0.04209750976938327,
+            "classifier_margin": 0.5245590955018997,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "benign-04",
+      "reference": "Benign",
+      "conservative": {
+        "elapsed_seconds": 0.131,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "No lesion regions were detected; the image was not assessed."
+        ],
+        "detections": []
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.113,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "No lesion regions were detected; the image was not assessed."
+        ],
+        "demo_readout": {
+          "status": "no_accepted_regions",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": null,
+          "class": null,
+          "yolo_class": null,
+          "classifier_score": null,
+          "fusion_score": null,
+          "concern_index": null,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [],
+          "excluded_regions": [],
+          "model_disagreement": false,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": []
+      }
+    },
+    {
+      "id": "benign-05",
+      "reference": "Benign",
+      "conservative": {
+        "elapsed_seconds": 0.052,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "No lesion regions were detected; the image was not assessed."
+        ],
+        "detections": []
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.209,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: detector confidence is below the conservative limit.",
+          "Region 1: models disagree (YOLO OPMD, classifier Benign).",
+          "Region 2: detector confidence is below the conservative limit.",
+          "Region 2: classifier scores are ambiguous."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 1,
+          "class": "Benign",
+          "yolo_class": "OPMD",
+          "classifier_score": 0.7923426032066345,
+          "fusion_score": 0.15373556835191682,
+          "concern_index": 0.6295278431891014,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            1,
+            2
+          ],
+          "excluded_regions": [],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              95,
+              1,
+              371,
+              230
+            ],
+            "yolo_conf": 0.1940266340970993,
+            "yolo_class": "OPMD",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.1444568634033203,
+              "OPMD": 0.0012404018780216575,
+              "Benign": 0.7923426032066345,
+              "Normal": 0.06196017935872078
+            },
+            "fusion_score": 0.15373556835191682,
+            "concern_score": 0.028269149979690947,
+            "classifier_margin": 0.6478857398033142,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": true
+          },
+          {
+            "bbox": [
+              258,
+              87,
+              373,
+              228
+            ],
+            "yolo_conf": 0.13548728823661804,
+            "yolo_class": "Benign",
+            "class": "Benign",
+            "class_scores": {
+              "OCA": 0.45661070942878723,
+              "OPMD": 0.008029074408113956,
+              "Benign": 0.4891136884689331,
+              "Normal": 0.046246543526649475
+            },
+            "fusion_score": 0.06626868729006574,
+            "concern_score": 0.06295278431891013,
+            "classifier_margin": 0.032502979040145874,
+            "model_disagreement": false,
+            "classification_uncertain": true,
+            "detection_uncertain": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "benign-06",
+      "reference": "Benign",
+      "conservative": {
+        "elapsed_seconds": 0.411,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OPMD, classifier Normal).",
+          "Region 1: classifier scores are ambiguous.",
+          "Region 2: models disagree (YOLO OPMD, classifier Normal).",
+          "Region 3: classifier scores are ambiguous."
+        ],
+        "detections": [
+          {
+            "bbox": [
+              99,
+              67,
+              356,
+              339
+            ],
+            "yolo_conf": 0.5831348299980164,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 0.4703064262866974,
+              "OPMD": 0.048072416335344315,
+              "Benign": 0.003505665808916092,
+              "Normal": 0.4781155586242676
+            },
+            "fusion_score": 0.2788058349977689,
+            "concern_score": 0.30228475826697276,
+            "classifier_margin": 0.00780913233757019,
+            "model_disagreement": true,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              72,
+              0,
+              358,
+              272
+            ],
+            "yolo_conf": 0.5161923170089722,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 0.0005659282323904335,
+              "OPMD": 0.11046499758958817,
+              "Benign": 0.00010029699478764087,
+              "Normal": 0.8888687491416931
+            },
+            "fusion_score": 0.4588272191363174,
+            "concern_score": 0.05731331085969845,
+            "classifier_margin": 0.778403751552105,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              0,
+              0,
+              272,
+              272
+            ],
+            "yolo_conf": 0.37111639976501465,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.02276911586523056,
+              "OPMD": 0.505438506603241,
+              "Benign": 0.007207410875707865,
+              "Normal": 0.46458497643470764
+            },
+            "fusion_score": 0.18757651887320037,
+            "concern_score": 0.1960265111789372,
+            "classifier_margin": 0.040853530168533325,
+            "model_disagreement": false,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              0,
+              63,
+              216,
+              339
+            ],
+            "yolo_conf": 0.35807082056999207,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.007617420982569456,
+              "OPMD": 0.9537972807884216,
+              "Benign": 0.003360115922987461,
+              "Normal": 0.03522514924407005
+            },
+            "fusion_score": 0.34152697498933726,
+            "concern_score": 0.34425455117119297,
+            "classifier_margin": 0.9185721315443516,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.457,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "Region 1: models disagree (YOLO OPMD, classifier Normal).",
+          "Region 1: classifier scores are ambiguous.",
+          "Region 2: models disagree (YOLO OPMD, classifier Normal).",
+          "Region 3: classifier scores are ambiguous."
+        ],
+        "demo_readout": {
+          "status": "provisional",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": 2,
+          "class": "Normal",
+          "yolo_class": "OPMD",
+          "classifier_score": 0.8888687491416931,
+          "fusion_score": 0.4588272191363174,
+          "concern_index": 3.4425455117119297,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [
+            2,
+            3,
+            4
+          ],
+          "excluded_regions": [
+            {
+              "region": 1,
+              "reasons": [
+                "Classifier margin is below the demo limit."
+              ]
+            }
+          ],
+          "model_disagreement": true,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": [
+          {
+            "bbox": [
+              99,
+              67,
+              356,
+              339
+            ],
+            "yolo_conf": 0.5831348299980164,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 0.4703064262866974,
+              "OPMD": 0.048072416335344315,
+              "Benign": 0.003505665808916092,
+              "Normal": 0.4781155586242676
+            },
+            "fusion_score": 0.2788058349977689,
+            "concern_score": 0.30228475826697276,
+            "classifier_margin": 0.00780913233757019,
+            "model_disagreement": true,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              72,
+              0,
+              358,
+              272
+            ],
+            "yolo_conf": 0.5161923170089722,
+            "yolo_class": "OPMD",
+            "class": "Normal",
+            "class_scores": {
+              "OCA": 0.0005659282323904335,
+              "OPMD": 0.11046499758958817,
+              "Benign": 0.00010029699478764087,
+              "Normal": 0.8888687491416931
+            },
+            "fusion_score": 0.4588272191363174,
+            "concern_score": 0.05731331085969845,
+            "classifier_margin": 0.778403751552105,
+            "model_disagreement": true,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              0,
+              0,
+              272,
+              272
+            ],
+            "yolo_conf": 0.37111639976501465,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.02276911586523056,
+              "OPMD": 0.505438506603241,
+              "Benign": 0.007207410875707865,
+              "Normal": 0.46458497643470764
+            },
+            "fusion_score": 0.18757651887320037,
+            "concern_score": 0.1960265111789372,
+            "classifier_margin": 0.040853530168533325,
+            "model_disagreement": false,
+            "classification_uncertain": true,
+            "detection_uncertain": false
+          },
+          {
+            "bbox": [
+              0,
+              63,
+              216,
+              339
+            ],
+            "yolo_conf": 0.35807082056999207,
+            "yolo_class": "OPMD",
+            "class": "OPMD",
+            "class_scores": {
+              "OCA": 0.007617420982569456,
+              "OPMD": 0.9537972807884216,
+              "Benign": 0.003360115922987461,
+              "Normal": 0.03522514924407005
+            },
+            "fusion_score": 0.34152697498933726,
+            "concern_score": 0.34425455117119297,
+            "classifier_margin": 0.9185721315443516,
+            "model_disagreement": false,
+            "classification_uncertain": false,
+            "detection_uncertain": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "benign-07",
+      "reference": "Benign",
+      "conservative": {
+        "elapsed_seconds": 0.087,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "No lesion regions were detected; the image was not assessed."
+        ],
+        "detections": []
+      },
+      "exploratory": {
+        "elapsed_seconds": 0.071,
+        "risk_level": "INCONCLUSIVE",
+        "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+        "risk_score": null,
+        "assessment_issues": [
+          "No lesion regions were detected; the image was not assessed."
+        ],
+        "demo_readout": {
+          "status": "no_accepted_regions",
+          "provisional": true,
+          "settings": {
+            "detector_threshold": 0.1,
+            "min_classifier_score": 0.35,
+            "min_classifier_margin": 0.02
+          },
+          "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+          "primary_region": null,
+          "class": null,
+          "yolo_class": null,
+          "classifier_score": null,
+          "fusion_score": null,
+          "concern_index": null,
+          "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+          "accepted_regions": [],
+          "excluded_regions": [],
+          "model_disagreement": false,
+          "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+        },
+        "detections": []
+      }
+    }
+  ]
+}

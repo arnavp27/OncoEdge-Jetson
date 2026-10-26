@@ -1,0 +1,13 @@
+# The two CC BY-NC evaluation photos and derivatives stay local.
+# The public demo gallery uses only the separately attributed CC BY 4.0 photos.
+2026-10-05/images/oca-03.png
+2026-10-05/images/oca-04.png
+2026-10-05/*overlays/oca-03.png
+2026-10-05/*overlays/oca-04.png
+2026-10-05/contact-sheet-oca.png
+2026-10-05/color-input-comparison.png
+2026-10-05/hosted-cancer-*.png
+2026-10-05/local-cancer-fixed.png
+
+# Link to source publications rather than redistributing complete PDFs.
+2026-10-05/sources/

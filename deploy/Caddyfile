@@ -1,0 +1,3 @@
+{$ONCOEDGE_DOMAIN} {
+	reverse_proxy oncoedge:8503
+}

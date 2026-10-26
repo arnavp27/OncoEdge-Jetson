@@ -40,3 +40,12 @@ class FusionModule:
             list: List of fused scores
         """
         return [self.combine(yc, bs) for yc, bs in zip(yolo_confs, biomedclip_scores)]
+
+    def combine_concern(self, yolo_conf, class_scores):
+        """Weight only OCA/OPMD relative evidence for the demo concern score.
+
+        The ordinary fused match remains available for visualization. Neither
+        score is a calibrated disease probability.
+        """
+        concerning_score = class_scores['OCA'] + class_scores['OPMD']
+        return self.combine(yolo_conf, concerning_score)

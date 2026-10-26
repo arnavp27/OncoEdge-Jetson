@@ -1,0 +1,210 @@
+{
+  "release_date": "2026-10-26",
+  "application_revision": "4f071ccb925c62873a18c579e3243fe2f23599c4",
+  "image_manifest_list": "sha256:ede87ce9f43360b1e0cfe76f2a7f38b6cd5b1b9c1d9d88e548f7b10743177f4b",
+  "live_url": "https://oncoedge.54-253-96-120.sslip.io/",
+  "purpose": "Deployment execution checks, not clinical validation.",
+  "model_initialization": "18.2s; detector classes: {0: 'OCA', 1: 'OPMD', 2: 'Benign'}",
+  "cases": [
+    {
+      "sample": "027.jpeg",
+      "seconds": 2.54,
+      "detections": 0,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "model_results": {
+        "detections": 3,
+        "class": "Normal",
+        "text_match": 0.9880410432815552,
+        "assessment_status": "INCONCLUSIVE",
+        "model_disagreement": true
+      },
+      "classifier": {
+        "class": "Benign",
+        "scores": {
+          "OCA": 0.09653507173061371,
+          "OPMD": 0.018591152504086494,
+          "Benign": 0.8314882516860962,
+          "Normal": 0.053385503590106964
+        },
+        "max_score": 0.8314882516860962
+      }
+    },
+    {
+      "sample": "photo.webp",
+      "seconds": 2.04,
+      "detections": 0,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "model_results": {
+        "detections": 2,
+        "class": "OPMD",
+        "text_match": 0.9920867085456848,
+        "assessment_status": "INCONCLUSIVE",
+        "model_disagreement": true
+      },
+      "classifier": {
+        "class": "OPMD",
+        "scores": {
+          "OCA": 0.00010969662253046408,
+          "OPMD": 0.9945125579833984,
+          "Benign": 7.295950490515679e-05,
+          "Normal": 0.005304830148816109
+        },
+        "max_score": 0.9945125579833984
+      }
+    },
+    {
+      "sample": "assets/samples/opmd-06.webp",
+      "seconds": 2.73,
+      "detections": 1,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "model_results": {
+        "detections": 3,
+        "class": "Benign",
+        "text_match": 0.42815107107162476,
+        "assessment_status": "INCONCLUSIVE",
+        "model_disagreement": true
+      },
+      "classifier": {
+        "class": "OCA",
+        "scores": {
+          "OCA": 0.8008314967155457,
+          "OPMD": 0.04126919433474541,
+          "Benign": 0.1570519208908081,
+          "Normal": 0.0008474084897898138
+        },
+        "max_score": 0.8008314967155457
+      }
+    },
+    {
+      "sample": "assets/samples/opmd-01.png",
+      "seconds": 2.44,
+      "detections": 1,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "model_results": {
+        "detections": 2,
+        "class": "OPMD",
+        "text_match": 0.9421537518501282,
+        "assessment_status": "INCONCLUSIVE",
+        "model_disagreement": false
+      },
+      "classifier": {
+        "class": "OPMD",
+        "scores": {
+          "OCA": 0.0037570111453533173,
+          "OPMD": 0.946760892868042,
+          "Benign": 0.048652760684490204,
+          "Normal": 0.0008294309373013675
+        },
+        "max_score": 0.946760892868042
+      }
+    },
+    {
+      "sample": "assets/samples/oca-01.png",
+      "seconds": 2.66,
+      "detections": 1,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "model_results": {
+        "detections": 3,
+        "class": "Benign",
+        "text_match": 0.9946209192276001,
+        "assessment_status": "INCONCLUSIVE",
+        "model_disagreement": true
+      },
+      "classifier": {
+        "class": "Benign",
+        "scores": {
+          "OCA": 0.0019118065247312188,
+          "OPMD": 0.0013248104369267821,
+          "Benign": 0.9959891438484192,
+          "Normal": 0.0007742923917248845
+        },
+        "max_score": 0.9959891438484192
+      }
+    },
+    {
+      "sample": "assets/samples/opmd-04.png",
+      "seconds": 2.42,
+      "detections": 2,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "model_results": {
+        "detections": 2,
+        "class": "Benign",
+        "text_match": 0.9833714365959167,
+        "assessment_status": "INCONCLUSIVE",
+        "model_disagreement": true
+      },
+      "classifier": {
+        "class": "Benign",
+        "scores": {
+          "OCA": 0.06842454522848129,
+          "OPMD": 0.002549162833020091,
+          "Benign": 0.9177796840667725,
+          "Normal": 0.01124659739434719
+        },
+        "max_score": 0.9177796840667725
+      }
+    },
+    {
+      "sample": "assets/samples/benign-01.png",
+      "seconds": 4.02,
+      "detections": 3,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "model_results": {
+        "detections": 4,
+        "class": "Benign",
+        "text_match": 0.9750670194625854,
+        "assessment_status": "INCONCLUSIVE",
+        "model_disagreement": true
+      },
+      "classifier": {
+        "class": "Benign",
+        "scores": {
+          "OCA": 0.002716868882998824,
+          "OPMD": 0.1162753701210022,
+          "Benign": 0.8732212781906128,
+          "Normal": 0.00778651749715209
+        },
+        "max_score": 0.8732212781906128
+      }
+    },
+    {
+      "sample": "assets/samples/benign-06.png",
+      "seconds": 4.49,
+      "detections": 4,
+      "risk_level": "INCONCLUSIVE",
+      "risk_score": null,
+      "model_results": {
+        "detections": 4,
+        "class": "Normal",
+        "text_match": 0.8888657093048096,
+        "assessment_status": "INCONCLUSIVE",
+        "model_disagreement": true
+      },
+      "classifier": {
+        "class": "Normal",
+        "scores": {
+          "OCA": 0.001207522233016789,
+          "OPMD": 0.12970559298992157,
+          "Benign": 0.00021211509010754526,
+          "Normal": 0.8688747882843018
+        },
+        "max_score": 0.8688747882843018
+      }
+    }
+  ],
+  "memory": {
+    "process_peak_rss_mib": 1973.6,
+    "container_peak_memory_mib": 2231.7
+  },
+  "cutover_started_utc": "2026-10-26 11:50:59 UTC",
+  "cutover_healthy_utc": "2026-10-26 11:52:03 UTC",
+  "runtime_checksum_files": 37,
+  "all_runtime_checksums_match_local": true
+}

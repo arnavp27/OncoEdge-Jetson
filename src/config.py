@@ -8,9 +8,13 @@ from pathlib import Path
 @dataclass
 class ModelConfig:
     """Model configuration"""
-    yolo_model: str = 'yolo11n-seg.pt'
+    yolo_model: str = 'models/best.pt'
     yolo_conf_threshold: float = 0.25
     yolo_imgsz: int = 640
+
+    # Engineering abstention gates, not calibrated clinical thresholds.
+    min_classifier_score: float = 0.60
+    min_classifier_margin: float = 0.15
     
     biomedclip_model: str = 'hf-hub:microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224'
     

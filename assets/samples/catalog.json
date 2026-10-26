@@ -1,0 +1,80 @@
+[
+  {
+    "id": "opmd-06",
+    "file": "opmd-06.webp",
+    "title": "Tongue \u00b7 white patch",
+    "description": "Sharp larger ventral-tongue photo; broad white areas and glare. No labels, diagrams or clinical overlays.",
+    "source_label": "Extensive tongue leukoplakia",
+    "source_credit": "Rich et al., 2023",
+    "source_url": "https://www.frontiersin.org/journals/oral-health/articles/10.3389/froh.2023.1122497/full",
+    "figure": 1,
+    "sha256": "51cca1f14fe0880d5631d783554b874568a54f88e5c28b2e7b62fa1de0be98ff",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    "id": "opmd-01",
+    "file": "opmd-01.png",
+    "title": "Cheek \u00b7 fine markings",
+    "description": "Single cheek photo with teeth/retractor and fine pale mucosal markings. Caption mapping checked on PDF page 7; first of paired figures 13/14. Vector arrows absent.",
+    "source_label": "Reticular oral lichen planus",
+    "source_credit": "Zahid et al., 2022",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9809440/",
+    "figure": 13,
+    "sha256": "94a549aa047820a8c3fd8047d2872d6cbc9a010fd2365be4609969b0218de697",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    "id": "oca-01",
+    "file": "oca-01.png",
+    "title": "Oral cavity \u00b7 red patch",
+    "description": "Single posterior oral photo; visible red ulcerated region on image left. No diagnostic text. PDF locator arrow is a separate vector and is absent from the extracted photograph.",
+    "source_label": "SCC, posterior right oral cavity",
+    "source_credit": "Zahid et al., 2022",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9809440/",
+    "figure": 6,
+    "sha256": "1114c8175729bf511ceea9f1b6c1375dc0d1c35088b18f4b86619df89958b505",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    "id": "opmd-04",
+    "file": "opmd-04.png",
+    "title": "Palate \u00b7 surface change",
+    "description": "Single posterior palate/uvula photo; small red area and glare. Caption mapping checked on PDF page 9. Vector arrow absent; no labels.",
+    "source_label": "Erythroplakia",
+    "source_credit": "Zahid et al., 2022",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9809440/",
+    "figure": 21,
+    "sha256": "613e4dcd094bdf144eb8cb449a55398d6d6a4c48b4aae24c26d5689c81fb3add",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    "id": "benign-01",
+    "file": "benign-01.png",
+    "title": "Mouth floor \u00b7 small ulcer",
+    "description": "Single floor-of-mouth photo; small pale/red ulcer at image left; visible thin clinical instrument. No labels.",
+    "source_label": "Minor aphthous ulcer",
+    "source_credit": "Zahid et al., 2022",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9809440/",
+    "figure": 1,
+    "sha256": "16c0a663b184315d5d7c452db4c8edbc6b22afd1da72ce6a7045fff7e9557eae",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  {
+    "id": "benign-06",
+    "file": "benign-06.png",
+    "title": "Tongue \u00b7 raised area",
+    "description": "Single ventral-tongue photo with small rounded pink projection near lower center; no labels.",
+    "source_label": "Squamous papilloma",
+    "source_credit": "Zahid et al., 2022",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9809440/",
+    "figure": 25,
+    "sha256": "caab459e00ced641643cc8fc2d40d8c1bbd8535f95a469325a278f6123da706e",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/"
+  }
+]

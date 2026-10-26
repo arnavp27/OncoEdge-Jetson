@@ -1,0 +1,44 @@
+name: oncoedge
+
+services:
+  oncoedge:
+    build: .
+    image: oncoedge:local
+    restart: unless-stopped
+    init: true
+    ports:
+      - "127.0.0.1:${ONCOEDGE_PORT:-8503}:8503"
+    volumes:
+      - type: bind
+        source: ./models/best.pt
+        target: /app/models/best.pt
+        read_only: true
+        bind:
+          create_host_path: false
+      - biomedclip:/app/models/biomedclip
+      - huggingface:/home/oncoedge/.cache/huggingface
+    cpus: "${ONCOEDGE_CPUS:-2}"
+    mem_limit: ${ONCOEDGE_MEMORY_LIMIT:-3g}
+    environment:
+      OMP_NUM_THREADS: "${ONCOEDGE_THREADS:-2}"
+      MKL_NUM_THREADS: "${ONCOEDGE_THREADS:-2}"
+      OPENBLAS_NUM_THREADS: "${ONCOEDGE_THREADS:-2}"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - edge
+
+volumes:
+  biomedclip:
+  huggingface:
+
+networks:
+  edge:
+    name: demo_edge

@@ -53,18 +53,14 @@ class BiomedCLIPClassifier:
         # Load BiomedCLIP model
         print("Loading BiomedCLIP model...")
         try:
+            model_name = 'hf-hub:' + self.MODEL_ID
             if use_local:
                 # Download to local models folder and load from there
                 local_model_path = self._ensure_local_model()
-                print(f"Loading from local path: {local_model_path}")
-                self.model, _, self.preprocess = open_clip.create_model_and_transforms(
-                    'hf-hub:' + self.MODEL_ID
-                )
-            else:
-                # Load directly from HuggingFace Hub
-                self.model, _, self.preprocess = open_clip.create_model_and_transforms(
-                    'hf-hub:' + self.MODEL_ID
-                )
+                if local_model_path is not None:
+                    print(f"Loading from local path: {local_model_path}")
+                    model_name = 'local-dir:' + str(local_model_path)
+            self.model, _, self.preprocess = open_clip.create_model_and_transforms(model_name)
 
             self.model.to(device)
             self.model.eval()
@@ -74,6 +70,8 @@ class BiomedCLIPClassifier:
             raise
 
         # Get tokenizer
+        # The checkpoint folder contains weights/config, while the tokenizer's
+        # vocabulary comes from its upstream repository and Hugging Face cache.
         self.tokenizer = open_clip.get_tokenizer('hf-hub:' + self.MODEL_ID)
 
         # Context length for text tokenization
@@ -94,10 +92,10 @@ class BiomedCLIPClassifier:
         local_model_dir = project_root / "models" / "biomedclip"
         local_model_dir.mkdir(parents=True, exist_ok=True)
 
-        local_model_file = local_model_dir / self.MODEL_FILE
+        required_files = (self.MODEL_FILE, "open_clip_config.json")
 
         # Check if model already exists locally
-        if local_model_file.exists():
+        if all((local_model_dir / filename).is_file() for filename in required_files):
             print(f"✓ Using cached model from: {local_model_dir}")
             return local_model_dir
 
@@ -106,14 +104,14 @@ class BiomedCLIPClassifier:
         print("This is a one-time download and will be cached locally.")
 
         try:
-            # Download main model file
-            downloaded_path = hf_hub_download(
-                repo_id=self.MODEL_ID,
-                filename=self.MODEL_FILE,
-                cache_dir=local_model_dir,
-                local_dir=local_model_dir,
-                local_dir_use_symlinks=False
-            )
+            # The local-dir loader needs both weights and their architecture/config.
+            for filename in required_files:
+                if not (local_model_dir / filename).is_file():
+                    hf_hub_download(
+                        repo_id=self.MODEL_ID,
+                        filename=filename,
+                        local_dir=local_model_dir,
+                    )
             print(f"✓ Model downloaded successfully to: {local_model_dir}")
 
             # Create info file

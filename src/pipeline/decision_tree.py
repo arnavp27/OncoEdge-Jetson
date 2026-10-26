@@ -13,23 +13,25 @@ class ClinicalDecisionTree:
     lesion duration) to provide clinical risk stratification.
     """
 
-    def assess_risk(self, vision_score, age, tobacco_years, lesion_duration):
+    def assess_risk(self, vision_score, age, tobacco_years, lesion_duration,
+                    *, detection_available=True, concerning_class=None,
+                    assessment_issues=()):
         """
-        Assess clinical risk level based on vision score and patient metadata.
+        Return a research-demo concern flag, not a clinical diagnosis.
 
         Risk Calculation:
-            - Base score: vision_score × 10
+            - Base score: OCA/OPMD evidence × 10
             - Age > 40: +1.5
             - Tobacco use > 10 years: +2.0
             - Lesion duration > 6 weeks: +1.5
 
-        Classification:
-            - HIGH (>8.0): Urgent referral within 2 weeks
-            - MEDIUM (>5.0): Non-urgent referral within 4 weeks
-            - LOW (≤5.0): Routine monitoring
+        Missing regions or unresolved model outputs yield INCONCLUSIVE and no
+        numeric score. Agreed OCA receives HIGH; agreed OPMD receives at least
+        MEDIUM, so a concerning model label cannot be diluted into LOW by fusion.
+        Scores and cutoffs are uncalibrated software heuristics.
 
         Args:
-            vision_score: Fused AI vision score (0-1)
+            vision_score: Detector-weighted OCA/OPMD relative score (0-1)
             age: Patient age in years
             tobacco_years: Years of tobacco use
             lesion_duration: Lesion duration category
@@ -37,10 +39,21 @@ class ClinicalDecisionTree:
 
         Returns:
             dict: Risk assessment containing:
-                - 'level': Risk level (str) - "HIGH", "MEDIUM", or "LOW"
+                - 'level': HIGH, MEDIUM, LOW or INCONCLUSIVE
                 - 'recommendation': Clinical recommendation (str)
-                - 'score': Computed risk score (float)
+                - 'score': Bounded demo score, or None when not assessed
         """
+        if not detection_available or assessment_issues:
+            return {
+                'level': 'INCONCLUSIVE',
+                'recommendation': (
+                    'The image could not be assessed reliably. This does not rule '
+                    'out disease. A persistent or concerning lesion needs an '
+                    'in-person dental or oral-medicine assessment.'
+                ),
+                'score': None,
+            }
+
         # Base risk score from vision
         risk_score = vision_score * 10
 
@@ -54,23 +67,38 @@ class ClinicalDecisionTree:
         if lesion_duration == "> 6 weeks":
             risk_score += 1.5
 
+        risk_score = min(10.0, max(0.0, risk_score))
+
         # Classify risk level and provide recommendation
-        if risk_score > 8.0:
+        if concerning_class == 'OCA' or (concerning_class == 'OPMD' and risk_score > 8.0):
             return {
                 'level': 'HIGH',
-                'recommendation': 'Urgent referral to specialist within 2 weeks',
+                'recommendation': (
+                    'The models flagged concerning features. An in-person '
+                    'dental or oral-medicine assessment is needed; this research '
+                    'result is not a diagnosis.'
+                ),
                 'score': risk_score
             }
-        elif risk_score > 5.0:
+        elif concerning_class == 'OPMD':
             return {
                 'level': 'MEDIUM',
-                'recommendation': 'Non-urgent referral within 4 weeks',
+                'recommendation': (
+                    'The models flagged a potentially malignant appearance. '
+                    'Arrange an in-person dental or oral-medicine assessment; '
+                    'this research result is not a diagnosis.'
+                ),
                 'score': risk_score
             }
         else:
             return {
                 'level': 'LOW',
-                'recommendation': 'Routine monitoring recommended',
+                'recommendation': (
+                    'The models agreed on non-concerning labels in the detected '
+                    'regions. This is not a negative screening result. A '
+                    'persistent or concerning lesion still needs an in-person '
+                    'dental or oral-medicine assessment.'
+                ),
                 'score': risk_score
             }
 
