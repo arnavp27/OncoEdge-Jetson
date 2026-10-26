@@ -4,7 +4,7 @@ OncoEdge is a research prototype for local, image-assisted oral lesion screening
 
 The project targets the **NVIDIA Jetson Nano 4 GB** and explores how a large biomedical vision-language model can be reduced to a practical edge-deployment pipeline.
 
-[**Try the live demo**](https://oncoedge.54-253-96-120.sslip.io/) — select a bundled sample or upload an image.
+[**Try the live demo**](https://oncoedge.duckdns.org/) — select a bundled sample or upload an image.
 The hosted demo runs the existing PyTorch pipeline on CPU with the trained
 `best.pt` detector; the Jetson/TensorRT code remains in the project.
 See the [assessment fixes and evaluation](evaluation/2026-10-05/FIXES.md)

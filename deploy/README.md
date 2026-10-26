@@ -75,7 +75,10 @@ choosing between a 4-GB and an 8-GB shared server.
 The demo uses the `codex/deploy-demo` branch on the `oncoedge-demo` Lightsail
 instance in Sydney (`ap-southeast-2a`): Ubuntu 24.04, 2 vCPUs, 4 GB RAM and
 80 GB SSD. The plan is $24/month. The attached static IP is `54.253.96.120`,
-with the live demo at [https://oncoedge.54-253-96-120.sslip.io/](https://oncoedge.54-253-96-120.sslip.io/).
+with the live demo at [https://oncoedge.duckdns.org/](https://oncoedge.duckdns.org/).
+The previous [IP-based address](https://oncoedge.54-253-96-120.sslip.io/)
+continues to work. The free DuckDNS hostname points directly to the same AWS
+static IP; the application still runs on Lightsail.
 
 The server checkout is `/home/ubuntu/OncoEdge-Jetson`. The private `.env`,
 trained detector and named model/certificate volumes stay on the server.
@@ -178,9 +181,21 @@ cp .env.example .env
 ```
 
 Give the instance a stable public IPv4 address and point the demo hostname's DNS A
-record at it. Without a purchased domain, `oncoedge.<static-ip-with-dashes>.sslip.io`
-can provide an IP-based hostname; verify that it resolves before starting Caddy.
-Set `ONCOEDGE_DOMAIN` in `.env` to that hostname. In the AWS firewall,
+record at it. A free DuckDNS subdomain can provide a named address without buying
+a domain. Set its IPv4 explicitly to the AWS static IP; automatic IP detection
+from a development browser would use the developer's connection instead.
+`oncoedge.<static-ip-with-dashes>.sslip.io` also provides an IP-based address.
+Verify DNS resolution before starting Caddy.
+
+Set `ONCOEDGE_DOMAIN` in `.env` to the hostname. To serve both the current and
+previous addresses, the existing Caddy configuration accepts a quoted,
+comma-separated list:
+
+```dotenv
+ONCOEDGE_DOMAIN="oncoedge.duckdns.org, oncoedge.54-253-96-120.sslip.io"
+```
+
+In the AWS firewall,
 allow inbound TCP 80 and 443; restrict SSH 22 to your own IP. Port 8503 stays private.
 Then launch the HTTPS gateway:
 
@@ -192,6 +207,20 @@ Caddy obtains and renews the certificate and proxies Streamlit WebSocket connect
 The hostname must resolve to the instance and ports 80/443 must be reachable before
 certificate issuance will work. The Compose health status alone does not confirm
 that the public DNS and certificate are working; open the actual HTTPS URL afterward.
+
+When changing only the hostname list, validate the Compose configuration and
+recreate only the gateway so it receives the updated environment:
+
+```bash
+docker compose -f compose.yaml -f compose.production.yaml config --quiet
+docker compose -f compose.yaml -f compose.production.yaml up -d --no-deps caddy
+```
+
+This leaves the running model container and its caches in place. Keep the private
+`.env` and any backup outside Git. The DuckDNS account token is not required on the
+server while the AWS static IP stays unchanged. See the
+[26 October DNS verification](../evaluation/2026-10-26/DNS_RELEASE.md) for the
+checked hostnames and rollback procedure.
 
 Only Caddy publishes public web ports. It can later route the other projects by
 hostname. Their Compose files can join the existing `demo_edge` Docker network as

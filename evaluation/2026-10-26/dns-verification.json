@@ -1,0 +1,95 @@
+{
+  "verified_at_utc": "2026-10-26T12:29:06.773005+00:00",
+  "results": [
+    {
+      "host": "oncoedge.duckdns.org",
+      "ipv4": [
+        "54.253.96.120"
+      ],
+      "http": {
+        "status": 308,
+        "location": "https://oncoedge.duckdns.org/"
+      },
+      "health": {
+        "status": 200,
+        "body": "ok",
+        "url": "https://oncoedge.duckdns.org/_stcore/health"
+      },
+      "tls": {
+        "version": "TLSv1.3",
+        "subjectAltName": [
+          [
+            "DNS",
+            "oncoedge.duckdns.org"
+          ]
+        ],
+        "notAfter": "Jan 24 11:30:22 2027 GMT",
+        "issuer": [
+          [
+            [
+              "countryName",
+              "US"
+            ]
+          ],
+          [
+            [
+              "organizationName",
+              "Let's Encrypt"
+            ]
+          ],
+          [
+            [
+              "commonName",
+              "YE2"
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "host": "oncoedge.54-253-96-120.sslip.io",
+      "ipv4": [
+        "54.253.96.120"
+      ],
+      "http": {
+        "status": 308,
+        "location": "https://oncoedge.54-253-96-120.sslip.io/"
+      },
+      "health": {
+        "status": 200,
+        "body": "ok",
+        "url": "https://oncoedge.54-253-96-120.sslip.io/_stcore/health"
+      },
+      "tls": {
+        "version": "TLSv1.3",
+        "subjectAltName": [
+          [
+            "DNS",
+            "oncoedge.54-253-96-120.sslip.io"
+          ]
+        ],
+        "notAfter": "Jan  3 09:58:47 2027 GMT",
+        "issuer": [
+          [
+            [
+              "countryName",
+              "US"
+            ]
+          ],
+          [
+            [
+              "organizationName",
+              "Let's Encrypt"
+            ]
+          ],
+          [
+            [
+              "commonName",
+              "YE2"
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "verified_at_utc": "2026-10-26T12:34:16.492520+00:00",
+  "containers": [
+    {
+      "name": "/oncoedge-caddy-1",
+      "id": "a5783b716ce0d9782dce1b43ce266594f737bc3752e5eac9083b4fc827578870",
+      "started_at": "2026-10-26T12:28:49.789553772Z",
+      "status": "running",
+      "restarts": 0,
+      "oom_killed": false,
+      "hostnames": "oncoedge.duckdns.org, oncoedge.54-253-96-120.sslip.io"
+    },
+    {
+      "name": "/oncoedge-oncoedge-1",
+      "id": "12d107cf1cbad836c1cb66ab8358a0c57985cb913bb54c30d5bb228fd94df1d9",
+      "started_at": "2026-10-26T11:51:57.345834555Z",
+      "status": "running",
+      "restarts": 0,
+      "oom_killed": false,
+      "health": "healthy"
+    }
+  ]
+}

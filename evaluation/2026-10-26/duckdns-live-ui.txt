@@ -1,0 +1,101 @@
+- banner
+- text: o
+- generic: e
+- generic: OncoEdge /
+- generic: EDGE AI · RESEARCH PROTOTYPE
+- generic: Live inference · CPU
+- paragraph: COMPUTER VISION, AT A HUMAN SCALE
+- heading "Oral lesion analysis. Built for the edge." [level=1]:
+  - text: Oral lesion analysis.
+  - emphasis: Built for the edge.
+- paragraph: A closer look at how detection and biomedical image classification work together. Start with a sample, or bring your own photograph.
+- generic: "01"
+- heading "Choose an image" [level=2]
+- radiogroup "Image source":
+  - radio "Samples" [checked]
+  - paragraph: Samples
+  - radio "Upload"
+  - paragraph: Upload
+- paragraph: Six published examples. Each runs the live pipeline; no results are prefilled.
+- img "Tongue · white patch"
+- button "Tongue · white patch":
+  - paragraph: Tongue · white patch
+- img "Cheek · fine markings"
+- button "Cheek · fine markings":
+  - paragraph: Cheek · fine markings
+- img "Oral cavity · red patch"
+- button "Oral cavity · red patch":
+  - paragraph: Oral cavity · red patch
+- img "Palate · surface change"
+- button "Palate · surface change":
+  - paragraph: Palate · surface change
+- img "Mouth floor · small ulcer"
+- button "Mouth floor · small ulcer":
+  - paragraph: Mouth floor · small ulcer
+- img "Tongue · raised area"
+- button "Tongue · raised area":
+  - paragraph: Tongue · raised area
+- generic: "02"
+- heading "Your photograph" [level=2]
+- button "Fullscreen":
+- img "0"
+- generic: Cheek · fine markings
+- paragraph: 398 × 332 px · Published sample
+- generic "keyboard_arrow_right Analysis settings":
+  - generic: keyboard_arrow_right
+  - paragraph: Analysis settings
+- button "arrow_forward Run analysis" [active]:
+  - generic: arrow_forward
+  - paragraph: Run analysis
+- paragraph: Runs the actual models. The first analysis takes longer while they load.
+- generic "check Analysis complete":
+  - generic: check
+  - paragraph: Analysis complete
+- generic "keyboard_arrow_right About this sample":
+  - generic: keyboard_arrow_right
+  - paragraph: About this sample
+- generic: "03"
+- heading "Analysis" [level=2]
+- generic: Model results
+- 'heading "Model label: OPMD" [level=3]':
+  - text: "Model label: OPMD"
+  - link "Link to heading":
+    - /url: "#model-label-opmd"
+- paragraph: Region 2 · Strongest combined match
+- generic "keyboard_arrow_right Model checks":
+  - generic: keyboard_arrow_right
+  - paragraph: Model checks
+- paragraph: Text match
+- button "Help for Text match":
+- paragraph: 94.2%
+- paragraph: Regions detected
+- paragraph: "2"
+- paragraph: Analysis time
+- paragraph: 1.3s
+- paragraph: Scores are relative model outputs, not disease probabilities. Time includes model loading on the first run.
+- heading "Detected regions" [level=4]:
+  - text: Detected regions
+  - link "Link to heading":
+    - /url: "#detected-regions"
+- button "Fullscreen":
+- img "0"
+- paragraph: Model-generated overlays. A ? marks a region that needs review.
+- heading "Inspect the evidence" [level=4]:
+  - text: Inspect the evidence
+  - link "Link to heading":
+    - /url: "#inspect-the-evidence"
+- generic "keyboard_arrow_right Region 1 · OPMD":
+  - generic: keyboard_arrow_right
+  - paragraph: Region 1 · OPMD
+- generic "keyboard_arrow_right Region 2 · OPMD":
+  - generic: keyboard_arrow_right
+  - paragraph: Region 2 · OPMD
+- paragraph: Live inference · PYTORCH · trained YOLO checkpoint + BioMedCLIP
+- button "download Download analysis JSON":
+  - generic: download
+  - paragraph: Download analysis JSON
+- generic "keyboard_arrow_right About OncoEdge":
+  - generic: keyboard_arrow_right
+  - paragraph: About OncoEdge
+- generic: OncoEdge / research in progress
+- generic: YOLO11 + BioMedCLIP
