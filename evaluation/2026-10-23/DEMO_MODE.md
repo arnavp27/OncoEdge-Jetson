@@ -3,7 +3,8 @@
 The local demo can now display real classifier readings while retaining the
 conservative review result separately. No weights, prompts, crop preprocessing
 or medical assessment recommendations were changed. This has not yet been
-deployed to the public AWS demo.
+deployed to the public AWS demo at the time of this experiment. The simplified
+results interface was subsequently [deployed on 26 October](../2026-10-26/AWS_RELEASE.md).
 
 | Limit or rule | Conservative request | Default exploratory request |
 |---|---:|---:|

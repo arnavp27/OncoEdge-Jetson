@@ -73,7 +73,9 @@ readings on **15/17 photos**, including all six gallery samples. Eight headline
 labels differ from the publications' whole-photo categories; region labels
 are not independently annotated. This is increased output coverage, **not
 demonstrated accuracy**. See the [demo-mode replay](evaluation/2026-10-23/DEMO_MODE.md).
-This local change has not yet been deployed to the public AWS demo.
+The simplified interface and model-results settings were deployed to the existing
+AWS instance on 26 October 2026. See the [release verification](evaluation/2026-10-26/AWS_RELEASE.md)
+for public browser checks, runtime checksums and rollback instructions.
 
 ### End-to-end architecture
 

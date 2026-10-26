@@ -1,7 +1,7 @@
 # OncoEdge evaluation: interview preparation
 
 Training and replay numbers were verified against retained project files on
-5 October 2026; UI regression coverage was updated on 23 October 2026. Use these
+5 October 2026; UI and deployment checks were updated on 26 October 2026. Use these
 as talking points and describe your own contribution accurately. Deployment
 verification is recorded separately in the deployment guide.
 

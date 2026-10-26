@@ -1,0 +1,123 @@
+o
+e
+OncoEdge /
+EDGE AI · RESEARCH PROTOTYPE
+Live inference · CPU
+View project ↗
+
+COMPUTER VISION, AT A HUMAN SCALE
+
+Oral lesion analysis.
+Built for the edge.
+
+A closer look at how detection and biomedical image classification work together. Start with a sample, or bring your own photograph.
+
+ONE IMAGE. TWO MODELS.
+01
+Locate
+YOLO11 · region detection
+↘
+02
+Compare
+BioMedCLIP · image + text
+↘
+03
+Review
+Labels, evidence & uncertainty
+01
+Choose an image
+SAMPLE LIBRARY / UPLOAD
+
+Samples
+
+Upload
+
+Six published examples. Each runs the live pipeline; no results are prefilled.
+
+Tongue · white patch
+
+Cheek · fine markings
+
+Oral cavity · red patch
+
+Palate · surface change
+
+Mouth floor · small ulcer
+
+Tongue · raised area
+
+02
+Your photograph
+Cheek · fine markings
+
+398 × 332 px · Published sample
+
+keyboard_arrow_right
+
+Analysis settings
+
+arrow_forward
+
+Run analysis
+
+Runs the actual models. The first analysis takes longer while they load.
+
+check
+
+Analysis complete
+
+keyboard_arrow_right
+
+About this sample
+
+03
+Analysis
+LIVE MODEL OUTPUT
+Model results
+Model label: OPMD
+
+Region 2 · Strongest combined match
+
+keyboard_arrow_right
+
+Model checks
+
+Text match
+
+94.2%
+
+Regions detected
+
+2
+
+Analysis time
+
+17.5s
+
+Scores are relative model outputs, not disease probabilities. Time includes model loading on the first run.
+
+Detected regions
+
+Model-generated overlays. A ? marks a region that needs review.
+
+Inspect the evidence
+keyboard_arrow_right
+
+Region 1 · OPMD
+
+keyboard_arrow_right
+
+Region 2 · OPMD
+
+Live inference · PYTORCH · trained YOLO checkpoint + BioMedCLIP
+
+download
+
+Download analysis JSON
+
+keyboard_arrow_right
+
+About OncoEdge
+
+OncoEdge / research in progress
+YOLO11 + BioMedCLIP

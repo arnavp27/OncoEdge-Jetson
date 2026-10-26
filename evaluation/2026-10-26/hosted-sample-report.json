@@ -1,0 +1,97 @@
+{
+  "project": "OncoEdge",
+  "research_only": true,
+  "image": "Cheek \u00b7 fine markings",
+  "demo_context": {
+    "age": 45,
+    "tobacco_years": 0,
+    "lesion_duration": "< 2 weeks"
+  },
+  "backend": "pytorch",
+  "elapsed_seconds": 17.546,
+  "risk_level": "INCONCLUSIVE",
+  "risk_score": null,
+  "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+  "assessment_issues": [
+    "Region 1: classifier scores are ambiguous.",
+    "Region 2: detector confidence is below the conservative limit."
+  ],
+  "inference_settings": {
+    "mode": "exploratory_demo",
+    "detector_threshold": 0.1,
+    "min_classifier_score": 0.35,
+    "min_classifier_margin": 0.02
+  },
+  "demo_readout": {
+    "status": "provisional",
+    "provisional": true,
+    "settings": {
+      "detector_threshold": 0.1,
+      "min_classifier_score": 0.35,
+      "min_classifier_margin": 0.02
+    },
+    "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+    "primary_region": 2,
+    "class": "OPMD",
+    "yolo_class": "OPMD",
+    "classifier_score": 0.9421537518501282,
+    "fusion_score": 0.14211673159541327,
+    "concern_index": 1.4260984080120953,
+    "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+    "accepted_regions": [
+      1,
+      2
+    ],
+    "excluded_regions": [],
+    "model_disagreement": false,
+    "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+  },
+  "detections": [
+    {
+      "bbox": [
+        0,
+        1,
+        316,
+        332
+      ],
+      "yolo_conf": 0.2662709057331085,
+      "yolo_class": "OPMD",
+      "class": "OPMD",
+      "class_scores": {
+        "OCA": 0.006279512774199247,
+        "OPMD": 0.4979100227355957,
+        "Benign": 0.472425252199173,
+        "Normal": 0.023385128006339073
+      },
+      "fusion_score": 0.13257895272739972,
+      "concern_score": 0.1342510042813484,
+      "classifier_margin": 0.02548477053642273,
+      "model_disagreement": false,
+      "classification_uncertain": true,
+      "detection_uncertain": false
+    },
+    {
+      "bbox": [
+        92,
+        1,
+        396,
+        326
+      ],
+      "yolo_conf": 0.15084239840507507,
+      "yolo_class": "OPMD",
+      "class": "OPMD",
+      "class_scores": {
+        "OCA": 0.0032690358348190784,
+        "OPMD": 0.9421537518501282,
+        "Benign": 0.0545232817530632,
+        "Normal": 5.4037634981796145e-05
+      },
+      "fusion_score": 0.14211673159541327,
+      "concern_score": 0.14260984080120953,
+      "classifier_margin": 0.887630470097065,
+      "model_disagreement": false,
+      "classification_uncertain": false,
+      "detection_uncertain": true
+    }
+  ]
+}

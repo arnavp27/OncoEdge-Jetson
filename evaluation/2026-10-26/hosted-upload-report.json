@@ -1,0 +1,145 @@
+{
+  "project": "OncoEdge",
+  "research_only": true,
+  "image": "benign-01.png",
+  "demo_context": {
+    "age": 45,
+    "tobacco_years": 0,
+    "lesion_duration": "< 2 weeks"
+  },
+  "backend": "pytorch",
+  "elapsed_seconds": 1.973,
+  "risk_level": "INCONCLUSIVE",
+  "risk_score": null,
+  "recommendation": "The image could not be assessed reliably. This does not rule out disease. A persistent or concerning lesion needs an in-person dental or oral-medicine assessment.",
+  "assessment_issues": [
+    "Region 3: models disagree (YOLO OPMD, classifier Benign).",
+    "Region 4: detector confidence is below the conservative limit."
+  ],
+  "inference_settings": {
+    "mode": "exploratory_demo",
+    "detector_threshold": 0.1,
+    "min_classifier_score": 0.35,
+    "min_classifier_margin": 0.02
+  },
+  "demo_readout": {
+    "status": "provisional",
+    "provisional": true,
+    "settings": {
+      "detector_threshold": 0.1,
+      "min_classifier_score": 0.35,
+      "min_classifier_margin": 0.02
+    },
+    "selection_rule": "Highest YOLO confidence \u00d7 classifier relative score among eligible regions.",
+    "primary_region": 2,
+    "class": "Benign",
+    "yolo_class": "Benign",
+    "classifier_score": 0.9750670194625854,
+    "fusion_score": 0.33430262813439526,
+    "concern_index": 0.5501198902106181,
+    "concern_index_formula": "10 \u00d7 max(YOLO confidence \u00d7 (OCA + OPMD relative scores)) over eligible regions; no patient-context weighting.",
+    "accepted_regions": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "excluded_regions": [],
+    "model_disagreement": true,
+    "note": "Unvalidated exploratory model output. Not a diagnosis or disease probability. Lower display limits do not improve accuracy."
+  },
+  "detections": [
+    {
+      "bbox": [
+        86,
+        160,
+        142,
+        212
+      ],
+      "yolo_conf": 0.3623538613319397,
+      "yolo_class": "Benign",
+      "class": "Benign",
+      "class_scores": {
+        "OCA": 0.00496406015008688,
+        "OPMD": 0.00029407587135210633,
+        "Benign": 0.7397380471229553,
+        "Normal": 0.25500380992889404
+      },
+      "fusion_score": 0.2680469377491512,
+      "concern_score": 0.0019053058907769795,
+      "classifier_margin": 0.4847342371940613,
+      "model_disagreement": false,
+      "classification_uncertain": false,
+      "detection_uncertain": false
+    },
+    {
+      "bbox": [
+        0,
+        0,
+        262,
+        272
+      ],
+      "yolo_conf": 0.342850923538208,
+      "yolo_class": "Benign",
+      "class": "Benign",
+      "class_scores": {
+        "OCA": 0.02303597517311573,
+        "OPMD": 0.0009720238740555942,
+        "Benign": 0.9750670194625854,
+        "Normal": 0.0009250383009202778
+      },
+      "fusion_score": 0.33430262813439526,
+      "concern_score": 0.008231164645627106,
+      "classifier_margin": 0.9520310442894697,
+      "model_disagreement": false,
+      "classification_uncertain": false,
+      "detection_uncertain": false
+    },
+    {
+      "bbox": [
+        83,
+        0,
+        359,
+        271
+      ],
+      "yolo_conf": 0.34186169505119324,
+      "yolo_class": "OPMD",
+      "class": "Benign",
+      "class_scores": {
+        "OCA": 0.00021397866657935083,
+        "OPMD": 0.1607048660516739,
+        "Benign": 0.8293709754943848,
+        "Normal": 0.009710200130939484
+      },
+      "fusion_score": 0.283530167508772,
+      "concern_score": 0.05501198902106181,
+      "classifier_margin": 0.6686661094427109,
+      "model_disagreement": true,
+      "classification_uncertain": false,
+      "detection_uncertain": false
+    },
+    {
+      "bbox": [
+        263,
+        175,
+        360,
+        269
+      ],
+      "yolo_conf": 0.20454348623752594,
+      "yolo_class": "Benign",
+      "class": "Benign",
+      "class_scores": {
+        "OCA": 8.846002310747281e-05,
+        "OPMD": 0.0017269434174522758,
+        "Benign": 0.9342546463012695,
+        "Normal": 0.0639299526810646
+      },
+      "fusion_score": 0.1910957023880684,
+      "concern_score": 0.00037132894865969017,
+      "classifier_margin": 0.8703246936202049,
+      "model_disagreement": false,
+      "classification_uncertain": false,
+      "detection_uncertain": true
+    }
+  ]
+}

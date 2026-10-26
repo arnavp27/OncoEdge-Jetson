@@ -122,6 +122,26 @@ the local release. Caddy continued serving HTTPS throughout the app replacement.
 The previous image is retained as `oncoedge:rollback-1f195a0-20261023`. See the
 [release record](../evaluation/2026-10-23/AWS_RELEASE.md) for evidence and rollback.
 
+### Verification on 26 October 2026
+
+Application revision `4f071ccb925c62873a18c579e3243fe2f23599c4` is live on the
+existing instance. The results view shows the selected classifier label, relative
+text match and detected regions, with tuning and agreement checks in collapsed
+details. Source weights, prompts, model caches, Caddy and the AWS instance are
+retained. The original conservative assessment remains available in settings.
+
+All 39 local regression checks passed. Eight real photographs ran through both
+assessment modes and the classifier inside the new AWS image, with offline model
+caches; peak container memory was 2,231.7 MiB. All 37 checked runtime files and
+model weights match the local release. The public gallery and an uploaded PNG
+completed inference, their JSON reports matched the displayed results, and input
+switching cleared stale results. The web container remained healthy, with zero
+restarts and no OOM kill. These are execution checks, not clinical validation.
+
+Rollback image: `oncoedge:rollback-before-4f071cc`. The
+[26 October release record](../evaluation/2026-10-26/AWS_RELEASE.md) retains the
+evidence and exact recovery commands. No additional AWS resources were created.
+
 ## AWS server setup
 
 Use one Ubuntu 24.04 x86_64 EC2 or Lightsail instance. Install Git and Docker Engine
