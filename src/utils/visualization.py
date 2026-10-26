@@ -80,7 +80,8 @@ def draw_detections(image, detections):
         class_name = detection['class']
         score = detection['fusion_score']
         color = CLASS_COLORS.get(class_name, (255, 255, 255))
-        needs_review = detection.get('model_disagreement') or detection.get('classification_uncertain')
+        needs_review = (detection.get('model_disagreement') or detection.get('classification_uncertain')
+                        or detection.get('detection_uncertain'))
         label = f"#{idx+1} {'? ' if needs_review else ''}{class_name} | match {score:.2f}"
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 0.5

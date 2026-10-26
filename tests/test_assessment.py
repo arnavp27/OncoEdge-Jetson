@@ -11,6 +11,7 @@ from src.models.yolo_detector import YOLODetector
 from src.pipeline.decision_tree import ClinicalDecisionTree
 from src.pipeline.fusion import FusionModule
 from src.pipeline.inference_pipeline import OncoEdgePipeline
+from src.pipeline.demo_readout import DemoOptions
 
 
 METADATA = {"age": 45, "tobacco_years": 0, "lesion_duration": "< 2 weeks"}
@@ -173,3 +174,112 @@ def test_detected_region_ui_displays_both_labels_and_relative_scores():
     assert 'Detector label:** OCA' in text
     assert 'Classifier label:** Benign' in text
     assert 'not disease probabilities' in text
+
+
+def test_demo_exposes_disagreement_without_turning_it_into_a_reliable_assessment():
+    scores = {'OCA': 0.01, 'OPMD': 0.02, 'Benign': 0.95, 'Normal': 0.02}
+    pipeline = make_pipeline([0], [classification('Benign', scores)])
+    result = pipeline.process_image(Image.new('RGB', (24, 24)), METADATA,
+                                    demo_options=DemoOptions())
+    demo = result['demo_readout']
+    assert demo['status'] == 'provisional'
+    assert demo['class'] == 'Benign'
+    assert demo['yolo_class'] == 'OCA'
+    assert demo['model_disagreement'] is True
+    assert result['risk_level'] == 'INCONCLUSIVE'
+    assert result['risk_score'] is None
+    assert any('disagree' in issue for issue in result['assessment_issues'])
+
+
+def test_relaxed_demo_gates_allow_reading_but_preserve_original_uncertainty():
+    scores = {'OCA': 0.30, 'OPMD': 0.40, 'Benign': 0.20, 'Normal': 0.10}
+    pipeline = make_pipeline([1], [classification('OPMD', scores)], confidences=[0.15])
+    result = pipeline.process_image(Image.new('RGB', (24, 24)), HIGH_FACTORS,
+                                    demo_options=DemoOptions())
+    assert result['demo_readout']['class'] == 'OPMD'
+    assert result['demo_readout']['concern_index'] == pytest.approx(1.05)
+    assert result['detections'][0]['classification_uncertain'] is True
+    assert result['detections'][0]['detection_uncertain'] is True
+    assert result['risk_level'] == 'INCONCLUSIVE'
+    assert result['risk_score'] is None
+
+
+@pytest.mark.parametrize('scores', [
+    {'OCA': 0.27, 'OPMD': 0.28, 'Benign': 0.25, 'Normal': 0.20},
+    {'OCA': 0.39, 'OPMD': 0.40, 'Benign': 0.11, 'Normal': 0.10},
+])
+def test_demo_still_abstains_when_display_score_or_margin_limit_fails(scores):
+    pipeline = make_pipeline([1], [classification('OPMD', scores)])
+    result = pipeline.process_image(Image.new('RGB', (24, 24)), METADATA,
+                                    demo_options=DemoOptions())
+    assert result['demo_readout']['status'] == 'no_accepted_regions'
+    assert result['demo_readout']['class'] is None
+    assert result['demo_readout']['concern_index'] is None
+    assert result['demo_readout']['excluded_regions'][0]['reasons']
+
+
+def test_demo_never_creates_a_classifier_reading_without_a_usable_region():
+    pipeline = make_pipeline([], [])
+    result = pipeline.process_image(Image.new('RGB', (24, 24)), METADATA,
+                                    demo_options=DemoOptions())
+    assert result['demo_readout']['status'] == 'no_accepted_regions'
+    assert result['demo_readout']['class'] is None
+    assert result['risk_score'] is None
+    pipeline.biomedclip.classify.assert_not_called()
+
+
+def test_demo_settings_do_not_leak_into_a_subsequent_conservative_request():
+    from src.config import CONFIG
+
+    scores = {'OCA': 0.30, 'OPMD': 0.40, 'Benign': 0.20, 'Normal': 0.10}
+    pipeline = make_pipeline([1], [classification('OPMD', scores)] * 2)
+    image = Image.new('RGB', (24, 24))
+    pipeline.process_image(image, METADATA, demo_options=DemoOptions(detector_threshold=0.08))
+    conservative = pipeline.process_image(image, METADATA)
+    assert 'demo_readout' not in conservative
+    assert conservative['risk_level'] == 'INCONCLUSIVE'
+    assert pipeline.yolo.detect.call_args_list[0].kwargs['conf_threshold'] == 0.08
+    assert pipeline.yolo.detect.call_args_list[1].kwargs['conf_threshold'] == 0.25
+    assert CONFIG['model'].min_classifier_score == 0.60
+    assert CONFIG['model'].min_classifier_margin == 0.15
+
+
+def test_demo_headline_uses_strongest_match_rather_than_most_concerning_class():
+    benign = {'OCA': 0.01, 'OPMD': 0.02, 'Benign': 0.95, 'Normal': 0.02}
+    oca = {'OCA': 0.90, 'OPMD': 0.02, 'Benign': 0.06, 'Normal': 0.02}
+    pipeline = make_pipeline([2, 0], [classification('Benign', benign), classification('OCA', oca)],
+                             confidences=[0.9, 0.3])
+    result = pipeline.process_image(Image.new('RGB', (24, 24)), METADATA,
+                                    demo_options=DemoOptions())
+    assert result['demo_readout']['class'] == 'Benign'
+    assert result['demo_readout']['primary_region'] == 1
+    assert result['demo_readout']['accepted_regions'] == [1, 2]
+    # The separate index still considers all eligible regions.
+    assert result['demo_readout']['concern_index'] == pytest.approx(2.76)
+
+
+@pytest.mark.parametrize('settings', [
+    {'detector_threshold': 0}, {'min_classifier_score': float('nan')},
+    {'min_classifier_margin': -0.1}, {'detector_threshold': 1.1},
+])
+def test_invalid_demo_settings_are_rejected(settings):
+    with pytest.raises(ValueError):
+        DemoOptions(**settings)
+
+
+def test_cached_pipeline_accepts_settings_from_a_reloaded_ui_module():
+    # Streamlit can reload the options class while retaining a cached pipeline.
+    from dataclasses import make_dataclass
+
+    reloaded_type = make_dataclass('DemoOptions', [
+        ('detector_threshold', float), ('min_classifier_score', float),
+        ('min_classifier_margin', float),
+    ])
+    options = reloaded_type(0.1, 0.35, 0.02)
+    assert not isinstance(options, DemoOptions)
+    scores = {'OCA': 0.30, 'OPMD': 0.40, 'Benign': 0.20, 'Normal': 0.10}
+    pipeline = make_pipeline([1], [classification('OPMD', scores)])
+    result = pipeline.process_image(Image.new('RGB', (24, 24)), METADATA,
+                                    demo_options=options)
+    assert result['demo_readout']['class'] == 'OPMD'
+    assert result['demo_readout']['settings']['detector_threshold'] == 0.1

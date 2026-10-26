@@ -24,7 +24,8 @@ oncoedge` for a temporary test. On this development machine, the previous launch
 can be stopped with `systemctl --user stop oncoedge-local`.
 
 The warm-up command checks the trained detector's classes, initializes BioMedCLIP,
-and optionally runs both original samples, all six gallery photos and the classifier. It exercises the classifier
+and optionally runs both original samples and all six gallery photos through both
+conservative assessment and the default model-results settings. It also exercises the classifier
 even if YOLO finds no regions. These checks verify execution, not clinical accuracy.
 The web health check verifies the Streamlit server; it does not initialize the models.
 Visitors' first analysis still loads the models into the web process's memory, using

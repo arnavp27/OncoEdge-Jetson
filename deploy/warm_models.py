@@ -15,6 +15,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.pipeline.inference_pipeline import OncoEdgePipeline
+from src.pipeline.demo_readout import DemoOptions
 
 
 def main():
@@ -43,6 +44,17 @@ def main():
                 image = sample.convert("RGB")
             started = time.monotonic()
             result = pipeline.process_image(np.array(image), metadata)
+            display_result = pipeline.process_image(np.array(image), metadata,
+                                                    demo_options=DemoOptions())
+            readout = display_result['demo_readout']
+            if readout['class'] is not None:
+                region = display_result['detections'][readout['primary_region'] - 1]
+                if readout['class'] != region['class']:
+                    raise SystemExit('Displayed label does not match the selected model region.')
+                if not np.isfinite(readout['classifier_score']) or not 0 <= readout['classifier_score'] <= 1:
+                    raise SystemExit('Invalid displayed classifier score.')
+            if display_result['risk_level'] == 'INCONCLUSIVE' and display_result['risk_score'] is not None:
+                raise SystemExit('An unresolved assessment must not have a clinical assessment score.')
             # Exercise the classifier even if this sample has no detector candidates.
             classification = pipeline.biomedclip.classify(image)
             scores = classification["scores"]
@@ -58,6 +70,13 @@ def main():
                 "detections": len(result["detections"]),
                 "risk_level": result["risk_level"],
                 "risk_score": result["risk_score"],
+                "model_results": {
+                    "detections": len(display_result['detections']),
+                    "class": readout['class'],
+                    "text_match": readout['classifier_score'],
+                    "assessment_status": display_result['risk_level'],
+                    "model_disagreement": readout['model_disagreement'],
+                },
                 "classifier": classification,
             }))
 

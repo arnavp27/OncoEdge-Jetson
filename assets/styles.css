@@ -22,8 +22,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid #b48122 !important; o
 .brand-mark span { color: #b5ce93; }
 .wordmark { font-size: 23px; font-weight: 650; line-height: 1.1; letter-spacing: -.8px; }
 .wordmark > span { color: #8da58e; font-weight: 400; margin-left: 6px; }
-.brand-caption, .eyebrow, .map-label, .section-label > span, .section-label > small,
-.research-note > span { font-family: 'iA Writer Mono', 'Noto Sans Mono', monospace;
+.brand-caption, .eyebrow, .map-label, .section-label > span, .section-label > small {
+  font-family: 'iA Writer Mono', 'Noto Sans Mono', monospace;
   font-size: 10px; font-weight: 500; letter-spacing: 1.3px; }
 .brand-caption { font-size: 8px; letter-spacing: 1.15px; margin-top: 7px; color: var(--muted); }
 .masthead-links { display: flex; gap: 22px; align-items: center; font-size: 13px; }
@@ -33,7 +33,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid #b48122 !important; o
   border: 1px solid var(--line); padding: 7px 12px; border-radius: 30px; font-size: 11px; }
 .runtime-pill i { width: 6px; height: 6px; border-radius: 100%; background: #5f8967; }
 .hero { display: grid; grid-template-columns: 1.6fr 1fr; gap: 80px; align-items: center;
-  padding: 25px 0 23px; }
+  padding: 20px 0 12px; }
 .eyebrow { color: var(--muted); margin: 0 0 16px; }
 .hero h1 { color: var(--ink); font: 400 clamp(35px, 4vw, 51px)/1.1 'Noto Serif', Georgia, serif;
   letter-spacing: -2px; margin: 0 0 18px; padding: 0; }
@@ -49,9 +49,6 @@ button:focus-visible, a:focus-visible { outline: 3px solid #b48122 !important; o
 .map-row small { display: block; color: var(--muted); font-size: 11px; padding-top: 4px; }
 .map-arrow { color: #9cae92; font-size: 20px; margin-left: auto; }
 .map-dot { width: 7px; height: 7px; background: #9ab17f; border-radius: 100%; margin-left: auto; }
-.research-note { border-block: 1px solid var(--line); color: #647165; padding: 11px 0;
-  line-height: 1.6; font-size: 12px; margin-bottom: 13px; }
-.research-note > span { color: #705e36; letter-spacing: .9px; margin-right: 12px; font-size: 9px; }
 .section-label { display: flex; align-items: baseline; gap: 12px; margin: 20px 0 8px; }
 .section-label > span { color: #8c9b83; font-size: 11px; }
 .section-label h2 { color: var(--ink); font-size: 21px; font-weight: 550; padding: 0; margin: 0;
@@ -134,14 +131,13 @@ button:focus-visible, a:focus-visible { outline: 3px solid #b48122 !important; o
 }
 @media (max-width: 700px) {
   .stMainBlockContainer { padding: 1.4rem 1rem; }
-  .hero { grid-template-columns: 1fr; padding: 27px 0 24px; }
+  .hero { grid-template-columns: 1fr; padding: 20px 0 12px; }
   .hero h1 { font-size: 38px; letter-spacing: -1.4px; }
   .hero-copy { font-size: 14px; }
   .pipeline-map { display: none; }
   .masthead-links { gap: 0; }
   .masthead-links a { display: none; }
   .runtime-pill { font-size: 9px; padding: 6px 9px; }
-  .research-note { font-size: 11px; }
   .section-label > small { display: none; }
   .st-key-sample_gallery [data-testid="stHorizontalBlock"] { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
   .sample-photo { height: 81px; }

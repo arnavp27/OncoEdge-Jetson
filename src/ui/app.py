@@ -5,6 +5,7 @@ import io
 import json
 import logging
 import time
+from dataclasses import asdict
 from pathlib import Path
 
 import numpy as np
@@ -13,6 +14,8 @@ import torch
 from PIL import Image, ImageOps, UnidentifiedImageError
 
 from src.pipeline.inference_pipeline import OncoEdgePipeline
+from src.pipeline.demo_readout import DemoOptions
+from src.config import CONFIG
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -52,11 +55,12 @@ def thumbnail(filename):
     return 'data:image/jpeg;base64,' + base64.b64encode(output.getvalue()).decode()
 
 
-def input_key(image, metadata, source_id):
+def input_key(image, metadata, source_id, settings=None):
     digest = hashlib.sha256(image.tobytes())
     digest.update(str(image.size).encode())
     digest.update(json.dumps(metadata, sort_keys=True).encode())
     digest.update(source_id.encode())
+    digest.update(json.dumps(settings, sort_keys=True).encode())
     return digest.hexdigest()
 
 
@@ -84,9 +88,7 @@ def render_header():
         <div class="map-row"><span class="map-number">02</span><div><b>Compare</b><small>BioMedCLIP · image + text</small></div><span class="map-arrow">↘</span></div>
         <div class="map-row"><span class="map-number">03</span><div><b>Review</b><small>Labels, evidence &amp; uncertainty</small></div><span class="map-dot"></span></div>
       </div>
-    </section>
-    <div class="research-note"><span>RESEARCH USE</span> This prototype does not diagnose disease.
-      Model scores are uncalibrated, and an inconclusive result does not rule out a lesion.</div>''')
+    </section>''')
 
 
 def section_label(number, title, detail=''):
@@ -124,8 +126,35 @@ def empty_results():
         st.write('YOLO locates candidate regions. BioMedCLIP compares each crop with four '
                  'text prompts: OCA (oral cancer), OPMD (potentially malignant disorder), '
                  'Benign and Normal. The models can miss regions or give conflicting labels.')
-        st.write('Missing regions or unresolved labels return INCONCLUSIVE. The sample set '
-                 'includes known failure cases, so it demonstrates both the pipeline and its limits.')
+        st.write('The result shows the classifier label from the region with the strongest '
+                 'combined model match. Open a region to compare both models and its scores. '
+                 'An image without a usable region has no classification result.')
+
+
+def acceptance_controls():
+    exploratory = not st.toggle('Require model agreement', value=False, key='require_model_agreement',
+                                help='Withhold an assessment when labels disagree or scores are ambiguous.')
+    if exploratory:
+        detector = st.slider('Minimum YOLO confidence', 5, 50, 10, 1,
+                             format='%d%%', key='demo_detector_limit')
+        classifier = st.slider('Minimum classifier relative score', 25, 100, 35, 1,
+                               format='%d%%', key='demo_classifier_limit')
+        margin = st.slider('Minimum top-two score gap', 0, 50, 2, 1,
+                           format='%d%%', key='demo_margin_limit')
+        st.caption('Lower limits include more candidates. The summary uses the strongest '
+                   'detector × classifier match; both labels remain available in the results.')
+        options = DemoOptions(detector / 100, classifier / 100, margin / 100)
+        settings = {'mode': 'exploratory_demo', **asdict(options)}
+    else:
+        st.caption('Unresolved evidence returns INCONCLUSIVE with no assessment score.')
+        options = None
+        config = CONFIG['model']
+        settings = {
+            'mode': 'conservative_review', 'detector_threshold': config.yolo_conf_threshold,
+            'min_classifier_score': config.min_classifier_score,
+            'min_classifier_margin': config.min_classifier_margin,
+        }
+    return options, settings
 
 
 def display_results(results, elapsed=None, backend=None):
@@ -137,29 +166,55 @@ def display_results(results, elapsed=None, backend=None):
         'MEDIUM': 'The models flagged a potentially malignant appearance',
         'LOW': 'The models agreed on non-concerning labels',
     }
-    st.html(f'<div class="result-eyebrow"><span class="result-dot {html.escape(level.lower())}"></span>'
-            f'{html.escape(descriptions.get(level, "Research assessment"))}</div>')
-    st.subheader(f'Assessment: {level}')
-    if level == 'HIGH':
-        st.error(results['recommendation'], icon=':material/info:')
-    elif level in ('INCONCLUSIVE', 'MEDIUM'):
-        st.warning(results['recommendation'], icon=':material/info:')
-    else:
-        st.info(results['recommendation'], icon=':material/info:')
-
+    demo = results.get('demo_readout')
     issues = results.get('assessment_issues', [])
-    if issues:
-        with st.expander('Why this result?', expanded=len(issues) <= 2):
+    if demo is not None:
+        st.html('<div class="result-eyebrow"><span class="result-dot"></span>Model results</div>')
+        if demo['class'] is not None:
+            st.subheader(f'Model label: {demo["class"]}')
+            st.caption(f'Region {demo["primary_region"]} · Strongest combined match')
+        else:
+            st.subheader('No label available')
+            st.info('No usable region passed the analysis settings. Try another photograph '
+                    'or adjust the settings.')
+        with st.expander('Model checks'):
+            st.write(f'**Assessment status:** {level}')
             for issue in issues:
                 st.write('- ' + issue)
+            if not issues:
+                st.write('The detected regions passed the model agreement checks.')
+            st.caption('The classifier summary can be shown even when these checks are unresolved.')
+            if demo['concern_index'] is not None:
+                st.write(f'**Concern index:** {demo["concern_index"]:.1f}/10')
+                st.caption('Detector-weighted OCA + OPMD evidence across included regions; '
+                           'uncalibrated and without patient-context weighting.')
+    else:
+        st.html(f'<div class="result-eyebrow"><span class="result-dot {html.escape(level.lower())}"></span>'
+                f'{html.escape(descriptions.get(level, "Research assessment"))}</div>')
+        st.subheader(f'Assessment: {level}')
+        if level == 'HIGH':
+            st.error(results['recommendation'], icon=':material/info:')
+        elif level in ('INCONCLUSIVE', 'MEDIUM'):
+            st.warning(results['recommendation'], icon=':material/info:')
+        else:
+            st.info(results['recommendation'], icon=':material/info:')
+        if issues:
+            with st.expander('Why this result?', expanded=len(issues) <= 2):
+                for issue in issues:
+                    st.write('- ' + issue)
 
     with st.container(key='result_metrics'):
         columns = st.columns(3)
-        score = results['risk_score']
-        columns[0].metric('Demo concern score', 'Not assessed' if score is None else f'{score:.1f}/10')
+        if demo is not None:
+            score = demo['classifier_score']
+            columns[0].metric('Text match', 'Not assessed' if score is None else f'{score:.1%}',
+                              help='Relative BioMedCLIP score across four text labels, not a disease probability.')
+        else:
+            score = results['risk_score']
+            columns[0].metric('Concern index', 'Not assessed' if score is None else f'{score:.1f}/10')
         columns[1].metric('Regions detected', len(results['detections']))
         columns[2].metric('Analysis time', f'{elapsed:.1f}s' if elapsed is not None else '—')
-    st.caption('The concern score is a demo heuristic, not a disease probability.'
+    st.caption('Scores are relative model outputs, not disease probabilities.'
                + (' Time includes model loading on the first run.' if elapsed is not None else ''))
 
     if results['detections']:
@@ -169,15 +224,26 @@ def display_results(results, elapsed=None, backend=None):
                      caption='Model-generated overlays. A ? marks a region that needs review.')
         st.markdown('#### Inspect the evidence')
         for i, det in enumerate(results['detections']):
-            needs_review = det['model_disagreement'] or det['classification_uncertain']
-            title = f'Region {i+1} · {det["class"]}' + (' · Needs review' if needs_review else '')
+            needs_review = (det['model_disagreement'] or det['classification_uncertain']
+                            or det.get('detection_uncertain', False))
+            title = f'Region {i+1} · {det["class"]}'
             with st.expander(title):
                 st.write(f'**Detector label:** {det["yolo_class"]}')
                 st.write(f'**Classifier label:** {det["class"]}')
                 st.write(f'**YOLO confidence:** {det["yolo_conf"]:.1%} · '
                          f'**Fused match:** {det["fusion_score"]:.1%}')
+                if demo is not None:
+                    st.caption('Included in the summary.' if i + 1 in demo['accepted_regions']
+                               else 'Below the selected limits; excluded from the summary.')
                 if needs_review:
-                    st.warning("This region's classification needs review.")
+                    reasons = []
+                    if det['model_disagreement']:
+                        reasons.append('The detector and classifier give different labels.')
+                    if det['classification_uncertain']:
+                        reasons.append('The classifier scores are ambiguous.')
+                    if det.get('detection_uncertain'):
+                        reasons.append('Detector confidence is below the agreement-check limit.')
+                    st.warning(' '.join(reasons))
                 st.write('**Classifier relative scores (not disease probabilities):**')
                 for label, value in det['class_scores'].items():
                     st.progress(min(1.0, max(0.0, value)), text=f'{label} · {value:.1%}')
@@ -196,6 +262,8 @@ def report_json(analysis):
         'risk_level': result['risk_level'], 'risk_score': result['risk_score'],
         'recommendation': result['recommendation'],
         'assessment_issues': result.get('assessment_issues', []),
+        'inference_settings': analysis.get('settings', {'mode': 'conservative_review'}),
+        'demo_readout': result.get('demo_readout'),
         'detections': [{k: v for k, v in det.items() if k != 'mask'}
                        for det in result['detections']],
     }, indent=2)
@@ -253,9 +321,12 @@ def main():
                     st.html('<div class="upload-empty">Your photograph will appear here.<br>'
                             '<small>Choose a file above to get started.</small></div>')
 
-                with st.expander('Demo context', expanded=False):
-                    st.caption('Optional synthetic inputs for the demo score. Sample defaults '
-                               'are not the photographed subjects’ medical histories.')
+                with st.expander('Analysis settings', expanded=False):
+                    demo_options, settings = acceptance_controls()
+                    st.markdown('**Patient context**')
+                    st.caption('Optional inputs for the rule-based assessment. Defaults are '
+                               'not the photographed subjects’ medical histories and do not '
+                               'affect the classifier label or text match.')
                     context_columns = st.columns(2)
                     age = context_columns[0].number_input('Age', min_value=1, max_value=120,
                                                           value=45, key='demo_age')
@@ -268,7 +339,7 @@ def main():
                 valid_context = tobacco_years <= age
                 if not valid_context:
                     st.warning('Years of tobacco use cannot exceed age.')
-                fingerprint = input_key(image, metadata, source_id) if image is not None else None
+                fingerprint = input_key(image, metadata, source_id, settings) if image is not None else None
                 analysis = st.session_state.get('analysis')
                 stale = analysis is not None and analysis['input_key'] != fingerprint
                 if stale:
@@ -287,12 +358,13 @@ def main():
                             st.write('Loading the detection and classification models…')
                             pipeline = load_pipeline()
                             st.write('Locating regions and comparing biomedical image prompts…')
-                            result = pipeline.process_image(np.array(image), metadata)
+                            result = pipeline.process_image(np.array(image), metadata,
+                                                            demo_options=demo_options)
                             analysis = {
                                 'input_key': fingerprint, 'result': result,
                                 'elapsed': time.perf_counter() - started,
                                 'backend': pipeline.backend, 'image_name': image_name,
-                                'metadata': metadata,
+                                'metadata': metadata, 'settings': settings,
                             }
                             st.session_state.analysis = analysis
                             status.update(label='Analysis complete', state='complete', expanded=False)
@@ -323,14 +395,12 @@ def main():
                         st.info('Inputs changed. Run analysis again to update the result.')
                     empty_results()
 
-    with st.expander('About the project & evaluation'):
+    with st.expander('About OncoEdge'):
         st.write('OncoEdge explores oral image analysis on resource-constrained edge hardware. '
                  'This interface runs the trained YOLO11 detector and zero-shot BioMedCLIP classifier '
                  'using the available local backend. It is an engineering research prototype.')
-        st.write('In the retained exploratory evaluation, 11 of 17 published photographs produced '
-                 'regions after correcting image channel order. All 17 assessments remained '
-                 'inconclusive. Detection presence is not accuracy, and no clinical performance '
-                 'claim is supported by that small set.')
-        st.caption('The model weights and assessment rules are unchanged by this interface redesign.')
+        st.write('Results show relative matches between image regions and four text labels. '
+                 'This is not a medical diagnosis. Evaluation details and known limitations '
+                 'are documented in the project repository.')
     st.html('<footer class="page-footer"><span>OncoEdge / research in progress</span>'
-            '<span>Built for exploration. Professional assessment remains essential.</span></footer>')
+            '<span>YOLO11 + BioMedCLIP</span></footer>')

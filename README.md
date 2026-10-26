@@ -57,6 +57,24 @@ For every region detected by YOLO, the current pipeline crops the bounding box, 
 - an `INCONCLUSIVE`, `LOW`, `MEDIUM`, or `HIGH` research assessment; and
 - a referral-oriented recommendation.
 
+The local UI presents **Model results** with a classifier label, relative text
+match, detected regions and inference time. Analysis settings are collapsed by
+default. The display limits remain YOLO `0.10`, classifier score `0.35` and
+top-two gap `0.02`, allowing classifier labels to be shown even when the models
+disagree. The headline selects the strongest detector × classifier match;
+both labels and unresolved assessment checks remain inspectable in the details.
+Enable **Require model agreement** in Analysis settings to use the original
+conservative thresholds. No usable or eligible region means no reading.
+This presentation cleanup does not change the weights or inference rules.
+Machine-readable exports retain the provisional flag and complete settings.
+
+On the retained 17-photo development replay, this mode displays provisional
+readings on **15/17 photos**, including all six gallery samples. Eight headline
+labels differ from the publications' whole-photo categories; region labels
+are not independently annotated. This is increased output coverage, **not
+demonstrated accuracy**. See the [demo-mode replay](evaluation/2026-10-23/DEMO_MODE.md).
+This local change has not yet been deployed to the public AWS demo.
+
 ### End-to-end architecture
 
 ```mermaid
@@ -89,7 +107,7 @@ flowchart TD
     V --> W
 ```
 
-### Runtime data flow
+### Conservative runtime data flow
 
 1. **Image preparation** — PIL or NumPy input is converted to RGB.
 2. **Detection** — the wrapper converts RGB to BGR at the Ultralytics NumPy boundary. YOLO processes the full image at input size `640` with confidence threshold `0.25`. Missing or unusable regions return `INCONCLUSIVE`, with no numeric score.
@@ -480,7 +498,7 @@ OncoEdge-Jetson/
 | Test surface | Current status |
 |---|---|
 | Python syntax | Source files compile syntactically |
-| Assessment, UI and demo deployment regressions | 25 passing checks; use the command below |
+| Assessment, UI and demo deployment regressions | 39 passing checks; use the command below |
 | YOLO unit tests | Placeholder tests on `main` |
 | BioMedCLIP unit tests | Placeholder tests on `main` |
 | Pipeline integration tests | Placeholder tests on `main` |
@@ -495,7 +513,7 @@ With the existing uv-created development environment:
 ```bash
 .venv/bin/python -m pytest tests/test_assessment.py tests/test_deployment.py tests/test_demo_ui.py -q
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 OMP_NUM_THREADS=2 \
-  .venv/bin/python evaluation/evaluate_fixes.py
+  .venv/bin/python evaluation/evaluate_demo_mode.py --output /tmp/oncoedge-demo-replay.json
 ```
 
 The saved 17-photo replay detects regions in 11 photos after the color fix. All 17 assessments are inconclusive under the review gates. This exposes unresolved model limitations; it is not evidence of clinical accuracy. The [fixes report](evaluation/2026-10-05/FIXES.md) retains the before/after results and links the historical baseline.

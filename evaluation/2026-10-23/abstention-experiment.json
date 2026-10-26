@@ -1,0 +1,3422 @@
+{
+  "git_revision": "6f30dfd53a3469fdfc5b92547c3a0f28263f2ee7",
+  "source_hashes": {
+    "evaluation/2026-10-05/manifest.json": "cd6a8981f204abc5b8362d16fbb930a0c19f6c49b8e9124a9504fa2b51e2dbf2",
+    "evaluation/2026-10-05/fixed-results.json": "212c761273bfad436f9be5fd091a0b57470bde927346b6d82cd36463fe061fb4"
+  },
+  "experiment_script_sha256": "a70a699af7afdcb9cd70a97f1caf7a363df88b28be99a039e5f7b21992dda7c0",
+  "model_sha256": {
+    "models/best.pt": "823cdd1190d18871b75b9f82a869c594184090a9c07c224719e666da6581f110",
+    "models/biomedclip/open_clip_pytorch_model.bin": "52cc993c5c5ff962bd0c60931874bc001e7e9b41666a385530f4a036294576be"
+  },
+  "checkpoint_logit_scale": 85.2322769165039,
+  "preprocess": "Compose(\n    Resize(size=224, interpolation=bicubic, max_size=None, antialias=True)\n    CenterCrop(size=(224, 224))\n    <function _convert_to_rgb at 0x7e2e46b15bc0>\n    ToTensor()\n    Normalize(mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])\n)",
+  "class_names": [
+    "OCA",
+    "OPMD",
+    "Benign",
+    "Normal"
+  ],
+  "broad_labels": [
+    "oral squamous cell carcinoma",
+    "oral potentially malignant disorder",
+    "benign oral lesion",
+    "normal oral mucosa"
+  ],
+  "prompt_templates": [
+    "clinical photograph of {}",
+    "this is a photo of {}"
+  ],
+  "gates": {
+    "min_score": 0.6,
+    "min_margin": 0.15
+  },
+  "variants": {
+    "deployed_baseline": {
+      "summary": {
+        "photos": 17,
+        "photos_with_regions": 11,
+        "all_regions_resolved_photos": 0,
+        "all_regions_resolved_ids": [],
+        "no_region_ids": [
+          "oca-02",
+          "oca-03",
+          "opmd-03",
+          "benign-04",
+          "benign-05",
+          "benign-07"
+        ],
+        "photos_with_any_reference_matching_crop": 6,
+        "resolved_crop_label_counts": {
+          "OCA": 1,
+          "Benign": 2,
+          "OPMD": 1
+        },
+        "resolved_crop_source_label_mismatches": [
+          {
+            "id": "opmd-04",
+            "reference": "OPMD",
+            "region": 2,
+            "class": "OCA"
+          },
+          {
+            "id": "benign-06",
+            "reference": "Benign",
+            "region": 4,
+            "class": "OPMD"
+          }
+        ],
+        "region_disagreements": 11,
+        "region_ambiguous_scores": 6
+      },
+      "cases": [
+        {
+          "id": "oca-01",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                309,
+                302
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26698195934295654,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.003967266529798508,
+                "OPMD": 0.0012468185741454363,
+                "Benign": 0.9946209192276001,
+                "Normal": 0.00016506064275745302
+              },
+              "margin": 0.9906536526978016,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "oca-02",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-03",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-04",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                255,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.7906551957130432,
+              "class": "OCA",
+              "scores": {
+                "OCA": 0.6961817741394043,
+                "OPMD": 0.0028002355247735977,
+                "Benign": 0.16993767023086548,
+                "Normal": 0.13108041882514954
+              },
+              "margin": 0.5262441039085388,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                70,
+                0,
+                334,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.376992404460907,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.04905592277646065,
+                "OPMD": 0.0006298249936662614,
+                "Benign": 0.9476761817932129,
+                "Normal": 0.0026379614137113094
+              },
+              "margin": 0.8986202590167522,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-01",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                1,
+                316,
+                332
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26627117395401,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.006279564928263426,
+                "OPMD": 0.49791985750198364,
+                "Benign": 0.4724147617816925,
+                "Normal": 0.02338585816323757
+              },
+              "margin": 0.025505095720291138,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-02",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                278,
+                290
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3521272540092468,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.13502788543701172,
+                "OPMD": 0.764430820941925,
+                "Benign": 0.09890389442443848,
+                "Normal": 0.001637392328120768
+              },
+              "margin": 0.6294029355049133,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-03",
+          "reference": "OPMD",
+          "regions": []
+        },
+        {
+          "id": "opmd-04",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                206,
+                89,
+                320,
+                183
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5655475854873657,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.0002787595149129629,
+                "OPMD": 0.00039960170397534966,
+                "Benign": 0.9833709001541138,
+                "Normal": 0.01595071330666542
+              },
+              "margin": 0.9674201868474483,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                84,
+                0,
+                371,
+                230
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5478081703186035,
+              "class": "OCA",
+              "scores": {
+                "OCA": 0.614687442779541,
+                "OPMD": 0.0003218514611944556,
+                "Benign": 0.3847085237503052,
+                "Normal": 0.0002821856178343296
+              },
+              "margin": 0.22997891902923584,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "opmd-05",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                120,
+                1,
+                499,
+                286
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.6351357698440552,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.14257115125656128,
+                "OPMD": 0.5708292722702026,
+                "Benign": 0.0019130143336951733,
+                "Normal": 0.28468650579452515
+              },
+              "margin": 0.2861427664756775,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                1,
+                399,
+                284
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3253743350505829,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.005839753895998001,
+                "OPMD": 0.010330851189792156,
+                "Benign": 0.0008454739581793547,
+                "Normal": 0.9829839468002319
+              },
+              "margin": 0.9726530956104398,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-06",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                4,
+                0,
+                1061,
+                895
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.40563857555389404,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.3672176003456116,
+                "OPMD": 0.20403137803077698,
+                "Benign": 0.4281531274318695,
+                "Normal": 0.0005979035049676895
+              },
+              "margin": 0.060935527086257935,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-01",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                86,
+                160,
+                142,
+                212
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.36235496401786804,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.004964134655892849,
+                "OPMD": 0.00029407977126538754,
+                "Benign": 0.7397336959838867,
+                "Normal": 0.25500816106796265
+              },
+              "margin": 0.4847255349159241,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                262,
+                272
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3428521752357483,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.023035889491438866,
+                "OPMD": 0.0009720017551444471,
+                "Benign": 0.975067138671875,
+                "Normal": 0.0009250384173355997
+              },
+              "margin": 0.9520312491804361,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                83,
+                0,
+                359,
+                271
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3418610990047455,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.00021398038370534778,
+                "OPMD": 0.16071045398712158,
+                "Benign": 0.8293650150299072,
+                "Normal": 0.009710649028420448
+              },
+              "margin": 0.6686545610427856,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-02",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                72,
+                0,
+                304,
+                223
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.33642274141311646,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.4401906728744507,
+                "OPMD": 0.04729025810956955,
+                "Benign": 0.4702153503894806,
+                "Normal": 0.04230380803346634
+              },
+              "margin": 0.030024677515029907,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-03",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                103,
+                1,
+                424,
+                281
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.34802308678627014,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0015854141674935818,
+                "OPMD": 0.0731956735253334,
+                "Benign": 0.0005487808957695961,
+                "Normal": 0.9246701002120972
+              },
+              "margin": 0.8514744266867638,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-04",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-05",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-06",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                99,
+                67,
+                356,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5831348299980164,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.4703083634376526,
+                "OPMD": 0.04807206615805626,
+                "Benign": 0.00350566697306931,
+                "Normal": 0.47811391949653625
+              },
+              "margin": 0.007805556058883667,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                72,
+                0,
+                358,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5161923170089722,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0005659322487190366,
+                "OPMD": 0.11046537011861801,
+                "Benign": 0.0001002975259325467,
+                "Normal": 0.8888683319091797
+              },
+              "margin": 0.7784029617905617,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                272,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.37111639976501465,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.02276911959052086,
+                "OPMD": 0.5054366588592529,
+                "Benign": 0.007207411807030439,
+                "Normal": 0.4645867943763733
+              },
+              "margin": 0.04084986448287964,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                63,
+                216,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.35807082056999207,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.007617505732923746,
+                "OPMD": 0.9537969827651978,
+                "Benign": 0.0033601277973502874,
+                "Normal": 0.035225410014390945
+              },
+              "margin": 0.9185715727508068,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "benign-07",
+          "reference": "Benign",
+          "regions": []
+        }
+      ]
+    },
+    "checkpoint_temperature": {
+      "summary": {
+        "photos": 17,
+        "photos_with_regions": 11,
+        "all_regions_resolved_photos": 0,
+        "all_regions_resolved_ids": [],
+        "no_region_ids": [
+          "oca-02",
+          "oca-03",
+          "opmd-03",
+          "benign-04",
+          "benign-05",
+          "benign-07"
+        ],
+        "photos_with_any_reference_matching_crop": 6,
+        "resolved_crop_label_counts": {
+          "Benign": 2,
+          "OPMD": 1
+        },
+        "resolved_crop_source_label_mismatches": [
+          {
+            "id": "benign-06",
+            "reference": "Benign",
+            "region": 4,
+            "class": "OPMD"
+          }
+        ],
+        "region_disagreements": 11,
+        "region_ambiguous_scores": 7
+      },
+      "cases": [
+        {
+          "id": "oca-01",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                309,
+                302
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26698195934295654,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.00890289805829525,
+                "OPMD": 0.003319544019177556,
+                "Benign": 0.9871851801872253,
+                "Normal": 0.0005923844291828573
+              },
+              "margin": 0.9782822821289301,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "oca-02",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-03",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-04",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                255,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.7906551957130432,
+              "class": "OCA",
+              "scores": {
+                "OCA": 0.6448953151702881,
+                "OPMD": 0.005857693497091532,
+                "Benign": 0.19386513531208038,
+                "Normal": 0.15538182854652405
+              },
+              "margin": 0.4510301798582077,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                70,
+                0,
+                334,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.376992404460907,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.07362248003482819,
+                "OPMD": 0.00179832405410707,
+                "Benign": 0.9184831976890564,
+                "Normal": 0.006096103694289923
+              },
+              "margin": 0.8448607176542282,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-01",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                1,
+                316,
+                332
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26627117395401,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.01171224843710661,
+                "OPMD": 0.48685404658317566,
+                "Benign": 0.46551376581192017,
+                "Normal": 0.03591999039053917
+              },
+              "margin": 0.021340280771255493,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-02",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                278,
+                290
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3521272540092468,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.1620033234357834,
+                "OPMD": 0.70998215675354,
+                "Benign": 0.12424542754888535,
+                "Normal": 0.0037691297475248575
+              },
+              "margin": 0.5479788333177567,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-03",
+          "reference": "OPMD",
+          "regions": []
+        },
+        {
+          "id": "opmd-04",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                206,
+                89,
+                320,
+                183
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5655475854873657,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.0009176918538287282,
+                "OPMD": 0.0012473813258111477,
+                "Benign": 0.9689481854438782,
+                "Normal": 0.02888672985136509
+              },
+              "margin": 0.9400614555925131,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                84,
+                0,
+                371,
+                230
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5478081703186035,
+              "class": "OCA",
+              "scores": {
+                "OCA": 0.597465991973877,
+                "OPMD": 0.0009546499932184815,
+                "Benign": 0.4007258713245392,
+                "Normal": 0.0008534134249202907
+              },
+              "margin": 0.19674012064933777,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-05",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                120,
+                1,
+                499,
+                286
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.6351357698440552,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.16419272124767303,
+                "OPMD": 0.5356140732765198,
+                "Benign": 0.0041642398573458195,
+                "Normal": 0.2960289716720581
+              },
+              "margin": 0.23958510160446167,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                1,
+                399,
+                284
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3253743350505829,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.012228264473378658,
+                "OPMD": 0.019884923473000526,
+                "Benign": 0.0023551529739052057,
+                "Normal": 0.9655317068099976
+              },
+              "margin": 0.945646783336997,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-06",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                4,
+                0,
+                1061,
+                895
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.40563857555389404,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.36363664269447327,
+                "OPMD": 0.2203603833913803,
+                "Benign": 0.4144749641418457,
+                "Normal": 0.001528071123175323
+              },
+              "margin": 0.050838321447372437,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-01",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                86,
+                160,
+                142,
+                212
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.36235496401786804,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.009903677739202976,
+                "OPMD": 0.0008905866998247802,
+                "Benign": 0.7048410773277283,
+                "Normal": 0.2843647003173828
+              },
+              "margin": 0.42047637701034546,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                262,
+                272
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3428521752357483,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.039251137524843216,
+                "OPMD": 0.0026432292070239782,
+                "Benign": 0.9555716514587402,
+                "Normal": 0.002533976687118411
+              },
+              "margin": 0.916320513933897,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                83,
+                0,
+                359,
+                271
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3418610990047455,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.000688044005073607,
+                "OPMD": 0.19436393678188324,
+                "Benign": 0.7871732115745544,
+                "Normal": 0.017774902284145355
+              },
+              "margin": 0.5928092747926712,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-02",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                72,
+                0,
+                304,
+                223
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.33642274141311646,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.4267985224723816,
+                "OPMD": 0.06374309957027435,
+                "Benign": 0.4514903724193573,
+                "Normal": 0.05796806141734123
+              },
+              "margin": 0.024691849946975708,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-03",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                103,
+                1,
+                424,
+                281
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.34802308678627014,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.003916426561772823,
+                "OPMD": 0.1026705801486969,
+                "Benign": 0.0015855758683755994,
+                "Normal": 0.891827404499054
+              },
+              "margin": 0.7891568243503571,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-04",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-05",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-06",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                99,
+                67,
+                356,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5831348299980164,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.4602683484554291,
+                "OPMD": 0.0658862367272377,
+                "Benign": 0.007072940934449434,
+                "Normal": 0.46677252650260925
+              },
+              "margin": 0.006504178047180176,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                72,
+                0,
+                358,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5161923170089722,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0016113950405269861,
+                "OPMD": 0.14434881508350372,
+                "Benign": 0.00036872518830932677,
+                "Normal": 0.8536710739135742
+              },
+              "margin": 0.7093222588300705,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                272,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.37111639976501465,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.035099733620882034,
+                "OPMD": 0.49294888973236084,
+                "Benign": 0.013167724013328552,
+                "Normal": 0.4587835669517517
+              },
+              "margin": 0.03416532278060913,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                63,
+                216,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.35807082056999207,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.015027672052383423,
+                "OPMD": 0.9220647811889648,
+                "Benign": 0.00748045789077878,
+                "Normal": 0.055427130311727524
+              },
+              "margin": 0.8666376508772373,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "benign-07",
+          "reference": "Benign",
+          "regions": []
+        }
+      ]
+    },
+    "preserve_entire_crop": {
+      "summary": {
+        "photos": 17,
+        "photos_with_regions": 11,
+        "all_regions_resolved_photos": 0,
+        "all_regions_resolved_ids": [],
+        "no_region_ids": [
+          "oca-02",
+          "oca-03",
+          "opmd-03",
+          "benign-04",
+          "benign-05",
+          "benign-07"
+        ],
+        "photos_with_any_reference_matching_crop": 2,
+        "resolved_crop_label_counts": {
+          "Benign": 1
+        },
+        "resolved_crop_source_label_mismatches": [],
+        "region_disagreements": 15,
+        "region_ambiguous_scores": 6
+      },
+      "cases": [
+        {
+          "id": "oca-01",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                309,
+                302
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26698195934295654,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.021559789776802063,
+                "OPMD": 0.005674570798873901,
+                "Benign": 0.9719807505607605,
+                "Normal": 0.0007848720415495336
+              },
+              "margin": 0.9504209607839584,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "oca-02",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-03",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-04",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                255,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.7906551957130432,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.011439056135714054,
+                "OPMD": 0.0001404731156071648,
+                "Benign": 0.004400452598929405,
+                "Normal": 0.9840199947357178
+              },
+              "margin": 0.9725809386000037,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                70,
+                0,
+                334,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.376992404460907,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.08019085973501205,
+                "OPMD": 0.00220687803812325,
+                "Benign": 0.4903056025505066,
+                "Normal": 0.4272966682910919
+              },
+              "margin": 0.06300893425941467,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-01",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                1,
+                316,
+                332
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26627117395401,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.01749083772301674,
+                "OPMD": 0.004934289027005434,
+                "Benign": 0.9766372442245483,
+                "Normal": 0.0009375425870530307
+              },
+              "margin": 0.9591464065015316,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-02",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                278,
+                290
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3521272540092468,
+              "class": "OCA",
+              "scores": {
+                "OCA": 0.42106953263282776,
+                "OPMD": 0.38037413358688354,
+                "Benign": 0.19845125079154968,
+                "Normal": 0.00010512987500987947
+              },
+              "margin": 0.040695399045944214,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-03",
+          "reference": "OPMD",
+          "regions": []
+        },
+        {
+          "id": "opmd-04",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                206,
+                89,
+                320,
+                183
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5655475854873657,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.0017042512772604823,
+                "OPMD": 2.6649377105059102e-05,
+                "Benign": 0.9974365830421448,
+                "Normal": 0.0008325144299305975
+              },
+              "margin": 0.9957323317648843,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                84,
+                0,
+                371,
+                230
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5478081703186035,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.3976452946662903,
+                "OPMD": 3.6357957924337825e-06,
+                "Benign": 0.6011890769004822,
+                "Normal": 0.001162043190561235
+              },
+              "margin": 0.2035437822341919,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-05",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                120,
+                1,
+                499,
+                286
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.6351357698440552,
+              "class": "OCA",
+              "scores": {
+                "OCA": 0.8900265693664551,
+                "OPMD": 0.0036336740013211966,
+                "Benign": 0.007312275934964418,
+                "Normal": 0.09902745485305786
+              },
+              "margin": 0.7909991145133972,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                1,
+                399,
+                284
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3253743350505829,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.021369002759456635,
+                "OPMD": 0.0011833083117380738,
+                "Benign": 0.0012424782617017627,
+                "Normal": 0.9762052893638611
+              },
+              "margin": 0.9548362866044044,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-06",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                4,
+                0,
+                1061,
+                895
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.40563857555389404,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.28800225257873535,
+                "OPMD": 0.2718047797679901,
+                "Benign": 0.40720781683921814,
+                "Normal": 0.032985106110572815
+              },
+              "margin": 0.11920556426048279,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-01",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                86,
+                160,
+                142,
+                212
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.36235496401786804,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.002814243547618389,
+                "OPMD": 3.6998262658016756e-06,
+                "Benign": 0.4756503999233246,
+                "Normal": 0.5215316414833069
+              },
+              "margin": 0.0458812415599823,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                262,
+                272
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3428521752357483,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.01440536230802536,
+                "OPMD": 0.000617120589595288,
+                "Benign": 0.9847776889801025,
+                "Normal": 0.00019975597388111055
+              },
+              "margin": 0.9703723266720772,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                83,
+                0,
+                359,
+                271
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3418610990047455,
+              "class": "Benign",
+              "scores": {
+                "OCA": 4.2830663005588576e-05,
+                "OPMD": 0.10012685507535934,
+                "Benign": 0.8946057558059692,
+                "Normal": 0.00522451801225543
+              },
+              "margin": 0.7944789007306099,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-02",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                72,
+                0,
+                304,
+                223
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.33642274141311646,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.37061578035354614,
+                "OPMD": 0.008345035836100578,
+                "Benign": 0.6180609464645386,
+                "Normal": 0.002978273667395115
+              },
+              "margin": 0.24744516611099243,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-03",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                103,
+                1,
+                424,
+                281
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.34802308678627014,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0005897328956052661,
+                "OPMD": 0.03438415378332138,
+                "Benign": 0.0028917037416249514,
+                "Normal": 0.9621343612670898
+              },
+              "margin": 0.9277502074837685,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-04",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-05",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-06",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                99,
+                67,
+                356,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5831348299980164,
+              "class": "OCA",
+              "scores": {
+                "OCA": 0.7439521551132202,
+                "OPMD": 0.05667010322213173,
+                "Benign": 0.003391232341527939,
+                "Normal": 0.19598649442195892
+              },
+              "margin": 0.5479656606912613,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                72,
+                0,
+                358,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5161923170089722,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.006387732923030853,
+                "OPMD": 0.17532260715961456,
+                "Benign": 0.0014785552630200982,
+                "Normal": 0.8168111443519592
+              },
+              "margin": 0.6414885371923447,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                272,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.37111639976501465,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.02276916243135929,
+                "OPMD": 0.5054357051849365,
+                "Benign": 0.0072073983028531075,
+                "Normal": 0.4645877182483673
+              },
+              "margin": 0.040847986936569214,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                63,
+                216,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.35807082056999207,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.23026899993419647,
+                "OPMD": 0.30874934792518616,
+                "Benign": 0.05827511474490166,
+                "Normal": 0.4027065634727478
+              },
+              "margin": 0.09395721554756165,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-07",
+          "reference": "Benign",
+          "regions": []
+        }
+      ]
+    },
+    "add_crop_context": {
+      "summary": {
+        "photos": 17,
+        "photos_with_regions": 11,
+        "all_regions_resolved_photos": 1,
+        "all_regions_resolved_ids": [
+          "opmd-01"
+        ],
+        "no_region_ids": [
+          "oca-02",
+          "oca-03",
+          "opmd-03",
+          "benign-04",
+          "benign-05",
+          "benign-07"
+        ],
+        "photos_with_any_reference_matching_crop": 4,
+        "resolved_crop_label_counts": {
+          "OPMD": 1,
+          "Benign": 2
+        },
+        "resolved_crop_source_label_mismatches": [],
+        "region_disagreements": 16,
+        "region_ambiguous_scores": 2
+      },
+      "cases": [
+        {
+          "id": "oca-01",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                309,
+                302
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26698195934295654,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.004470253363251686,
+                "OPMD": 0.0034437531139701605,
+                "Benign": 0.991270899772644,
+                "Normal": 0.0008151005022227764
+              },
+              "margin": 0.9868006464093924,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "oca-02",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-03",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-04",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                255,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.7906551957130432,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.2963044047355652,
+                "OPMD": 0.0025007338263094425,
+                "Benign": 0.6942204833030701,
+                "Normal": 0.0069744219072163105
+              },
+              "margin": 0.3979160785675049,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                70,
+                0,
+                334,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.376992404460907,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.03528686985373497,
+                "OPMD": 0.0011257895966991782,
+                "Benign": 0.9618425965309143,
+                "Normal": 0.001744814682751894
+              },
+              "margin": 0.9265557266771793,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-01",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                1,
+                316,
+                332
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26627117395401,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.04176485538482666,
+                "OPMD": 0.6984835267066956,
+                "Benign": 0.25526851415634155,
+                "Normal": 0.004483123309910297
+              },
+              "margin": 0.443215012550354,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "opmd-02",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                278,
+                290
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3521272540092468,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.08726458251476288,
+                "OPMD": 0.8487259745597839,
+                "Benign": 0.06306663155555725,
+                "Normal": 0.0009427446057088673
+              },
+              "margin": 0.7614613920450211,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-03",
+          "reference": "OPMD",
+          "regions": []
+        },
+        {
+          "id": "opmd-04",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                206,
+                89,
+                320,
+                183
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5655475854873657,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.003425394417718053,
+                "OPMD": 0.000277961342362687,
+                "Benign": 0.9743915796279907,
+                "Normal": 0.02190510742366314
+              },
+              "margin": 0.9524864722043276,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                84,
+                0,
+                371,
+                230
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5478081703186035,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.41327226161956787,
+                "OPMD": 0.0011667878134176135,
+                "Benign": 0.5841695070266724,
+                "Normal": 0.0013914796290919185
+              },
+              "margin": 0.1708972454071045,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-05",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                120,
+                1,
+                499,
+                286
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.6351357698440552,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.01256559882313013,
+                "OPMD": 0.03187887370586395,
+                "Benign": 0.00039064063457772136,
+                "Normal": 0.955164909362793
+              },
+              "margin": 0.923286035656929,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                1,
+                399,
+                284
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3253743350505829,
+              "class": "Normal",
+              "scores": {
+                "OCA": 1.543611870147288e-05,
+                "OPMD": 0.0006238415953703225,
+                "Benign": 1.4820978321949951e-05,
+                "Normal": 0.9993458390235901
+              },
+              "margin": 0.9987219974282198,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-06",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                4,
+                0,
+                1061,
+                895
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.40563857555389404,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.09017035365104675,
+                "OPMD": 0.8553917407989502,
+                "Benign": 0.05281424522399902,
+                "Normal": 0.0016235802322626114
+              },
+              "margin": 0.7652213871479034,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-01",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                86,
+                160,
+                142,
+                212
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.36235496401786804,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.01968972571194172,
+                "OPMD": 5.703425995307043e-05,
+                "Benign": 0.9624611139297485,
+                "Normal": 0.017792120575904846
+              },
+              "margin": 0.9427713882178068,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                262,
+                272
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3428521752357483,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.00911545380949974,
+                "OPMD": 0.02120247296988964,
+                "Benign": 0.9515606760978699,
+                "Normal": 0.018121328204870224
+              },
+              "margin": 0.9303582031279802,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                83,
+                0,
+                359,
+                271
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3418610990047455,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.00043751474004238844,
+                "OPMD": 0.3706055283546448,
+                "Benign": 0.6272189021110535,
+                "Normal": 0.0017380252247676253
+              },
+              "margin": 0.2566133737564087,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-02",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                72,
+                0,
+                304,
+                223
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.33642274141311646,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.057204730808734894,
+                "OPMD": 0.030596133321523666,
+                "Benign": 0.33974769711494446,
+                "Normal": 0.5724514722824097
+              },
+              "margin": 0.2327037751674652,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-03",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                103,
+                1,
+                424,
+                281
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.34802308678627014,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0014745392836630344,
+                "OPMD": 0.14732982218265533,
+                "Benign": 0.0004585245333146304,
+                "Normal": 0.8507370948791504
+              },
+              "margin": 0.7034072726964951,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-04",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-05",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-06",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                99,
+                67,
+                356,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5831348299980164,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0011239283485338092,
+                "OPMD": 0.028742056339979172,
+                "Benign": 0.0001140958775067702,
+                "Normal": 0.9700199365615845
+              },
+              "margin": 0.9412778802216053,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                72,
+                0,
+                358,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5161923170089722,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0012539353920146823,
+                "OPMD": 0.2863345444202423,
+                "Benign": 0.00019006124057341367,
+                "Normal": 0.7122215032577515
+              },
+              "margin": 0.42588695883750916,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                272,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.37111639976501465,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0024253595620393753,
+                "OPMD": 0.31033870577812195,
+                "Benign": 0.0005475959624163806,
+                "Normal": 0.6866883039474487
+              },
+              "margin": 0.3763495981693268,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                63,
+                216,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.35807082056999207,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.028153343126177788,
+                "OPMD": 0.31835800409317017,
+                "Benign": 0.005282153375446796,
+                "Normal": 0.6482065320014954
+              },
+              "margin": 0.3298485279083252,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-07",
+          "reference": "Benign",
+          "regions": []
+        }
+      ]
+    },
+    "broad_class_prompts": {
+      "summary": {
+        "photos": 17,
+        "photos_with_regions": 11,
+        "all_regions_resolved_photos": 3,
+        "all_regions_resolved_ids": [
+          "opmd-01",
+          "opmd-05",
+          "benign-02"
+        ],
+        "no_region_ids": [
+          "oca-02",
+          "oca-03",
+          "opmd-03",
+          "benign-04",
+          "benign-05",
+          "benign-07"
+        ],
+        "photos_with_any_reference_matching_crop": 6,
+        "resolved_crop_label_counts": {
+          "OPMD": 6,
+          "Benign": 2
+        },
+        "resolved_crop_source_label_mismatches": [
+          {
+            "id": "benign-02",
+            "reference": "Benign",
+            "region": 1,
+            "class": "OPMD"
+          },
+          {
+            "id": "benign-06",
+            "reference": "Benign",
+            "region": 3,
+            "class": "OPMD"
+          },
+          {
+            "id": "benign-06",
+            "reference": "Benign",
+            "region": 4,
+            "class": "OPMD"
+          }
+        ],
+        "region_disagreements": 11,
+        "region_ambiguous_scores": 6
+      },
+      "cases": [
+        {
+          "id": "oca-01",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                309,
+                302
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26698195934295654,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.09691081196069717,
+                "OPMD": 0.43210965394973755,
+                "Benign": 0.4669475555419922,
+                "Normal": 0.004032036289572716
+              },
+              "margin": 0.03483790159225464,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "oca-02",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-03",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-04",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                255,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.7906551957130432,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.16712450981140137,
+                "OPMD": 0.3041788637638092,
+                "Benign": 0.4972296357154846,
+                "Normal": 0.03146699443459511
+              },
+              "margin": 0.19305077195167542,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                70,
+                0,
+                334,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.376992404460907,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.13667991757392883,
+                "OPMD": 0.4025069773197174,
+                "Benign": 0.4534631669521332,
+                "Normal": 0.007349904160946608
+              },
+              "margin": 0.05095618963241577,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-01",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                1,
+                316,
+                332
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26627117395401,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.0035434856545180082,
+                "OPMD": 0.7097140550613403,
+                "Benign": 0.27354609966278076,
+                "Normal": 0.013196367770433426
+              },
+              "margin": 0.43616795539855957,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "opmd-02",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                278,
+                290
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3521272540092468,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.020542088896036148,
+                "OPMD": 0.9589552879333496,
+                "Benign": 0.02025356888771057,
+                "Normal": 0.00024910009233281016
+              },
+              "margin": 0.9384131990373135,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-03",
+          "reference": "OPMD",
+          "regions": []
+        },
+        {
+          "id": "opmd-04",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                206,
+                89,
+                320,
+                183
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5655475854873657,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.0023120795376598835,
+                "OPMD": 0.27447226643562317,
+                "Benign": 0.5909177660942078,
+                "Normal": 0.13229796290397644
+              },
+              "margin": 0.3164454996585846,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                84,
+                0,
+                371,
+                230
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5478081703186035,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.28334206342697144,
+                "OPMD": 0.5231136679649353,
+                "Benign": 0.19341424107551575,
+                "Normal": 0.00013007433153688908
+              },
+              "margin": 0.23977160453796387,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-05",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                120,
+                1,
+                499,
+                286
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.6351357698440552,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.0030435598455369473,
+                "OPMD": 0.9881196022033691,
+                "Benign": 0.00275947293266654,
+                "Normal": 0.006077389698475599
+              },
+              "margin": 0.9820422125048935,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                0,
+                1,
+                399,
+                284
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3253743350505829,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.00042504031443968415,
+                "OPMD": 0.9266764521598816,
+                "Benign": 0.0013530185678973794,
+                "Normal": 0.07154543697834015
+              },
+              "margin": 0.8551310151815414,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "opmd-06",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                4,
+                0,
+                1061,
+                895
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.40563857555389404,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.23402641713619232,
+                "OPMD": 0.6180822849273682,
+                "Benign": 0.14751024544239044,
+                "Normal": 0.0003810416965279728
+              },
+              "margin": 0.38405586779117584,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-01",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                86,
+                160,
+                142,
+                212
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.36235496401786804,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.0021685189567506313,
+                "OPMD": 0.024008914828300476,
+                "Benign": 0.8624255657196045,
+                "Normal": 0.11139704287052155
+              },
+              "margin": 0.751028522849083,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                262,
+                272
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3428521752357483,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.026180770248174667,
+                "OPMD": 0.27277764678001404,
+                "Benign": 0.6999902725219727,
+                "Normal": 0.001051325467415154
+              },
+              "margin": 0.4272126257419586,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                83,
+                0,
+                359,
+                271
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3418610990047455,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.0013899450423195958,
+                "OPMD": 0.045842912048101425,
+                "Benign": 0.8896900415420532,
+                "Normal": 0.06307712942361832
+              },
+              "margin": 0.8266129121184349,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-02",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                72,
+                0,
+                304,
+                223
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.33642274141311646,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.0034895949065685272,
+                "OPMD": 0.9905698299407959,
+                "Benign": 0.005605148617178202,
+                "Normal": 0.0003353618085384369
+              },
+              "margin": 0.9849646813236177,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "benign-03",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                103,
+                1,
+                424,
+                281
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.34802308678627014,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0014683575136587024,
+                "OPMD": 0.1403675079345703,
+                "Benign": 0.0017656456911936402,
+                "Normal": 0.8563984632492065
+              },
+              "margin": 0.7160309553146362,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-04",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-05",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-06",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                99,
+                67,
+                356,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5831348299980164,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.3300125002861023,
+                "OPMD": 0.292319118976593,
+                "Benign": 0.04217880219221115,
+                "Normal": 0.3354896008968353
+              },
+              "margin": 0.005477100610733032,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                72,
+                0,
+                358,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5161923170089722,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.000546943221706897,
+                "OPMD": 0.14003244042396545,
+                "Benign": 0.00037698092637583613,
+                "Normal": 0.8590437173843384
+              },
+              "margin": 0.7190112769603729,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                272,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.37111639976501465,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.006597055122256279,
+                "OPMD": 0.8578234910964966,
+                "Benign": 0.0009715245687402785,
+                "Normal": 0.1346079707145691
+              },
+              "margin": 0.7232155203819275,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                0,
+                63,
+                216,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.35807082056999207,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.0028375654947012663,
+                "OPMD": 0.982671320438385,
+                "Benign": 0.001369370031170547,
+                "Normal": 0.013121671974658966
+              },
+              "margin": 0.969549648463726,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "benign-07",
+          "reference": "Benign",
+          "regions": []
+        }
+      ]
+    },
+    "broad_prompt_ensemble": {
+      "summary": {
+        "photos": 17,
+        "photos_with_regions": 11,
+        "all_regions_resolved_photos": 3,
+        "all_regions_resolved_ids": [
+          "opmd-01",
+          "opmd-05",
+          "benign-02"
+        ],
+        "no_region_ids": [
+          "oca-02",
+          "oca-03",
+          "opmd-03",
+          "benign-04",
+          "benign-05",
+          "benign-07"
+        ],
+        "photos_with_any_reference_matching_crop": 5,
+        "resolved_crop_label_counts": {
+          "OPMD": 6,
+          "OCA": 1,
+          "Benign": 2
+        },
+        "resolved_crop_source_label_mismatches": [
+          {
+            "id": "opmd-04",
+            "reference": "OPMD",
+            "region": 2,
+            "class": "OCA"
+          },
+          {
+            "id": "benign-02",
+            "reference": "Benign",
+            "region": 1,
+            "class": "OPMD"
+          },
+          {
+            "id": "benign-06",
+            "reference": "Benign",
+            "region": 3,
+            "class": "OPMD"
+          },
+          {
+            "id": "benign-06",
+            "reference": "Benign",
+            "region": 4,
+            "class": "OPMD"
+          }
+        ],
+        "region_disagreements": 8,
+        "region_ambiguous_scores": 4
+      },
+      "cases": [
+        {
+          "id": "oca-01",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                309,
+                302
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26698195934295654,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.08743993937969208,
+                "OPMD": 0.5273122191429138,
+                "Benign": 0.38354623317718506,
+                "Normal": 0.0017016301862895489
+              },
+              "margin": 0.14376598596572876,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "oca-02",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-03",
+          "reference": "OCA",
+          "regions": []
+        },
+        {
+          "id": "oca-04",
+          "reference": "OCA",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                255,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.7906551957130432,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.33209526538848877,
+                "OPMD": 0.2175227403640747,
+                "Benign": 0.4257621169090271,
+                "Normal": 0.024619879201054573
+              },
+              "margin": 0.09366685152053833,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                70,
+                0,
+                334,
+                214
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.376992404460907,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.21120765805244446,
+                "OPMD": 0.4349002242088318,
+                "Benign": 0.35180890560150146,
+                "Normal": 0.0020832361187785864
+              },
+              "margin": 0.08309131860733032,
+              "disagreement": false,
+              "uncertain": true,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-01",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                1,
+                316,
+                332
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.26627117395401,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.002113960450515151,
+                "OPMD": 0.8890748620033264,
+                "Benign": 0.10744062066078186,
+                "Normal": 0.00137046305462718
+              },
+              "margin": 0.7816342413425446,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "opmd-02",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                0,
+                0,
+                278,
+                290
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3521272540092468,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.010388697497546673,
+                "OPMD": 0.9811623096466064,
+                "Benign": 0.00840757042169571,
+                "Normal": 4.140034434385598e-05
+              },
+              "margin": 0.9707736121490598,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "opmd-03",
+          "reference": "OPMD",
+          "regions": []
+        },
+        {
+          "id": "opmd-04",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                206,
+                89,
+                320,
+                183
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5655475854873657,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.005758198443800211,
+                "OPMD": 0.30708780884742737,
+                "Benign": 0.6127589344978333,
+                "Normal": 0.07439509779214859
+              },
+              "margin": 0.3056711256504059,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                84,
+                0,
+                371,
+                230
+              ],
+              "yolo_class": "OCA",
+              "yolo_conf": 0.5478081703186035,
+              "class": "OCA",
+              "scores": {
+                "OCA": 0.6153278350830078,
+                "OPMD": 0.23289552330970764,
+                "Benign": 0.15173889696598053,
+                "Normal": 3.767612361116335e-05
+              },
+              "margin": 0.38243231177330017,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "opmd-05",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                120,
+                1,
+                499,
+                286
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.6351357698440552,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.002034156583249569,
+                "OPMD": 0.9948973059654236,
+                "Benign": 0.0014018884394317865,
+                "Normal": 0.001666715368628502
+              },
+              "margin": 0.992863149382174,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                0,
+                1,
+                399,
+                284
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3253743350505829,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.0004688616027124226,
+                "OPMD": 0.979626476764679,
+                "Benign": 0.0009529867675155401,
+                "Normal": 0.018951762467622757
+              },
+              "margin": 0.9606747142970562,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "opmd-06",
+          "reference": "OPMD",
+          "regions": [
+            {
+              "bbox": [
+                4,
+                0,
+                1061,
+                895
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.40563857555389404,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.23514552414417267,
+                "OPMD": 0.6687846779823303,
+                "Benign": 0.09592070430517197,
+                "Normal": 0.00014914898201823235
+              },
+              "margin": 0.43363915383815765,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-01",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                86,
+                160,
+                142,
+                212
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.36235496401786804,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.001316336216405034,
+                "OPMD": 0.012193320319056511,
+                "Benign": 0.9406493902206421,
+                "Normal": 0.045840855687856674
+              },
+              "margin": 0.8948085345327854,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                262,
+                272
+              ],
+              "yolo_class": "Benign",
+              "yolo_conf": 0.3428521752357483,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.02336934395134449,
+                "OPMD": 0.32200750708580017,
+                "Benign": 0.6545078158378601,
+                "Normal": 0.00011534721124917269
+              },
+              "margin": 0.33250030875205994,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                83,
+                0,
+                359,
+                271
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.3418610990047455,
+              "class": "Benign",
+              "scores": {
+                "OCA": 0.0010488942498341203,
+                "OPMD": 0.07119306921958923,
+                "Benign": 0.9156872630119324,
+                "Normal": 0.012070863507688046
+              },
+              "margin": 0.8444941937923431,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-02",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                72,
+                0,
+                304,
+                223
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.33642274141311646,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.003443537512794137,
+                "OPMD": 0.9925445318222046,
+                "Benign": 0.003927366342395544,
+                "Normal": 8.4621824498754e-05
+              },
+              "margin": 0.988617165479809,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "benign-03",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                103,
+                1,
+                424,
+                281
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.34802308678627014,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0028462661430239677,
+                "OPMD": 0.27781936526298523,
+                "Benign": 0.0020853220485150814,
+                "Normal": 0.7172490954399109
+              },
+              "margin": 0.43942973017692566,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            }
+          ]
+        },
+        {
+          "id": "benign-04",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-05",
+          "reference": "Benign",
+          "regions": []
+        },
+        {
+          "id": "benign-06",
+          "reference": "Benign",
+          "regions": [
+            {
+              "bbox": [
+                99,
+                67,
+                356,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5831348299980164,
+              "class": "OCA",
+              "scores": {
+                "OCA": 0.4942241609096527,
+                "OPMD": 0.27030470967292786,
+                "Benign": 0.01711217127740383,
+                "Normal": 0.21835897862911224
+              },
+              "margin": 0.22391945123672485,
+              "disagreement": true,
+              "uncertain": true,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                72,
+                0,
+                358,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.5161923170089722,
+              "class": "Normal",
+              "scores": {
+                "OCA": 0.0009015323594212532,
+                "OPMD": 0.24442541599273682,
+                "Benign": 0.00039262024802155793,
+                "Normal": 0.7542803883552551
+              },
+              "margin": 0.5098549723625183,
+              "disagreement": true,
+              "uncertain": false,
+              "resolved": false
+            },
+            {
+              "bbox": [
+                0,
+                0,
+                272,
+                272
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.37111639976501465,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.004507183097302914,
+                "OPMD": 0.9279705882072449,
+                "Benign": 0.0004830686957575381,
+                "Normal": 0.0670391246676445
+              },
+              "margin": 0.8609314635396004,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            },
+            {
+              "bbox": [
+                0,
+                63,
+                216,
+                339
+              ],
+              "yolo_class": "OPMD",
+              "yolo_conf": 0.35807082056999207,
+              "class": "OPMD",
+              "scores": {
+                "OCA": 0.001677406718954444,
+                "OPMD": 0.99189293384552,
+                "Benign": 0.00045324527309276164,
+                "Normal": 0.005976442713290453
+              },
+              "margin": 0.9859164911322296,
+              "disagreement": false,
+              "uncertain": false,
+              "resolved": true
+            }
+          ]
+        },
+        {
+          "id": "benign-07",
+          "reference": "Benign",
+          "regions": []
+        }
+      ]
+    }
+  },
+  "detector_imgsz512": {
+    "photos_with_regions": 11,
+    "cases": [
+      {
+        "id": "oca-01",
+        "reference": "OCA",
+        "regions": 1,
+        "labels": [
+          "OPMD"
+        ],
+        "confidence": [
+          0.4063396155834198
+        ]
+      },
+      {
+        "id": "oca-02",
+        "reference": "OCA",
+        "regions": 0,
+        "labels": [],
+        "confidence": []
+      },
+      {
+        "id": "oca-03",
+        "reference": "OCA",
+        "regions": 0,
+        "labels": [],
+        "confidence": []
+      },
+      {
+        "id": "oca-04",
+        "reference": "OCA",
+        "regions": 1,
+        "labels": [
+          "OPMD"
+        ],
+        "confidence": [
+          0.5658233761787415
+        ]
+      },
+      {
+        "id": "opmd-01",
+        "reference": "OPMD",
+        "regions": 1,
+        "labels": [
+          "OPMD"
+        ],
+        "confidence": [
+          0.4227396845817566
+        ]
+      },
+      {
+        "id": "opmd-02",
+        "reference": "OPMD",
+        "regions": 1,
+        "labels": [
+          "Benign"
+        ],
+        "confidence": [
+          0.28243526816368103
+        ]
+      },
+      {
+        "id": "opmd-03",
+        "reference": "OPMD",
+        "regions": 3,
+        "labels": [
+          "OPMD",
+          "OPMD",
+          "OPMD"
+        ],
+        "confidence": [
+          0.32412412762641907,
+          0.2772243916988373,
+          0.25320741534233093
+        ]
+      },
+      {
+        "id": "opmd-04",
+        "reference": "OPMD",
+        "regions": 2,
+        "labels": [
+          "OCA",
+          "OCA"
+        ],
+        "confidence": [
+          0.6415849924087524,
+          0.533053994178772
+        ]
+      },
+      {
+        "id": "opmd-05",
+        "reference": "OPMD",
+        "regions": 1,
+        "labels": [
+          "OPMD"
+        ],
+        "confidence": [
+          0.2815837264060974
+        ]
+      },
+      {
+        "id": "opmd-06",
+        "reference": "OPMD",
+        "regions": 1,
+        "labels": [
+          "OPMD"
+        ],
+        "confidence": [
+          0.4534446895122528
+        ]
+      },
+      {
+        "id": "benign-01",
+        "reference": "Benign",
+        "regions": 2,
+        "labels": [
+          "Benign",
+          "Benign"
+        ],
+        "confidence": [
+          0.6227957606315613,
+          0.3206712007522583
+        ]
+      },
+      {
+        "id": "benign-02",
+        "reference": "Benign",
+        "regions": 2,
+        "labels": [
+          "OPMD",
+          "Benign"
+        ],
+        "confidence": [
+          0.4781116247177124,
+          0.2635229825973511
+        ]
+      },
+      {
+        "id": "benign-03",
+        "reference": "Benign",
+        "regions": 0,
+        "labels": [],
+        "confidence": []
+      },
+      {
+        "id": "benign-04",
+        "reference": "Benign",
+        "regions": 0,
+        "labels": [],
+        "confidence": []
+      },
+      {
+        "id": "benign-05",
+        "reference": "Benign",
+        "regions": 0,
+        "labels": [],
+        "confidence": []
+      },
+      {
+        "id": "benign-06",
+        "reference": "Benign",
+        "regions": 1,
+        "labels": [
+          "OPMD"
+        ],
+        "confidence": [
+          0.8242484927177429
+        ]
+      },
+      {
+        "id": "benign-07",
+        "reference": "Benign",
+        "regions": 0,
+        "labels": [],
+        "confidence": []
+      }
+    ]
+  },
+  "limitations": [
+    "17 previously inspected publication photographs; development diagnostics only.",
+    "Photo source labels are not ground truth for every detector crop.",
+    "No localization annotations, independent test set, normal controls or calibration.",
+    "No changes to application code, thresholds, deployed models or AWS resources.",
+    "No inference variant is selected for production from this small replay."
+  ]
+}

@@ -14,7 +14,9 @@ verification is recorded separately in the deployment guide.
 > integration bug and a decision rule that returned LOW when detection failed.
 > Correcting the colors produced regions in 11 photos. We also added abstention
 > for missing or unresolved outputs and regression checks for those failures.
-> All 17 assessments currently abstain, so I present this as a research and edge
+> All 17 conservative assessments abstain. The separate exploratory demo shows
+> explicitly provisional readings on 15 photos with lower display limits. I
+> present this as a research and edge
 > engineering prototype, not a clinically validated screening system.
 
 Do not turn “regions in 11 photos” into a claim of correct localization. Do not
@@ -32,9 +34,10 @@ turn “no more LOW cancer results” into a claim that every cancer was detecte
 | YOLO mask mAP50 / mAP50–95 | 0.477 / 0.287 | Logged segmentation validation metrics |
 | Exploratory photo set | 17: 4 OCA, 6 OPMD, 7 Benign | Small convenience sample from three publications |
 | Photos with regions, before → after | 0/17 → 11/17 | Detection presence, **not accuracy or recall** |
-| Fixed pipeline decision coverage | 0/17 = 0% | Fraction receiving a completed, non-INCONCLUSIVE assessment |
-| Fixed pipeline abstention rate | 17/17 = 100% | Current unresolved assessments on this set |
-| Assessment/UI/deployment regression checks | 25 passing | Code behavior; not clinical accuracy |
+| Conservative pipeline decision coverage | 0/17 = 0% | Fraction receiving a completed, non-INCONCLUSIVE assessment |
+| Conservative pipeline abstention rate | 17/17 = 100% | Unresolved conservative assessments on this set |
+| Exploratory demo readout coverage | 15/17; all 6 gallery samples | Provisional display coverage, not diagnostic accuracy |
+| Assessment/UI/deployment regression checks | 39 passing | Code behavior; not clinical accuracy |
 
 Training numbers were checked directly against the cached training branch at
 commit `cf745d5785f9422659928701dca7bb56501db9c2`. Metrics are rounded to three
@@ -126,6 +129,14 @@ is undefined. Abstentions must not be counted as correct negatives or detected
 cancers. Lowering gates simply to make the demo look successful would not fix
 the underlying errors.
 
+The opt-in pipeline demo readout (enabled by default in the local UI) is a
+separate display policy: YOLO 0.10, classifier score 0.35, margin 0.02, with
+conflicts permitted for provisional display. It produces readings on 15/17
+photos; eight headline labels differ from the whole-photo source category.
+That is not a region-level error rate because reference regions are unavailable.
+The [demo-mode report](2026-10-23/DEMO_MODE.md) records all cases and settings.
+Describe this as a coverage demonstration, not a trained or validated improvement.
+
 ### 8. “Why use 0.60 confidence and a 0.15 margin?”
 
 They are provisional engineering gates, not clinically calibrated thresholds.
@@ -154,6 +165,15 @@ cover less variety than their broad categories. Detection crops, visual domain
 differences, prompt wording and model limitations may contribute to disagreement.
 The present evaluation does not isolate which contributes most.
 
+The [23 October abstention investigation](2026-10-23/ABSTENTION_INVESTIGATION.md)
+compared crop padding, surrounding context, broader prompts, prompt averaging,
+the checkpoint's learned score scale and the detector's training image size.
+Broader prompts completed three assessments, but one labelled a source-described
+benign photograph OPMD with a relative score of 0.9906. None of those alternatives
+was selected for deployment. This illustrates why completed-decision coverage
+must be considered alongside errors, rather than treating fewer abstentions as
+an improvement by itself.
+
 We retain both labels and abstain on incompatible outputs. We did not add a
 whole-image fallback: the separate whole-photo classifier experiment matched
 only 7/17 source categories, so it did not establish a dependable fallback.
@@ -170,7 +190,7 @@ or unresolved inference has no numeric score. Completed scores are bounded to
 0–10; resolved OCA has a HIGH flag and OPMD at least MEDIUM. These weights and
 class floors remain demo heuristics, not validated clinical risk estimates.
 
-### 11. “What do the 25 passing tests prove?”
+### 11. “What do the 39 passing tests prove?”
 
 They check failure handling, channel order, label disagreement, class-aware
 concern, bounds, Streamlit rendering, model/checkpoint provisioning, session
@@ -178,6 +198,10 @@ persistence, stale results, upload decoding and gallery integrity. Most
 assessment tests use controlled detector/classifier outputs to exercise edge
 cases. Separately, the real-model replay checks the saved photographs and the
 actual browser upload/sample flows were verified.
+
+The additional demo checks cover provisional disagreement, adjustable score
+and margin gates, missing regions, settings isolation between requests, clearing
+results after mode/threshold changes, and preserving uncertainty in JSON exports.
 
 Passing tests establish expected software behavior. They do not establish model
 generalization, medical safety or diagnostic accuracy. Retained input and source

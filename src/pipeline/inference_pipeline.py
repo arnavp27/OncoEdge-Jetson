@@ -14,6 +14,7 @@ from src.models.yolo_detector import YOLODetector
 from src.config import CONFIG
 from src.pipeline.fusion import FusionModule
 from src.pipeline.decision_tree import ClinicalDecisionTree
+from src.pipeline.demo_readout import DemoOptions, build_demo_readout
 from src.utils.visualization import draw_detections
 
 
@@ -126,7 +127,7 @@ class OncoEdgePipeline:
         print(f"[OK] OncoEdge pipeline initialized (backend: {self.backend})")
         print()
 
-    def process_image(self, image, patient_metadata):
+    def process_image(self, image, patient_metadata, *, demo_options=None):
         """
         Process an image through the complete pipeline.
 
@@ -136,6 +137,8 @@ class OncoEdgePipeline:
                 - age: Patient age (int)
                 - tobacco_years: Years of tobacco use (int)
                 - lesion_duration: Duration category (str)
+            demo_options: Optional DemoOptions for provisional model readouts.
+                The conservative assessment never bypasses its review gates.
 
         Returns:
             dict: Results containing:
@@ -146,6 +149,16 @@ class OncoEdgePipeline:
                 - 'risk_score': Demo score, or None if inconclusive
                 - 'assessment_issues': Reasons the assessment is inconclusive
         """
+        if demo_options is not None:
+            # A cached Streamlit pipeline can outlive a module reload. Copy the
+            # values into the current validated type instead of comparing class
+            # identity across reloads or retaining mutable caller settings.
+            demo_options = DemoOptions(
+                detector_threshold=demo_options.detector_threshold,
+                min_classifier_score=demo_options.min_classifier_score,
+                min_classifier_margin=demo_options.min_classifier_margin,
+            )
+
         # Convert PIL Image to numpy array if needed
         if isinstance(image, Image.Image):
             image = np.array(image.convert('RGB'))
@@ -158,11 +171,16 @@ class OncoEdgePipeline:
 
         # Step 1: YOLO detection
         print("Running YOLO detection...")
-        yolo_results = self.yolo.detect(image)
+        yolo_results = self.yolo.detect(
+            image,
+            conf_threshold=(demo_options.detector_threshold if demo_options
+                            else CONFIG['model'].yolo_conf_threshold),
+            imgsz=CONFIG['model'].yolo_imgsz,
+        )
 
         # Check if any detections found
         if yolo_results.boxes is None or len(yolo_results.boxes) == 0:
-            return self._no_detection_output(image, patient_metadata)
+            return self._no_detection_output(image, patient_metadata, demo_options=demo_options)
 
         # Step 2: Process each detection
         print(f"Processing {len(yolo_results.boxes)} detections...")
@@ -220,6 +238,11 @@ class OncoEdgePipeline:
                 classification['max_score'] < CONFIG['model'].min_classifier_score
                 or margin < CONFIG['model'].min_classifier_margin
             )
+            detection_uncertain = conf < CONFIG['model'].yolo_conf_threshold
+            if detection_uncertain:
+                assessment_issues.append(
+                    f'Region {i+1}: detector confidence is below the conservative limit.'
+                )
             if model_disagreement:
                 assessment_issues.append(
                     f"Region {i+1}: models disagree (YOLO {yolo_class}, "
@@ -244,13 +267,15 @@ class OncoEdgePipeline:
                 'classifier_margin': margin,
                 'model_disagreement': model_disagreement,
                 'classification_uncertain': classification_uncertain,
+                'detection_uncertain': detection_uncertain,
             })
 
         # Handle case where all detections were invalid
         if not detections:
             return self._no_detection_output(
                 image, patient_metadata,
-                reason='The detector returned no usable regions to classify.'
+                reason='The detector returned no usable regions to classify.',
+                demo_options=demo_options,
             )
 
         # Step 5: Clinical risk assessment
@@ -259,6 +284,7 @@ class OncoEdgePipeline:
         agreed_classes = {
             d['class'] for d in detections
             if not d['model_disagreement'] and not d['classification_uncertain']
+            and not d['detection_uncertain']
         }
         concerning_class = ('OCA' if 'OCA' in agreed_classes else
                             'OPMD' if 'OPMD' in agreed_classes else None)
@@ -275,7 +301,7 @@ class OncoEdgePipeline:
         print("Creating visualization...")
         annotated_image = draw_detections(image, detections)
 
-        return {
+        output = {
             'risk_level': risk_output['level'],
             'recommendation': risk_output['recommendation'],
             'detections': detections,
@@ -283,9 +309,13 @@ class OncoEdgePipeline:
             'risk_score': risk_output['score'],
             'assessment_issues': assessment_issues,
         }
+        if demo_options is not None:
+            output['demo_readout'] = build_demo_readout(detections, demo_options)
+        return output
 
     def _no_detection_output(self, image, patient_metadata,
-                             reason='No lesion regions were detected; the image was not assessed.'):
+                             reason='No lesion regions were detected; the image was not assessed.',
+                             *, demo_options=None):
         """
         Generate output when no lesions are detected.
 
@@ -304,7 +334,7 @@ class OncoEdgePipeline:
             detection_available=False,
         )
 
-        return {
+        output = {
             'risk_level': risk_output['level'],
             'recommendation': risk_output['recommendation'],
             'detections': [],
@@ -312,3 +342,6 @@ class OncoEdgePipeline:
             'risk_score': risk_output['score'],
             'assessment_issues': [reason],
         }
+        if demo_options is not None:
+            output['demo_readout'] = build_demo_readout([], demo_options)
+        return output
